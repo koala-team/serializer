@@ -1,0 +1,9 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys
+from koala_serializer import generate
+
+
+dest = '.' if len(sys.argv) < 4 else sys.argv[3]
+generate(sys.argv[1], sys.argv[2], dest)
