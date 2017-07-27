@@ -7,7 +7,7 @@ KoalaSerializer is a tool designed for creating serializable objects. This is us
 
 ### Install
 
-	$ sudo pip install https://github.com/k04la/serializer/archive/master.zip
+	$ sudo pip install koala-serializer
 
 ### Generate Codes
 
