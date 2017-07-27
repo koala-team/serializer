@@ -296,15 +296,7 @@ class SerializerGenerator:
         code_editor = self._code_editor
 
         # gen size
-        size = code_editor.new_tempvar()
-        code_editor.add_line("%s = b''" % size)
-        self._gen_serializer_simples("len(%s)" % value_name, size, (Tokens.UnsignedInteger, ))
-        code_editor.add_line("while len(%s) and %s[-1] == b'\\x00'[0]:" % (size, size))
-        code_editor.add_line("%s = %s[:-1]" % (size, size), 1)
-
-        self._gen_serializer_simples("len(%s)" % size, result_name, (Tokens.UnsignedByte, ))
-        code_editor.add_line("%s += %s" % (result_name, size))
-        code_editor.add_line()
+        self._gen_size(value_name, result_name, tree)
 
         # gen items
         item = code_editor.new_tempvar()
@@ -318,15 +310,7 @@ class SerializerGenerator:
         code_editor = self._code_editor
 
         # gen size
-        size = code_editor.new_tempvar()
-        code_editor.add_line("%s = b''" % size)
-        self._gen_serializer_simples("len(%s)" % value_name, size, (Tokens.UnsignedInteger, ))
-        code_editor.add_line("while len(%s) and %s[-1] == b'\\x00'[0]:" % (size, size))
-        code_editor.add_line("%s = %s[:-1]" % (size, size), 1)
-
-        self._gen_serializer_simples("len(%s)" % size, result_name, (Tokens.UnsignedByte, ))
-        code_editor.add_line("%s += %s" % (result_name, size))
-        code_editor.add_line()
+        self._gen_size(value_name, result_name, tree)
 
         # gen items
         key = code_editor.new_tempvar()
@@ -356,20 +340,11 @@ class SerializerGenerator:
 
 
     def _gen_serializer_string(self, value_name, result_name, tree):
-        code_editor = self._code_editor
-
         # gen size
-        size = code_editor.new_tempvar()
-        code_editor.add_line("%s = b''" % size)
-        self._gen_serializer_simples("len(%s)" % value_name, size, (Tokens.UnsignedInteger, ))
-        code_editor.add_line("while len(%s) and %s[-1] == b'\\x00'[0]:" % (size, size))
-        code_editor.add_line("%s = %s[:-1]" % (size, size), 1)
-        self._gen_serializer_simples("len(%s)" % size, result_name, (Tokens.UnsignedByte, ))
-        code_editor.add_line()
+        self._gen_size(value_name, result_name, tree)
 
         # gen string
-        code_editor.add_line("%s += %s" % (result_name, size))
-        code_editor.add_line("%s += %s.encode('ascii')" % (result_name, value_name))
+        self._code_editor.add_line("%s += %s.encode('ascii')" % (result_name, value_name))
 
 
     def _gen_serializer_char(self, value_name, result_name, tree):
@@ -380,6 +355,20 @@ class SerializerGenerator:
     def _gen_serializer_simples(self, value_name, result_name, tree):
         fmt = self._simples_format_table[tree[0]]
         self._code_editor.add_line("%s += struct.pack('%s', %s)" % (result_name, fmt, value_name))
+
+
+    def _gen_size(self, value_name, result_name, tree):
+        code_editor = self._code_editor
+
+        size = code_editor.new_tempvar()
+        code_editor.add_line("%s = b''" % size)
+        self._gen_serializer_simples("len(%s)" % value_name, size, (Tokens.UnsignedInteger, ))
+        code_editor.add_line("while len(%s) and %s[-1] == b'\\x00'[0]:" % (size, size))
+        code_editor.add_line("%s = %s[:-1]" % (size, size), 1)
+
+        self._gen_serializer_simples("len(%s)" % size, result_name, (Tokens.UnsignedByte, ))
+        code_editor.add_line("%s += %s" % (result_name, size))
+        code_editor.add_line()
 
 
 ###################################################################################
@@ -468,16 +457,7 @@ class DeserializerGenerator:
         code_editor = self._code_editor
 
         # gen size
-        size_len = code_editor.new_tempvar()
-        self._gen_deserializer_simples(data_name, offset_name, size_len, (Tokens.UnsignedByte, ))
-        size_bytes = code_editor.new_tempvar()
-        code_editor.add_line("%s = %s" % (size_bytes, self._get_data(data_name, offset_name, size_len)))
-        self._increase_offset(offset_name, size_len)
-        code_editor.add_line("%s += b'\\x00' * (%s - %s)" % 
-                             (size_bytes, self._simples_fmtsize_table[Tokens.UnsignedInteger], size_len))
-        size = code_editor.new_tempvar()
-        self._gen_deserializer_simples(size_bytes, None, size, (Tokens.UnsignedInteger, ))
-        code_editor.add_line()
+        size = self._gen_size(data_name, offset_name, value_name, tree)
 
         # gen items
         code_editor.add_line("%s = []" % value_name)
@@ -494,16 +474,7 @@ class DeserializerGenerator:
         code_editor = self._code_editor
 
         # gen size
-        size_len = code_editor.new_tempvar()
-        self._gen_deserializer_simples(data_name, offset_name, size_len, (Tokens.UnsignedByte, ))
-        size_bytes = code_editor.new_tempvar()
-        code_editor.add_line("%s = %s" % (size_bytes, self._get_data(data_name, offset_name, size_len)))
-        self._increase_offset(offset_name, size_len)
-        code_editor.add_line("%s += b'\\x00' * (%s - %s)" % 
-                             (size_bytes, self._simples_fmtsize_table[Tokens.UnsignedInteger], size_len))
-        size = code_editor.new_tempvar()
-        self._gen_deserializer_simples(size_bytes, None, size, (Tokens.UnsignedInteger, ))
-        code_editor.add_line()
+        size = self._gen_size(data_name, offset_name, value_name, tree)
 
         # gen items
         code_editor.add_line("%s = {}" % value_name)
@@ -537,23 +508,12 @@ class DeserializerGenerator:
 
 
     def _gen_deserializer_string(self, data_name, offset_name, value_name, tree):
-        code_editor = self._code_editor
-
         # gen size
-        size_len = code_editor.new_tempvar()
-        self._gen_deserializer_simples(data_name, offset_name, size_len, (Tokens.UnsignedByte, ))
-        size_bytes = code_editor.new_tempvar()
-        code_editor.add_line("%s = %s" % (size_bytes, self._get_data(data_name, offset_name, size_len)))
-        self._increase_offset(offset_name, size_len)
-        code_editor.add_line("%s += b'\\x00' * (%s - %s)" % 
-                             (size_bytes, self._simples_fmtsize_table[Tokens.UnsignedInteger], size_len))
-        size = code_editor.new_tempvar()
-        self._gen_deserializer_simples(size_bytes, None, size, (Tokens.UnsignedInteger, ))
-        code_editor.add_line()
+        size = self._gen_size(data_name, offset_name, value_name, tree)
 
         # gen string
-        code_editor.add_line("%s = %s.decode('utf-8')" % 
-                             (value_name, self._get_data(data_name, offset_name, size)))
+        self._code_editor.add_line("%s = %s.decode('utf-8')" % 
+                                   (value_name, self._get_data(data_name, offset_name, size)))
         self._increase_offset(offset_name, size)
 
 
@@ -570,3 +530,20 @@ class DeserializerGenerator:
                                    (value_name, fmt, data))
         if offset_name is not None:
             self._increase_offset(offset_name, size)
+
+
+    def _gen_size(self, data_name, offset_name, value_name, tree):
+        code_editor = self._code_editor
+
+        size_len = code_editor.new_tempvar()
+        self._gen_deserializer_simples(data_name, offset_name, size_len, (Tokens.UnsignedByte, ))
+        size_bytes = code_editor.new_tempvar()
+        code_editor.add_line("%s = %s" % (size_bytes, self._get_data(data_name, offset_name, size_len)))
+        self._increase_offset(offset_name, size_len)
+        code_editor.add_line("%s += b'\\x00' * (%s - %s)" % 
+                             (size_bytes, self._simples_fmtsize_table[Tokens.UnsignedInteger], size_len))
+        size = code_editor.new_tempvar()
+        self._gen_deserializer_simples(size_bytes, None, size, (Tokens.UnsignedInteger, ))
+        code_editor.add_line()
+
+        return size
