@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 # python imports
+import sys
 import struct
 from enum import Enum
+
+PY3 = sys.version_info > (3,)
 
 
 class EColor(Enum):
@@ -110,7 +113,7 @@ class Child(Parent1, Parent2):
 		s += struct.pack('B', len(tmp0))
 		s += tmp0
 		
-		s += self.c.encode('ascii')
+		s += self.c.encode('ISO-8859-1') if PY3 else self.c
 		
 		return s
 	
@@ -128,7 +131,7 @@ class Child(Parent1, Parent2):
 		tmp2 += b'\x00' * (4 - tmp1)
 		tmp3 = struct.unpack('I', tmp2)[0]
 		
-		self.c = s[offset:offset + tmp3].decode('utf-8')
+		self.c = s[offset:offset + tmp3].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp3]
 		offset += tmp3
 		
 		return offset
@@ -196,7 +199,7 @@ class Test(object):
 		s += struct.pack('?', self.v0)
 		
 		# serialize self.v1
-		s += struct.pack('c', self.v1.encode('ascii'))
+		s += struct.pack('c', self.v1.encode('ISO-8859-1') if PY3 else self.v1)
 		
 		# serialize self.v10
 		s += struct.pack('f', self.v10)
@@ -212,7 +215,7 @@ class Test(object):
 		s += struct.pack('B', len(tmp4))
 		s += tmp4
 		
-		s += self.v12.encode('ascii')
+		s += self.v12.encode('ISO-8859-1') if PY3 else self.v12
 		
 		# serialize self.v13
 		s += struct.pack('b', self.v13.value)
@@ -248,7 +251,7 @@ class Test(object):
 			s += tmp9
 			
 			for tmp10 in tmp8:
-				s += struct.pack('c', tmp10.encode('ascii'))
+				s += struct.pack('c', tmp10.encode('ISO-8859-1') if PY3 else tmp10)
 		
 		# serialize self.v17
 		tmp11 = b''
@@ -266,7 +269,7 @@ class Test(object):
 			s += struct.pack('B', len(tmp13))
 			s += tmp13
 			
-			s += tmp12.encode('ascii')
+			s += tmp12.encode('ISO-8859-1') if PY3 else tmp12
 			s += struct.pack('i', self.v17[tmp12])
 		
 		# serialize self.v18
@@ -278,7 +281,7 @@ class Test(object):
 		s += tmp14
 		
 		for tmp15 in self.v18:
-			s += struct.pack('c', tmp15.encode('ascii'))
+			s += struct.pack('c', tmp15.encode('ISO-8859-1') if PY3 else tmp15)
 			tmp16 = b''
 			tmp16 += struct.pack('I', len(self.v18[tmp15]))
 			while len(tmp16) and tmp16[-1] == b'\x00'[0]:
@@ -323,7 +326,7 @@ class Test(object):
 					s += struct.pack('B', len(tmp25))
 					s += tmp25
 					
-					s += tmp24.encode('ascii')
+					s += tmp24.encode('ISO-8859-1') if PY3 else tmp24
 		
 		# serialize self.v3
 		s += struct.pack('B', self.v3)
@@ -357,7 +360,7 @@ class Test(object):
 		# deserialize self.v1
 		self.v1 = struct.unpack('c', s[offset:offset + 1])[0]
 		offset += 1
-		self.v1 = self.v1.decode('utf-8')
+		self.v1 = self.v1.decode('ISO-8859-1') if PY3 else self.v1
 		
 		# deserialize self.v10
 		self.v10 = struct.unpack('f', s[offset:offset + 4])[0]
@@ -375,7 +378,7 @@ class Test(object):
 		tmp27 += b'\x00' * (4 - tmp26)
 		tmp28 = struct.unpack('I', tmp27)[0]
 		
-		self.v12 = s[offset:offset + tmp28].decode('utf-8')
+		self.v12 = s[offset:offset + tmp28].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp28]
 		offset += tmp28
 		
 		# deserialize self.v13
@@ -423,7 +426,7 @@ class Test(object):
 			for tmp43 in range(tmp42):
 				tmp44 = struct.unpack('c', s[offset:offset + 1])[0]
 				offset += 1
-				tmp44 = tmp44.decode('utf-8')
+				tmp44 = tmp44.decode('ISO-8859-1') if PY3 else tmp44
 				tmp39.append(tmp44)
 			self.v16.append(tmp39)
 		
@@ -444,7 +447,7 @@ class Test(object):
 			tmp52 += b'\x00' * (4 - tmp51)
 			tmp53 = struct.unpack('I', tmp52)[0]
 			
-			tmp49 = s[offset:offset + tmp53].decode('utf-8')
+			tmp49 = s[offset:offset + tmp53].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp53]
 			offset += tmp53
 			tmp50 = struct.unpack('i', s[offset:offset + 4])[0]
 			offset += 4
@@ -462,7 +465,7 @@ class Test(object):
 		for tmp57 in range(tmp56):
 			tmp58 = struct.unpack('c', s[offset:offset + 1])[0]
 			offset += 1
-			tmp58 = tmp58.decode('utf-8')
+			tmp58 = tmp58.decode('ISO-8859-1') if PY3 else tmp58
 			tmp60 = struct.unpack('B', s[offset:offset + 1])[0]
 			offset += 1
 			tmp61 = s[offset:offset + tmp60]
@@ -518,7 +521,7 @@ class Test(object):
 					tmp81 += b'\x00' * (4 - tmp80)
 					tmp82 = struct.unpack('I', tmp81)[0]
 					
-					tmp79 = s[offset:offset + tmp82].decode('utf-8')
+					tmp79 = s[offset:offset + tmp82].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp82]
 					offset += tmp82
 					self.v20[tmp73][tmp74].append(tmp79)
 		

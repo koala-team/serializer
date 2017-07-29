@@ -20,9 +20,14 @@ class HeaderGenerator:
 
 
     def _gen_imports(self):
-        self._code_editor.add_line("# python imports")
-        self._code_editor.add_line("import struct")
-        self._code_editor.add_line("from enum import Enum")
+        code_editor = self._code_editor
+
+        code_editor.add_line("# python imports")
+        code_editor.add_line("import sys")
+        code_editor.add_line("import struct")
+        code_editor.add_line("from enum import Enum")
+        code_editor.add_line()
+        code_editor.add_line("PY3 = sys.version_info > (3,)")
 
 
 ###################################################################################
@@ -344,11 +349,12 @@ class SerializerGenerator:
         self._gen_size(value_name, result_name, tree)
 
         # gen string
-        self._code_editor.add_line("%s += %s.encode('ascii')" % (result_name, value_name))
+        self._code_editor.add_line("%s += %s.encode('ISO-8859-1') if PY3 else %s" % 
+                                   (result_name, value_name, value_name))
 
 
     def _gen_serializer_char(self, value_name, result_name, tree):
-        value_name = "%s.encode('ascii')" % value_name
+        value_name = "%s.encode('ISO-8859-1') if PY3 else %s" % (value_name, value_name)
         self._gen_serializer_simples(value_name, result_name, tree)
 
 
@@ -512,14 +518,16 @@ class DeserializerGenerator:
         size = self._gen_size(data_name, offset_name, value_name, tree)
 
         # gen string
-        self._code_editor.add_line("%s = %s.decode('utf-8')" % 
-                                   (value_name, self._get_data(data_name, offset_name, size)))
+        data = self._get_data(data_name, offset_name, size)
+        self._code_editor.add_line("%s = %s.decode('ISO-8859-1') if PY3 else %s" % 
+                                   (value_name, data, data))
         self._increase_offset(offset_name, size)
 
 
     def _gen_deserializer_char(self, data_name, offset_name, value_name, tree):
         self._gen_deserializer_simples(data_name, offset_name, value_name, tree)
-        self._code_editor.add_line("%s = %s.decode('utf-8')" % (value_name, value_name))
+        self._code_editor.add_line("%s = %s.decode('ISO-8859-1') if PY3 else %s" %
+                                   (value_name, value_name, value_name))
 
 
     def _gen_deserializer_simples(self, data_name, offset_name, value_name, tree):

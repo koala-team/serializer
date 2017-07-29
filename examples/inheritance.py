@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 # python imports
+import sys
 import struct
 from enum import Enum
+
+PY3 = sys.version_info > (3,)
 
 
 class Parent1(object):
@@ -102,7 +105,7 @@ class Child(Parent1, Parent2):
 		s += struct.pack('B', len(tmp0))
 		s += tmp0
 		
-		s += self.name.encode('ascii')
+		s += self.name.encode('ISO-8859-1') if PY3 else self.name
 		
 		return s
 	
@@ -120,7 +123,7 @@ class Child(Parent1, Parent2):
 		tmp2 += b'\x00' * (4 - tmp1)
 		tmp3 = struct.unpack('I', tmp2)[0]
 		
-		self.name = s[offset:offset + tmp3].decode('utf-8')
+		self.name = s[offset:offset + tmp3].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp3]
 		offset += tmp3
 		
 		return offset
