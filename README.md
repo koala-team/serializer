@@ -23,18 +23,20 @@ To generate source codes run the command below:
 **ks** is a Koala serializer format that enables you to define your objects simply.
 Basically the **ks** file has the same structure as the [**ini**](https://en.wikipedia.org/wiki/INI_file) files.
 
-	[ObjectName1]
-	_def = ObjectSpecification
-	attribute1 = attribute_type
-	attribute2 = attribute_type
+```ini
+[ObjectName1]
+_def = ObjectSpecification
+attribute1 = attribute_type
+attribute2 = attribute_type
 
-	[ObjectName2]
-	_def = ObjectSpecification
-	attribute1 = attribute_type
-	attribute2 = attribute_type
+[ObjectName2]
+_def = ObjectSpecification
+attribute1 = attribute_type
+attribute2 = attribute_type
 
-	[ObjectName3]
-	_def = ObjectSpecification
+[ObjectName3]
+_def = ObjectSpecification
+```
 
 
 ### Simple Data Types
@@ -74,14 +76,16 @@ Objects are specified using ``_def`` in **ks** files.
 
 Structure:
 
-	[EnumName]
-	_def = enum <enum_type>
-		{
-			name1,
-			name2,
-			name3(value3),
-			name4
-		}
+```ini
+[EnumName]
+_def = enum <enum_type>
+	{
+		name1,
+		name2,
+		name3(value3),
+		name4
+	}
+```
 
 * The **enum_type** can be one of the following types: *byte*, *ubyte*, *short*, *ushort*, *int*, *uint*, *long* and *ulong*.
 For example if you choose *byte*, then your enum values must be between *-128* and *127*.
@@ -90,24 +94,28 @@ For example if you choose *byte*, then your enum values must be between *-128* a
 
 Example:
 
-	[EColor]
-	_def = enum <byte> 
-		{
-			white,
-			red(3),
-			green,
-			blue(-2),
-			black
-		}
+```ini
+[EColor]
+_def = enum <byte>
+	{
+		white,
+		red(3),
+		green,
+		blue(-2),
+		black
+	}
+```
 
 Python generated code:
 
-	class EColor(Enum):
-		white = 0
-		red = 3
-		green = 4
-		blue = -2
-		black = -1
+```python
+class EColor(Enum):
+	white = 0
+	red = 3
+	green = 4
+	blue = -2
+	black = -1
+```
 
 Note that the **enum_type** will be used in *serializer* and *deserializer* functions in classes.
 
@@ -115,17 +123,21 @@ Note that the **enum_type** will be used in *serializer* and *deserializer* func
 
 Structure:
 
-	[ClassName]
-	_def = class
-	attribute1 = attribute_type
-	attribute2 = attribute_type
+```ini
+[ClassName]
+_def = class
+attribute1 = attribute_type
+attribute2 = attribute_type
+```
 
 Inheritance:
 
-	[ChildClassName]
-	_def = class(ParentClassName1, ParentClassName2, ...)
-	attribute1 = attribute_type
-	attribute2 = attribute_type
+```ini
+[ChildClassName]
+_def = class(ParentClassName1, ParentClassName2, ...)
+attribute1 = attribute_type
+attribute2 = attribute_type
+```
 
 * The **attribute_type** can either be *simple data types*, *complex data types*, *enums* or other *classes*.
 * In case you want to add new functions to your classes or other similar operations, be noted that it is not possible to add them in the **ks** file. You must create your own class, inherit it from the generated class, and then add your desired functions to this class.
@@ -143,20 +155,21 @@ Inheritance:
 
 Example:
 
-	[Parent1]
-	_def = class
-	count = uint
+```ini
+[Parent1]
+_def = class
+count = uint
 
 
-	[Parent2]
-	_def = class
-	number = long
+[Parent2]
+_def = class
+number = long
 
 
-	[Child]
-	_def = class(Parent1, Parent2)
-	name = string
-
+[Child]
+_def = class(Parent1, Parent2)
+name = string
+```
 
 Python generated code:
 
@@ -172,20 +185,21 @@ In bash:
 
 In python shell:
 
-	>>> from full import Test
-	>>> t1 = Test(init=True)
-	>>> t1.v14.initialize()
-	>>> t1.v12 = "hello"
-	>>> t1.v15 = [1, 2, 3]
-	>>> t1.v17 = {'one': 1, 'two': 2}
-	>>> s = t1.serialize()
-	
-	>>> t2 = Test(init=True)
-	>>> t2.deserialize(s)
-	>>> assert t1.v12 == t2.v12
-	>>> assert t1.v15 == t2.v15
-	>>> assert t1.v17 == t2.v17
+```python
+>>> from full import Test
+>>> t1 = Test(init=True)
+>>> t1.v14.initialize()
+>>> t1.v12 = "hello"
+>>> t1.v15 = [1, 2, 3]
+>>> t1.v17 = {'one': 1, 'two': 2}
+>>> s = t1.serialize()
 
+>>> t2 = Test(init=True)
+>>> t2.deserialize(s)
+>>> assert t1.v12 == t2.v12
+>>> assert t1.v15 == t2.v15
+>>> assert t1.v17 == t2.v17
+```
 
 ## TODO
 
