@@ -18,6 +18,11 @@ class EColor(Enum):
 
 class Parent1(object):
 
+	@staticmethod
+	def get_name():
+		return 'Parent1'
+
+
 	def __init__(self, init=False):
 		super(Parent1, self).__init__()
 	
@@ -50,6 +55,11 @@ class Parent1(object):
 
 class Parent2(object):
 
+	@staticmethod
+	def get_name():
+		return 'Parent2'
+
+
 	def __init__(self, init=False):
 		super(Parent2, self).__init__()
 	
@@ -81,6 +91,11 @@ class Parent2(object):
 
 
 class Child(Parent1, Parent2):
+
+	@staticmethod
+	def get_name():
+		return 'Child'
+
 
 	def __init__(self, init=False):
 		super(Child, self).__init__()
@@ -138,6 +153,11 @@ class Child(Parent1, Parent2):
 
 
 class Test(object):
+
+	@staticmethod
+	def get_name():
+		return 'Test'
+
 
 	def __init__(self, init=False):
 		super(Test, self).__init__()

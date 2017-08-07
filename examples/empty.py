@@ -10,6 +10,11 @@ PY3 = sys.version_info > (3,)
 
 class Parent(object):
 
+	@staticmethod
+	def get_name():
+		return 'Parent'
+
+
 	def __init__(self, init=False):
 		super(Parent, self).__init__()
 	
@@ -41,4 +46,7 @@ class Parent(object):
 
 
 class Child(Parent):
-	pass
+
+	@staticmethod
+	def get_name():
+		return 'Child'
