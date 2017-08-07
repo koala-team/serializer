@@ -65,6 +65,11 @@ class TypeGenerator:
 
         # generate definitions
         code_editor.add_line("class %s(%s):" % (type_name, ', '.join(parents)))
+
+        if not properties:
+            code_editor.add_line('pass', 1)
+            return
+
         code_editor.add_line()
         code_editor.increase_indentation()
 
