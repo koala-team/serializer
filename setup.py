@@ -7,8 +7,8 @@ except ImportError:
 
 setup(
     name='koala-serializer',
-    version='0.1.1',
-    description='A tool desgiend for creating serializable objects among different programming languages',
+    version='0.2.0',
+    description='A tool designed for creating serializable objects among different programming languages',
     long_description='',
     author='k04la',
     author_email='mdan.hagh@gmail.com',
