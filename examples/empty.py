@@ -11,7 +11,7 @@ PY3 = sys.version_info > (3,)
 class Parent(object):
 
 	@staticmethod
-	def get_name():
+	def name():
 		return 'Parent'
 
 
@@ -48,5 +48,5 @@ class Parent(object):
 class Child(Parent):
 
 	@staticmethod
-	def get_name():
+	def name():
 		return 'Child'

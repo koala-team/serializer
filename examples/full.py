@@ -19,7 +19,7 @@ class EColor(Enum):
 class Parent1(object):
 
 	@staticmethod
-	def get_name():
+	def name():
 		return 'Parent1'
 
 
@@ -56,7 +56,7 @@ class Parent1(object):
 class Parent2(object):
 
 	@staticmethod
-	def get_name():
+	def name():
 		return 'Parent2'
 
 
@@ -93,7 +93,7 @@ class Parent2(object):
 class Child(Parent1, Parent2):
 
 	@staticmethod
-	def get_name():
+	def name():
 		return 'Child'
 
 
@@ -155,7 +155,7 @@ class Child(Parent1, Parent2):
 class Test(object):
 
 	@staticmethod
-	def get_name():
+	def name():
 		return 'Test'
 
 

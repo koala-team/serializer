@@ -67,9 +67,9 @@ class TypeGenerator:
         code_editor.add_line("class %s(%s):" % (type_name, ', '.join(parents)))
         code_editor.add_line()
 
-        # generate get_name
+        # generate name
         code_editor.add_line("@staticmethod", 1)
-        code_editor.add_line("def get_name():", 1)
+        code_editor.add_line("def name():", 1)
         code_editor.add_line("return '%s'" % type_name, 2)
 
         if not properties:
