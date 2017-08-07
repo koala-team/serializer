@@ -23,17 +23,17 @@ class Parent1(object):
 		return 'Parent1'
 
 
-	def __init__(self, init=False):
+	def __init__(self, p1=None, init=False):
 		super(Parent1, self).__init__()
 	
 		if init:
-			self.initialize()
+			self.initialize(p1)
 		else:
-			self.p1 = None
+			self.p1 = p1
 	
 
-	def initialize(self):
-		self.p1 = int()
+	def initialize(self, p1=None):
+		self.p1 = p1 or int()
 	
 
 	def serialize(self):
@@ -60,17 +60,17 @@ class Parent2(object):
 		return 'Parent2'
 
 
-	def __init__(self, init=False):
+	def __init__(self, p2=None, init=False):
 		super(Parent2, self).__init__()
 	
 		if init:
-			self.initialize()
+			self.initialize(p2)
 		else:
-			self.p2 = None
+			self.p2 = p2
 	
 
-	def initialize(self):
-		self.p2 = int()
+	def initialize(self, p2=None):
+		self.p2 = p2 or int()
 	
 
 	def serialize(self):
@@ -97,20 +97,20 @@ class Child(Parent1, Parent2):
 		return 'Child'
 
 
-	def __init__(self, init=False):
+	def __init__(self, c=None, init=False):
 		super(Child, self).__init__()
 	
 		if init:
-			self.initialize()
+			self.initialize(c)
 		else:
-			self.c = None
+			self.c = c
 	
 
-	def initialize(self):
+	def initialize(self, c=None):
 		Parent1.initialize(self)
 		Parent2.initialize(self)
 		
-		self.c = str()
+		self.c = c or str()
 	
 
 	def serialize(self):
@@ -159,57 +159,57 @@ class Test(object):
 		return 'Test'
 
 
-	def __init__(self, init=False):
+	def __init__(self, v0=None, v1=None, v10=None, v11=None, v12=None, v13=None, v14=None, v15=None, v16=None, v17=None, v18=None, v19=None, v2=None, v20=None, v3=None, v4=None, v5=None, v6=None, v7=None, v8=None, v9=None, init=False):
 		super(Test, self).__init__()
 	
 		if init:
-			self.initialize()
+			self.initialize(v0, v1, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v2, v20, v3, v4, v5, v6, v7, v8, v9)
 		else:
-			self.v0 = None
-			self.v1 = None
-			self.v10 = None
-			self.v11 = None
-			self.v12 = None
-			self.v13 = None
-			self.v14 = None
-			self.v15 = None
-			self.v16 = None
-			self.v17 = None
-			self.v18 = None
-			self.v19 = None
-			self.v2 = None
-			self.v20 = None
-			self.v3 = None
-			self.v4 = None
-			self.v5 = None
-			self.v6 = None
-			self.v7 = None
-			self.v8 = None
-			self.v9 = None
+			self.v0 = v0
+			self.v1 = v1
+			self.v10 = v10
+			self.v11 = v11
+			self.v12 = v12
+			self.v13 = v13
+			self.v14 = v14
+			self.v15 = v15
+			self.v16 = v16
+			self.v17 = v17
+			self.v18 = v18
+			self.v19 = v19
+			self.v2 = v2
+			self.v20 = v20
+			self.v3 = v3
+			self.v4 = v4
+			self.v5 = v5
+			self.v6 = v6
+			self.v7 = v7
+			self.v8 = v8
+			self.v9 = v9
 	
 
-	def initialize(self):
-		self.v0 = bool()
-		self.v1 = '\x00'
-		self.v10 = float()
-		self.v11 = int()
-		self.v12 = str()
-		self.v13 = list(EColor)[0]
-		self.v14 = Child()
-		self.v15 = list()
-		self.v16 = list()
-		self.v17 = dict()
-		self.v18 = dict()
-		self.v19 = [int() for _ in range(10)]
-		self.v2 = int()
-		self.v20 = [[list() for _ in range(20)] for _ in range(10)]
-		self.v3 = int()
-		self.v4 = int()
-		self.v5 = int()
-		self.v6 = int()
-		self.v7 = int()
-		self.v8 = int()
-		self.v9 = int()
+	def initialize(self, v0=None, v1=None, v10=None, v11=None, v12=None, v13=None, v14=None, v15=None, v16=None, v17=None, v18=None, v19=None, v2=None, v20=None, v3=None, v4=None, v5=None, v6=None, v7=None, v8=None, v9=None):
+		self.v0 = v0 or bool()
+		self.v1 = v1 or '\x00'
+		self.v10 = v10 or float()
+		self.v11 = v11 or int()
+		self.v12 = v12 or str()
+		self.v13 = v13 or list(EColor)[0]
+		self.v14 = v14 or Child()
+		self.v15 = v15 or list()
+		self.v16 = v16 or list()
+		self.v17 = v17 or dict()
+		self.v18 = v18 or dict()
+		self.v19 = v19 or [int() for _ in range(10)]
+		self.v2 = v2 or int()
+		self.v20 = v20 or [[list() for _ in range(20)] for _ in range(10)]
+		self.v3 = v3 or int()
+		self.v4 = v4 or int()
+		self.v5 = v5 or int()
+		self.v6 = v6 or int()
+		self.v7 = v7 or int()
+		self.v8 = v8 or int()
+		self.v9 = v9 or int()
 	
 
 	def serialize(self):

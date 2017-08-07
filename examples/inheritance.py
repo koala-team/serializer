@@ -15,17 +15,17 @@ class Parent1(object):
 		return 'Parent1'
 
 
-	def __init__(self, init=False):
+	def __init__(self, count=None, init=False):
 		super(Parent1, self).__init__()
 	
 		if init:
-			self.initialize()
+			self.initialize(count)
 		else:
-			self.count = None
+			self.count = count
 	
 
-	def initialize(self):
-		self.count = int()
+	def initialize(self, count=None):
+		self.count = count or int()
 	
 
 	def serialize(self):
@@ -52,17 +52,17 @@ class Parent2(object):
 		return 'Parent2'
 
 
-	def __init__(self, init=False):
+	def __init__(self, number=None, init=False):
 		super(Parent2, self).__init__()
 	
 		if init:
-			self.initialize()
+			self.initialize(number)
 		else:
-			self.number = None
+			self.number = number
 	
 
-	def initialize(self):
-		self.number = int()
+	def initialize(self, number=None):
+		self.number = number or int()
 	
 
 	def serialize(self):
@@ -89,20 +89,20 @@ class Child(Parent1, Parent2):
 		return 'Child'
 
 
-	def __init__(self, init=False):
+	def __init__(self, name=None, init=False):
 		super(Child, self).__init__()
 	
 		if init:
-			self.initialize()
+			self.initialize(name)
 		else:
-			self.name = None
+			self.name = name
 	
 
-	def initialize(self):
+	def initialize(self, name=None):
 		Parent1.initialize(self)
 		Parent2.initialize(self)
 		
-		self.name = str()
+		self.name = name or str()
 	
 
 	def serialize(self):

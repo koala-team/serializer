@@ -15,17 +15,17 @@ class Parent(object):
 		return 'Parent'
 
 
-	def __init__(self, init=False):
+	def __init__(self, count=None, init=False):
 		super(Parent, self).__init__()
 	
 		if init:
-			self.initialize()
+			self.initialize(count)
 		else:
-			self.count = None
+			self.count = count
 	
 
-	def initialize(self):
-		self.count = int()
+	def initialize(self, count=None):
+		self.count = count or int()
 	
 
 	def serialize(self):
