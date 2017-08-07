@@ -12,7 +12,7 @@ KoalaSerializer is a tool designed for creating serializable objects. This is us
 ### Generate Codes
 
 After installation, define your objects in a **ks** file. Examples can be found [here](https://github.com/k04la/serializer/tree/master/examples).
-To generate source codes run the command below:
+To generate source codes run the command below (the *output_dir* is optional):
 
 	$ koalasc <ks_path> <programming_language> <output_dir>
 
@@ -117,7 +117,7 @@ class EColor(Enum):
 	black = -1
 ```
 
-Note that the **enum_type** will be used in *serializer* and *deserializer* functions in classes.
+Note that the **enum_type** will be used in *serialize* and *deserialize* methods in classes.
 
 #### Class
 
@@ -140,17 +140,19 @@ attribute2 = attribute_type
 ```
 
 * The **attribute_type** can either be *simple data types*, *complex data types*, *enums* or other *classes*.
-* In case you want to add new functions to your classes or other similar operations, be noted that it is not possible to add them in the **ks** file. You must create your own class, inherit it from the generated class, and then add your desired functions to this class.
-* Each generated class has three functions:
+* In case you want to add new methods to your classes or other similar operations, be noted that it is not possible to add them in the **ks** file. You must create your own class, inherit it from the generated class, and then add your desired methods to this class.
+* Each generated class has four methods:
 
-> **initialize:** Initializes all attributes of the instance to default value.
+> **get_name:** Returns the *class name* of a class or an instance.
+> 
+> **initialize:** Initializes all attributes of the instance to the given or default value.
 > 
 > **serialize:** Serializes the instance to string or bytearray.
 > 
 > **deserialize:** Deserializes given string or bytearray to instance.
 
-* The instance can be initialized using **init** argument of the constructor. Recursive initialization is not supported yet.
-* Attributes with **Null** or **None** value are not supported in *serialize* function yet. Assigning a value to all the attributes is essential before serialization.
+* The instance can be initialized automatically using **init** argument of the constructor. Recursive initialization is not supported yet. Arguments can also be passed to the *constructor* or *initialize* method.
+* Attributes with **Null** or **None** value are not supported in *serialize* method yet. Assigning a value to all the attributes is essential before serialization.
 * Arrays must be initialized before serialization or deserialization.
 
 Example:
@@ -181,7 +183,7 @@ See [full.ks](https://github.com/k04la/serializer/tree/master/examples/full.ks) 
 
 In bash:
 
-	$ koalasc examples/full.ks python .
+	$ koalasc examples/full.ks python
 
 In python shell:
 
