@@ -72,27 +72,25 @@ class TypeGenerator:
         code_editor.add_line("def name():", 1)
         code_editor.add_line("return '%s'" % type_name, 2)
 
-        if not properties:
-            return
-
         code_editor.add_line('\n')
         code_editor.increase_indentation()
 
         # generate constructor
         attrs = [p for p, _ in properties]
-        parameters = ', '.join(["%s=None" % a for a in attrs])
-        code_editor.add_line("def __init__(self, %s, init=False):" % parameters)
+        parameters = ', '.join(['self'] + ["%s=None" % a for a in attrs])
+        code_editor.add_line("def __init__(%s, init=False):" % parameters)
         code_editor.add_line("super(%s, self).__init__()" % type_name, 1)
         code_editor.add_line()
         code_editor.add_line("if init:", 1)
         code_editor.add_line("self.initialize(%s)" % ', '.join(attrs), 2)
-        code_editor.add_line("else:", 1)
-        for attr_name, tree in properties:
-            code_editor.add_line("self.%s = %s" % (attr_name, attr_name), 2)
+        if properties:
+            code_editor.add_line("else:", 1)
+            for attr_name, tree in properties:
+                code_editor.add_line("self.%s = %s" % (attr_name, attr_name), 2)
         code_editor.add_line('\n')
 
         # generate initializer
-        code_editor.add_line("def initialize(self, %s):" % parameters)
+        code_editor.add_line("def initialize(%s):" % parameters)
         code_editor.increase_indentation()
 
         if parents[0] != 'object':
@@ -100,8 +98,11 @@ class TypeGenerator:
                 code_editor.add_line("%s.initialize(self)" % parent)
             code_editor.add_line()
 
-        for attr_name, tree in properties:
-            self._initializer_generator.gen_initializer(attr_name, tree)
+        if properties:
+            for attr_name, tree in properties:
+                self._initializer_generator.gen_initializer(attr_name, tree)
+        else:
+            code_editor.add_line('return')
 
         code_editor.decrease_indentation()
         code_editor.add_line('\n')

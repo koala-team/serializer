@@ -50,3 +50,32 @@ class Child(Parent):
 	@staticmethod
 	def name():
 		return 'Child'
+
+
+	def __init__(self, init=False):
+		super(Child, self).__init__()
+	
+		if init:
+			self.initialize()
+	
+
+	def initialize(self):
+		Parent.initialize(self)
+		
+		return
+	
+
+	def serialize(self):
+		s = b''
+		
+		# serialize parents
+		s += Parent.serialize(self)
+		
+		return s
+	
+
+	def deserialize(self, s, offset=0):
+		# deserialize parents
+		offset = Parent.deserialize(self, s, offset)
+		
+		return offset
