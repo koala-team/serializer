@@ -58,7 +58,7 @@ class TypeGenerator:
         code_editor = self._code_editor
 
         _def = properties.pop('_def')
-        properties = sorted(properties.items())
+        properties = properties.items()
 
         self._user_defined_types[Tokens.Class].append(type_name)
         parents = ['object'] if len(_def) == 1 else [p[0] for p in _def[1]]

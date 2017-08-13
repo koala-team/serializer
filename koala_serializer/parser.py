@@ -2,6 +2,7 @@
 
 # python imports
 import configparser
+from collections import OrderedDict
 
 # project imports
 from .rule_parser import RuleParser
@@ -29,7 +30,7 @@ class Parser:
 
         user_defined_types = src.sections()
         for udt in user_defined_types:
-            attr_trees = {}
+            attr_trees = OrderedDict()
             for attr, type in src.items(udt):
                 attr_trees[attr] = self._rule_parser.get_type_tree(type, udt, user_defined_types)
             parse_tree.append((udt, attr_trees))

@@ -159,14 +159,22 @@ class Test(object):
 		return 'Test'
 
 
-	def __init__(self, v0=None, v1=None, v10=None, v11=None, v12=None, v13=None, v14=None, v15=None, v16=None, v17=None, v18=None, v19=None, v2=None, v20=None, v3=None, v4=None, v5=None, v6=None, v7=None, v8=None, v9=None, init=False):
+	def __init__(self, v0=None, v1=None, v2=None, v3=None, v4=None, v5=None, v6=None, v7=None, v8=None, v9=None, v10=None, v11=None, v12=None, v13=None, v14=None, v15=None, v16=None, v17=None, v18=None, v19=None, v20=None, init=False):
 		super(Test, self).__init__()
 	
 		if init:
-			self.initialize(v0, v1, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v2, v20, v3, v4, v5, v6, v7, v8, v9)
+			self.initialize(v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20)
 		else:
 			self.v0 = v0
 			self.v1 = v1
+			self.v2 = v2
+			self.v3 = v3
+			self.v4 = v4
+			self.v5 = v5
+			self.v6 = v6
+			self.v7 = v7
+			self.v8 = v8
+			self.v9 = v9
 			self.v10 = v10
 			self.v11 = v11
 			self.v12 = v12
@@ -177,20 +185,20 @@ class Test(object):
 			self.v17 = v17
 			self.v18 = v18
 			self.v19 = v19
-			self.v2 = v2
 			self.v20 = v20
-			self.v3 = v3
-			self.v4 = v4
-			self.v5 = v5
-			self.v6 = v6
-			self.v7 = v7
-			self.v8 = v8
-			self.v9 = v9
 	
 
-	def initialize(self, v0=None, v1=None, v10=None, v11=None, v12=None, v13=None, v14=None, v15=None, v16=None, v17=None, v18=None, v19=None, v2=None, v20=None, v3=None, v4=None, v5=None, v6=None, v7=None, v8=None, v9=None):
+	def initialize(self, v0=None, v1=None, v2=None, v3=None, v4=None, v5=None, v6=None, v7=None, v8=None, v9=None, v10=None, v11=None, v12=None, v13=None, v14=None, v15=None, v16=None, v17=None, v18=None, v19=None, v20=None):
 		self.v0 = v0 or bool()
 		self.v1 = v1 or '\x00'
+		self.v2 = v2 or int()
+		self.v3 = v3 or int()
+		self.v4 = v4 or int()
+		self.v5 = v5 or int()
+		self.v6 = v6 or int()
+		self.v7 = v7 or int()
+		self.v8 = v8 or int()
+		self.v9 = v9 or int()
 		self.v10 = v10 or float()
 		self.v11 = v11 or int()
 		self.v12 = v12 or str()
@@ -201,15 +209,7 @@ class Test(object):
 		self.v17 = v17 or dict()
 		self.v18 = v18 or dict()
 		self.v19 = v19 or [int() for _ in range(10)]
-		self.v2 = v2 or int()
 		self.v20 = v20 or [[list() for _ in range(20)] for _ in range(10)]
-		self.v3 = v3 or int()
-		self.v4 = v4 or int()
-		self.v5 = v5 or int()
-		self.v6 = v6 or int()
-		self.v7 = v7 or int()
-		self.v8 = v8 or int()
-		self.v9 = v9 or int()
 	
 
 	def serialize(self):
@@ -220,6 +220,30 @@ class Test(object):
 		
 		# serialize self.v1
 		s += struct.pack('c', self.v1.encode('ISO-8859-1') if PY3 else self.v1)
+		
+		# serialize self.v2
+		s += struct.pack('b', self.v2)
+		
+		# serialize self.v3
+		s += struct.pack('B', self.v3)
+		
+		# serialize self.v4
+		s += struct.pack('h', self.v4)
+		
+		# serialize self.v5
+		s += struct.pack('H', self.v5)
+		
+		# serialize self.v6
+		s += struct.pack('i', self.v6)
+		
+		# serialize self.v7
+		s += struct.pack('I', self.v7)
+		
+		# serialize self.v8
+		s += struct.pack('q', self.v8)
+		
+		# serialize self.v9
+		s += struct.pack('Q', self.v9)
 		
 		# serialize self.v10
 		s += struct.pack('f', self.v10)
@@ -325,9 +349,6 @@ class Test(object):
 		for tmp20 in range(10):
 			s += struct.pack('b', self.v19[tmp20])
 		
-		# serialize self.v2
-		s += struct.pack('b', self.v2)
-		
 		# serialize self.v20
 		for tmp21 in range(10):
 			for tmp22 in range(20):
@@ -348,27 +369,6 @@ class Test(object):
 					
 					s += tmp24.encode('ISO-8859-1') if PY3 else tmp24
 		
-		# serialize self.v3
-		s += struct.pack('B', self.v3)
-		
-		# serialize self.v4
-		s += struct.pack('h', self.v4)
-		
-		# serialize self.v5
-		s += struct.pack('H', self.v5)
-		
-		# serialize self.v6
-		s += struct.pack('i', self.v6)
-		
-		# serialize self.v7
-		s += struct.pack('I', self.v7)
-		
-		# serialize self.v8
-		s += struct.pack('q', self.v8)
-		
-		# serialize self.v9
-		s += struct.pack('Q', self.v9)
-		
 		return s
 	
 
@@ -381,6 +381,38 @@ class Test(object):
 		self.v1 = struct.unpack('c', s[offset:offset + 1])[0]
 		offset += 1
 		self.v1 = self.v1.decode('ISO-8859-1') if PY3 else self.v1
+		
+		# deserialize self.v2
+		self.v2 = struct.unpack('b', s[offset:offset + 1])[0]
+		offset += 1
+		
+		# deserialize self.v3
+		self.v3 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		
+		# deserialize self.v4
+		self.v4 = struct.unpack('h', s[offset:offset + 2])[0]
+		offset += 2
+		
+		# deserialize self.v5
+		self.v5 = struct.unpack('H', s[offset:offset + 2])[0]
+		offset += 2
+		
+		# deserialize self.v6
+		self.v6 = struct.unpack('i', s[offset:offset + 4])[0]
+		offset += 4
+		
+		# deserialize self.v7
+		self.v7 = struct.unpack('I', s[offset:offset + 4])[0]
+		offset += 4
+		
+		# deserialize self.v8
+		self.v8 = struct.unpack('q', s[offset:offset + 8])[0]
+		offset += 8
+		
+		# deserialize self.v9
+		self.v9 = struct.unpack('Q', s[offset:offset + 8])[0]
+		offset += 8
 		
 		# deserialize self.v10
 		self.v10 = struct.unpack('f', s[offset:offset + 4])[0]
@@ -518,10 +550,6 @@ class Test(object):
 			self.v19[tmp72] = struct.unpack('b', s[offset:offset + 1])[0]
 			offset += 1
 		
-		# deserialize self.v2
-		self.v2 = struct.unpack('b', s[offset:offset + 1])[0]
-		offset += 1
-		
 		# deserialize self.v20
 		for tmp73 in range(10):
 			for tmp74 in range(20):
@@ -544,33 +572,5 @@ class Test(object):
 					tmp79 = s[offset:offset + tmp82].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp82]
 					offset += tmp82
 					self.v20[tmp73][tmp74].append(tmp79)
-		
-		# deserialize self.v3
-		self.v3 = struct.unpack('B', s[offset:offset + 1])[0]
-		offset += 1
-		
-		# deserialize self.v4
-		self.v4 = struct.unpack('h', s[offset:offset + 2])[0]
-		offset += 2
-		
-		# deserialize self.v5
-		self.v5 = struct.unpack('H', s[offset:offset + 2])[0]
-		offset += 2
-		
-		# deserialize self.v6
-		self.v6 = struct.unpack('i', s[offset:offset + 4])[0]
-		offset += 4
-		
-		# deserialize self.v7
-		self.v7 = struct.unpack('I', s[offset:offset + 4])[0]
-		offset += 4
-		
-		# deserialize self.v8
-		self.v8 = struct.unpack('q', s[offset:offset + 8])[0]
-		offset += 8
-		
-		# deserialize self.v9
-		self.v9 = struct.unpack('Q', s[offset:offset + 8])[0]
-		offset += 8
 		
 		return offset
