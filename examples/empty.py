@@ -15,32 +15,34 @@ class Parent(object):
 		return 'Parent'
 
 
-	def __init__(self, count=None, init=False):
-		super(Parent, self).__init__()
-	
-		if init:
-			self.initialize(count)
-		else:
-			self.count = count
+	def __init__(self, count=None):
+		self.initialize(count)
 	
 
 	def initialize(self, count=None):
-		self.count = count or int()
+		self.count = count
 	
 
 	def serialize(self):
 		s = b''
 		
 		# serialize self.count
-		s += struct.pack('I', self.count)
+		s += b'\x00' if self.count is None else b'\x01'
+		if self.count is not None:
+			s += struct.pack('I', self.count)
 		
 		return s
 	
 
 	def deserialize(self, s, offset=0):
 		# deserialize self.count
-		self.count = struct.unpack('I', s[offset:offset + 4])[0]
-		offset += 4
+		tmp0 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		if tmp0:
+			self.count = struct.unpack('I', s[offset:offset + 4])[0]
+			offset += 4
+		else:
+			self.count = None
 		
 		return offset
 
@@ -52,11 +54,8 @@ class Child(Parent):
 		return 'Child'
 
 
-	def __init__(self, init=False):
-		super(Child, self).__init__()
-	
-		if init:
-			self.initialize()
+	def __init__(self):
+		self.initialize()
 	
 
 	def initialize(self):

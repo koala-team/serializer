@@ -43,7 +43,6 @@ class TypeGenerator:
         }
 
         self._code_editor = code_editor
-        self._initializer_generator = InitializerGenerator(self._user_defined_types, code_editor)
         self._serializer_generator = SerializerGenerator(self._user_defined_types, code_editor)
         self._deserializer_generator = DeserializerGenerator(self._user_defined_types, code_editor)
 
@@ -78,15 +77,8 @@ class TypeGenerator:
         # generate constructor
         attrs = [p for p, _ in properties]
         parameters = ', '.join(['self'] + ["%s=None" % a for a in attrs])
-        code_editor.add_line("def __init__(%s, init=False):" % parameters)
-        code_editor.add_line("super(%s, self).__init__()" % type_name, 1)
-        code_editor.add_line()
-        code_editor.add_line("if init:", 1)
-        code_editor.add_line("self.initialize(%s)" % ', '.join(attrs), 2)
-        if properties:
-            code_editor.add_line("else:", 1)
-            for attr_name, tree in properties:
-                code_editor.add_line("self.%s = %s" % (attr_name, attr_name), 2)
+        code_editor.add_line("def __init__(%s):" % parameters)
+        code_editor.add_line("self.initialize(%s)" % ', '.join(attrs), 1)
         code_editor.add_line('\n')
 
         # generate initializer
@@ -100,7 +92,7 @@ class TypeGenerator:
 
         if properties:
             for attr_name, tree in properties:
-                self._initializer_generator.gen_initializer(attr_name, tree)
+                self._code_editor.add_line("self.%s = %s" % (attr_name, attr_name))
         else:
             code_editor.add_line('return')
 
@@ -176,84 +168,6 @@ class TypeGenerator:
 ###################################################################################
 
 
-class InitializerGenerator:
-
-    def __init__(self, user_defined_types, code_editor):
-        self._simples_initial_value_table = {
-            Tokens.Boolean: "bool()",
-            Tokens.Char: "'\\x00'",
-            Tokens.Byte: "int()",
-            Tokens.UnsignedByte: "int()",
-            Tokens.Short: "int()",
-            Tokens.UnsignedShort: "int()",
-            Tokens.Integer: "int()",
-            Tokens.UnsignedInteger: "int()",
-            Tokens.Long: "int()",
-            Tokens.UnsignedLong: "int()",
-            Tokens.Float: "float()",
-            Tokens.Double: "int()",
-            Tokens.String: "str()",
-            Tokens.List: "list()",
-            Tokens.Map: "dict()"
-        }
-
-        self._user_defined_types = user_defined_types
-        self._code_editor = code_editor
-
-
-    def gen_initializer(self, value_name, tree):
-        initial_value = self._gen_initializer(tree)
-        self._code_editor.add_line("self.%s = %s or %s" % (value_name, value_name, initial_value))
-
-
-    def _gen_initializer(self, tree):
-        value_type = tree[0]
-        initializer_func = None
-
-        for type_token in self._user_defined_types:
-            if value_type in self._user_defined_types[type_token]:
-                initializer_func = getattr(self, '_gen_initializer_%s' % type_token)
-                break
-
-        if initializer_func is None:
-            initializer_func = getattr(
-                self,
-                '_gen_initializer_%s' % value_type,
-                self._gen_initializer_simples
-            )
-
-        return initializer_func(value_type, tree)
-
-
-
-    def _gen_initializer_class(self, value_type, tree):
-        return "%s()" % value_type
-
-
-    def _gen_initializer_enum(self, value_type, tree):
-        return "list(%s)[0]" % value_type
-
-
-    def _gen_initializer_array(self, value_type, tree):
-        dims = list(tree[1][0])
-        dims.reverse()
-        array_type = tree[1][1]
-
-        initial_value = self._gen_initializer(array_type)
-        for dim in dims:
-            initial_value = "[%s for _ in range(%s)]" % (initial_value, dim)
-
-        return initial_value
-
-
-    def _gen_initializer_simples(self, value_type, tree):
-        return self._simples_initial_value_table[value_type]
-
-
-###################################################################################
-###################################################################################
-
-
 class SerializerGenerator:
 
     def __init__(self, user_defined_types, code_editor):
@@ -292,7 +206,12 @@ class SerializerGenerator:
                 self._gen_serializer_simples
             )
 
+        self._code_editor.add_line("%s += b'\\x00' if %s is None else b'\\x01'" % 
+                                   (result_name, value_name))
+        self._code_editor.add_line("if %s is not None:" % value_name)
+        self._code_editor.increase_indentation()
         serializer_func(value_name, result_name, tree)
+        self._code_editor.decrease_indentation()
 
 
 
@@ -443,7 +362,14 @@ class DeserializerGenerator:
                 self._gen_deserializer_simples
             )
 
+        is_null = self._code_editor.new_tempvar()
+        self._gen_deserializer_simples(data_name, offset_name, is_null, (Tokens.UnsignedByte, ))
+        self._code_editor.add_line("if %s:" % is_null)
+        self._code_editor.increase_indentation()
         deserializer_func(data_name, offset_name, value_name, tree)
+        self._code_editor.decrease_indentation()
+        self._code_editor.add_line("else:")
+        self._code_editor.add_line("%s = None" % value_name, 1)
 
 
 
@@ -511,6 +437,11 @@ class DeserializerGenerator:
 
         dims = tree[1][0]
         array_type = tree[1][1]
+
+        initial_value = 'None'
+        for dim in dims:
+            initial_value = "[%s for _ in range(%s)]" % (initial_value, dim)
+        code_editor.add_line("%s = %s" % (value_name, initial_value))
 
         indexes = []
         for i in range(len(dims)):
