@@ -67,7 +67,6 @@ map <data_type, data_type\>  |  dict  |  map<data_type, data_type\>
 array[dim1_size][dim2_size]...[dimN_size] <data_type\>  |  multi-dim list  |  data_type[dim1_size][dim2_size]...[dimN_size]
 
 * The **data_type** can either be *simple data types*, *complex data types*, *enums* or other *classes*.
-* It is not recommended to use *arrays*, unless you are experienced and professional enough.
 
 ### Objects
 Objects are specified using ``_def`` in **ks** files.
@@ -89,7 +88,7 @@ _def = enum <enum_type>
 
 * The **enum_type** can be one of the following types: *byte*, *ubyte*, *short*, *ushort*, *int*, *uint*, *long* and *ulong*.
 For example if you choose *byte*, then your enum values must be between *-128* and *127*.
-* Also you can specify the value of enum names optionally in parentheses. By default, values start from 0 and increase.
+* Also the enum name values can be optionally specified in perantheses. By default, values start from 0 and increase.
 * Enums don't have attributes.
 
 Example:
@@ -145,15 +144,13 @@ attribute2 = attribute_type
 
 > **name:** Returns the *class name* of a class or an instance.
 > 
-> **initialize:** Initializes all attributes of the instance to the given or default value.
+> **initialize:** Initializes all attributes of the instance to the given value or *Null*.
 > 
 > **serialize:** Serializes the instance to string or bytearray.
 > 
 > **deserialize:** Deserializes given string or bytearray to instance.
 
-* The instance can be initialized automatically using **init** argument of the constructor. Recursive initialization is not supported yet. Arguments can also be passed to the *constructor* or *initialize* method.
-* Attributes with **Null** or **None** value are not supported in *serialize* method yet. Assigning a value to all the attributes is essential before serialization.
-* Arrays must be initialized before serialization or deserialization.
+* Initial values of the attributes can be passed as arguments to the *constructor* or *initialize* method.
 
 Example:
 
@@ -189,14 +186,13 @@ In python shell:
 
 ```python
 >>> from full import Test
->>> t1 = Test(init=True)
->>> t1.v14.initialize()
+>>> t1 = Test()
 >>> t1.v12 = "hello"
 >>> t1.v15 = [1, 2, 3]
 >>> t1.v17 = {'one': 1, 'two': 2}
 >>> s = t1.serialize()
 
->>> t2 = Test(init=True)
+>>> t2 = Test()
 >>> t2.deserialize(s)
 >>> assert t1.v12 == t2.v12
 >>> assert t1.v15 == t2.v15
@@ -205,8 +201,5 @@ In python shell:
 
 ## TODO
 
-* Pass initial value of attributes via constructor.
-* Support recursive initialization.
 * Advanced optimization and compression.
 * Add code generators for other programming languages like **C++**, **Java** and **C#**. Currently, **Python** is the only supported language.
-* Support *Null* values.
