@@ -5,13 +5,15 @@ import os
 
 # project imports
 from .python import PythonCodeGenerator
+from .cpp import CppCodeGenerator
 
 
 class CodeGenerator:
 
     def __init__(self, source_path, programming_language, destination_dir):
         self._generators = {
-            'python': PythonCodeGenerator()
+            'python': PythonCodeGenerator(),
+            'cpp': CppCodeGenerator()
         }
 
         self._module_name = os.path.splitext(os.path.basename(source_path))[0]
