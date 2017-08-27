@@ -16,6 +16,7 @@ To generate source codes run the command below (the *output_dir* is optional):
 
 	$ koalasc <ks_path> <programming_language> <output_dir>
 
+The *programming_language* can be **python** or **cpp**.
 
 ## Usage
 
@@ -55,16 +56,16 @@ long  |  int  |  long long |  8
 ulong  |  int  |  unsigned long long |  8
 float  |  float  |  float |  4
 double  | float  |  double |  8
-string  |  str  |  string |
+string  |  str  |  std::string |
 
 
 ### Complex Data Types
 
 KS Type  |  Python Type  |  C++ Type
 ---  |  ---  |  ---
-list <data_type\>  |  list  |  vector<data_type\>
-map <data_type, data_type\>  |  dict  |  map<data_type, data_type\>
-array[dim1_size][dim2_size]...[dimN_size] <data_type\>  |  multi-dim list  |  data_type[dim1_size][dim2_size]...[dimN_size]
+list <data_type>  |  list  |  std::vector<data_type>
+map <data_type1, data_type2>  |  dict  |  std::map<data_type1, data_type2>
+array[dim1_size][dim2_size]...[dimN_size] <data_type>  |  multi-dim list  |  std::array<std::array< ... std::array<data_type, dimN_size> ... , dim2_size>, dim1_size>
 
 * The **data_type** can either be *simple data types*, *complex data types*, *enums* or other *classes*.
 
@@ -116,6 +117,19 @@ class EColor(Enum):
 	black = -1
 ```
 
+C++ generated code:
+
+```c++
+enum class EColor
+{
+	white = 0,
+	red = 3,
+	green = 4,
+	blue = -2,
+	black = -1,
+};
+```
+
 Note that the **enum_type** will be used in *serialize* and *deserialize* methods in classes.
 
 #### Class
@@ -142,7 +156,7 @@ attribute2 = attribute_type
 * In case you want to add new methods to your classes or other similar operations, be noted that it is not possible to add them in the **ks** file. You must create your own class, inherit it from the generated class, and then add your desired methods to this class.
 * Each generated class has four methods:
 
-> **name:** Returns the *class name* of a class or an instance.
+> **name:** Returns the *class name* of an *instance* (or *class* in Python).
 > 
 > **initialize:** Initializes all attributes of the instance to the given value or *Null*.
 > 
@@ -151,6 +165,35 @@ attribute2 = attribute_type
 > **deserialize:** Deserializes given string or bytearray to instance.
 
 * Initial values of the attributes can be passed as arguments to the *constructor* or *initialize* method.
+
+**C++** extras:
+
+* Methods:
+
+> **nameStatic:** A static method that returns the *class name* of a *class*. Do **not** use this method for *instances*. Use the **name** method instead.
+> 
+> **getters:** Return a copy of attributes. Their names are same as attributes.
+> 
+> **reference getters:** Return reference of attributes. Their names start with **ref_** and end with an attribute name.
+> 
+> **setters:** Given a reference value, these methods set the attributes. Their names are same as attributes.
+> 
+> **has_attribute getters and setters:** They are used to handle *Null* values. Their names start with **has_** and end with an attribute name.
+
+* Inner *Null* values are not supported in **C++**.
+
+* Every generated class inherits **KSObject** class. The **KSObject** is an abstract class that is implemented as below:
+
+	```c++
+	class KSObject
+	{
+	public:
+		static std::string nameStatic() { return ""; };
+		virtual std::string name() const = 0;
+		virtual std::string serialize() const = 0;
+		virtual unsigned int deserialize(const std::string &, unsigned int) = 0;
+	};
+	```
 
 Example:
 
@@ -174,9 +217,15 @@ Python generated code:
 
 See [inheritance.py](https://github.com/k04la/serializer/tree/master/examples/inheritance.py)
 
+C++ generated code:
+
+See [inheritance.h](https://github.com/k04la/serializer/tree/master/examples/inheritance.h)
+
 ## Full Example
 
 See [full.ks](https://github.com/k04la/serializer/tree/master/examples/full.ks) example and run the below commands as noted:
+
+### Python:
 
 In bash:
 
@@ -199,7 +248,50 @@ In python shell:
 >>> assert t1.v17 == t2.v17
 ```
 
+### C++:
+
+In bash:
+
+	$ koalasc examples/full.ks cpp
+
+main.cpp:
+```c++
+#include <iostream>
+#include <assert.h>
+
+#include "full.h"
+
+using namespace std;
+using namespace ks_full;
+
+int main()
+{
+	Test t1;
+	t1.v12("hello");
+
+	t1.ref_v15().push_back(1);
+	t1.ref_v15().push_back(2);
+	t1.ref_v15().push_back(3);
+	t1.has_v15(true);
+
+	map<string, int> v17;
+	v17["one"] = 1;
+	v17["two"] = 2;
+	t1.v17(v17);
+
+	string s = t1.serialize();
+
+	Test t2;
+	t2.deserialize(s);
+	assert(t1.v12() == t2.v12());
+	assert(t1.v15() == t2.v15());
+	assert(t1.v17() == t2.v17());
+	assert(t1.has_v12() == true);
+	assert(t1.has_v11() == false);
+}
+```
+
 ## TODO
 
 * Advanced optimization and compression.
-* Add code generators for other programming languages like **C++**, **Java** and **C#**. Currently, **Python** is the only supported language.
+* Add code generators for other programming languages like **Java** and **C#**. Currently, **Python** and **C++ 11** are the supported languages.
