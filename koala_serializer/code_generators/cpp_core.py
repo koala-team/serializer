@@ -164,8 +164,8 @@ class TypeGenerator:
         code_editor.decrease_indentation(put_accolade=False)
         code_editor.add_line()
 
-        # generate has_getters
-        code_editor.add_line("public: // has_getters\n")
+        # generate has_attribute getters
+        code_editor.add_line("public: // has_attribute getters\n")
         code_editor.increase_indentation(put_accolade=False)
         for attr_name, _ in properties:
             attr_name = 'has_' + attr_name
@@ -177,8 +177,8 @@ class TypeGenerator:
         code_editor.decrease_indentation(put_accolade=False)
         code_editor.add_line()
 
-        # generate has_setters
-        code_editor.add_line("public: // has_setters\n")
+        # generate has_attribute setters
+        code_editor.add_line("public: // has_attribute setters\n")
         code_editor.increase_indentation(put_accolade=False)
         for attr_name, _ in properties:
             attr_name = 'has_' + attr_name

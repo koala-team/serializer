@@ -62,7 +62,7 @@ public: // setters
 	}
 	
 
-public: // has_getters
+public: // has_attribute getters
 
 	inline bool has_count() const
 	{
@@ -70,7 +70,7 @@ public: // has_getters
 	}
 	
 
-public: // has_setters
+public: // has_attribute setters
 
 	inline void has_count(const bool &has_count)
 	{
@@ -144,10 +144,10 @@ public: // reference getters
 public: // setters
 
 
-public: // has_getters
+public: // has_attribute getters
 
 
-public: // has_setters
+public: // has_attribute setters
 
 
 public:

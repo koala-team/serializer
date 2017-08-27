@@ -72,7 +72,7 @@ public: // setters
 	}
 	
 
-public: // has_getters
+public: // has_attribute getters
 
 	inline bool has_p1() const
 	{
@@ -80,7 +80,7 @@ public: // has_getters
 	}
 	
 
-public: // has_setters
+public: // has_attribute setters
 
 	inline void has_p1(const bool &has_p1)
 	{
@@ -172,7 +172,7 @@ public: // setters
 	}
 	
 
-public: // has_getters
+public: // has_attribute getters
 
 	inline bool has_p2() const
 	{
@@ -180,7 +180,7 @@ public: // has_getters
 	}
 	
 
-public: // has_setters
+public: // has_attribute setters
 
 	inline void has_p2(const bool &has_p2)
 	{
@@ -272,7 +272,7 @@ public: // setters
 	}
 	
 
-public: // has_getters
+public: // has_attribute getters
 
 	inline bool has_c() const
 	{
@@ -280,7 +280,7 @@ public: // has_getters
 	}
 	
 
-public: // has_setters
+public: // has_attribute setters
 
 	inline void has_c(const bool &has_c)
 	{
@@ -759,7 +759,7 @@ public: // setters
 	}
 	
 
-public: // has_getters
+public: // has_attribute getters
 
 	inline bool has_v0() const
 	{
@@ -867,7 +867,7 @@ public: // has_getters
 	}
 	
 
-public: // has_setters
+public: // has_attribute setters
 
 	inline void has_v0(const bool &has_v0)
 	{

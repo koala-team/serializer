@@ -62,7 +62,7 @@ public: // setters
 	}
 	
 
-public: // has_getters
+public: // has_attribute getters
 
 	inline bool has_count() const
 	{
@@ -70,7 +70,7 @@ public: // has_getters
 	}
 	
 
-public: // has_setters
+public: // has_attribute setters
 
 	inline void has_count(const bool &has_count)
 	{
@@ -162,7 +162,7 @@ public: // setters
 	}
 	
 
-public: // has_getters
+public: // has_attribute getters
 
 	inline bool has_number() const
 	{
@@ -170,7 +170,7 @@ public: // has_getters
 	}
 	
 
-public: // has_setters
+public: // has_attribute setters
 
 	inline void has_number(const bool &has_number)
 	{
@@ -262,7 +262,7 @@ public: // setters
 	}
 	
 
-public: // has_getters
+public: // has_attribute getters
 
 	inline bool has_name() const
 	{
@@ -270,7 +270,7 @@ public: // has_getters
 	}
 	
 
-public: // has_setters
+public: // has_attribute setters
 
 	inline void has_name(const bool &has_name)
 	{
