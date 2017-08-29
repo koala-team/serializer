@@ -262,7 +262,8 @@ main.cpp:
 #include "full.h"
 
 using namespace std;
-using namespace ks_full;
+using namespace ks;
+using namespace ks::full;
 
 int main()
 {
