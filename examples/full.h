@@ -7,6 +7,9 @@
 #include <array>
 
 
+namespace ks
+{
+
 #ifndef _KS_OBJECT_
 #define _KS_OBJECT_
 
@@ -14,17 +17,17 @@ class KSObject
 {
 
 public:
-	static std::string nameStatic() { return ""; };
+	static std::string nameStatic() { return ""; }
 	virtual std::string name() const = 0;
 	virtual std::string serialize() const = 0;
-	virtual unsigned int deserialize(const std::string &, unsigned int) = 0;
+	virtual unsigned int deserialize(const std::string &, unsigned int = 0) = 0;
 
 };
 
 #endif // _KS_OBJECT_
 
 
-namespace ks_full
+namespace full
 {
 
 enum class EColor
@@ -1772,6 +1775,8 @@ public:
 	}
 };
 
-}
+} // namespace full
+
+} // namespace ks
 
 #endif // _KS_FULL_H_
