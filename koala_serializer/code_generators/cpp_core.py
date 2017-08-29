@@ -17,6 +17,8 @@ class HeaderGenerator:
         code_editor.add_line("#define _KS_%s_H_\n" % module_name.upper())
         self._gen_includes()
         code_editor.add_line('\n')
+        self._gen_namespace('ks')
+        code_editor.add_line()
         self._gen_ks_object()
         code_editor.add_line('\n')
         self._gen_namespace(module_name)
@@ -50,8 +52,8 @@ class HeaderGenerator:
         ])
 
 
-    def _gen_namespace(self, module_name):
-        self._code_editor.add_line("namespace ks_%s" % module_name)
+    def _gen_namespace(self, ns_name):
+        self._code_editor.add_line("namespace %s" % ns_name)
         self._code_editor.add_line('{')
 
 
@@ -68,11 +70,13 @@ class FooterGenerator:
     def gen_footer(self, module_name):
         self._gen_namespace(module_name)
         self._code_editor.add_line()
+        self._gen_namespace('ks')
+        self._code_editor.add_line()
         self._code_editor.add_line("#endif // _KS_%s_H_" % module_name.upper())
 
 
-    def _gen_namespace(self, module_name):
-        self._code_editor.add_line('}')
+    def _gen_namespace(self, ns_name):
+        self._code_editor.add_line("} // namespace %s" % ns_name)
 
 
 ###################################################################################
