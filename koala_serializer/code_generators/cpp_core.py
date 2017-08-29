@@ -41,7 +41,7 @@ class HeaderGenerator:
             "{",
             "",
             "public:",
-            "\tstatic std::string nameStatic() { return \"\"; };",
+            "\tstatic std::string nameStatic() { return \"\"; }",
             "\tvirtual std::string name() const = 0;",
             "\tvirtual std::string serialize() const = 0;",
             "\tvirtual unsigned int deserialize(const std::string &, unsigned int) = 0;",
