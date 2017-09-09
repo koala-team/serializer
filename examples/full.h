@@ -15,13 +15,11 @@ namespace ks
 
 class KSObject
 {
-
 public:
-	static std::string nameStatic() { return ""; }
-	virtual std::string name() const = 0;
+	static inline const std::string nameStatic() { return ""; }
+	virtual inline const std::string name() const = 0;
 	virtual std::string serialize() const = 0;
 	virtual unsigned int deserialize(const std::string &, unsigned int = 0) = 0;
-
 };
 
 #endif // _KS_OBJECT_
@@ -98,12 +96,12 @@ public:
 		has_p1(false);
 	}
 	
-	static std::string nameStatic()
+	static inline const std::string nameStatic()
 	{
 		return "Parent1";
 	}
 	
-	virtual std::string name() const
+	virtual inline const std::string name() const
 	{
 		return "Parent1";
 	}
@@ -198,12 +196,12 @@ public:
 		has_p2(false);
 	}
 	
-	static std::string nameStatic()
+	static inline const std::string nameStatic()
 	{
 		return "Parent2";
 	}
 	
-	virtual std::string name() const
+	virtual inline const std::string name() const
 	{
 		return "Parent2";
 	}
@@ -298,12 +296,12 @@ public:
 		has_c(false);
 	}
 	
-	static std::string nameStatic()
+	static inline const std::string nameStatic()
 	{
 		return "Child";
 	}
 	
-	virtual std::string name() const
+	virtual inline const std::string name() const
 	{
 		return "Child";
 	}
@@ -1005,12 +1003,12 @@ public:
 		has_v20(false);
 	}
 	
-	static std::string nameStatic()
+	static inline const std::string nameStatic()
 	{
 		return "Test";
 	}
 	
-	virtual std::string name() const
+	virtual inline const std::string name() const
 	{
 		return "Test";
 	}

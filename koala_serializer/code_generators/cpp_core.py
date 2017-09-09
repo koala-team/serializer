@@ -39,13 +39,11 @@ class HeaderGenerator:
             "",
             "class KSObject",
             "{",
-            "",
             "public:",
-            "\tstatic std::string nameStatic() { return \"\"; }",
-            "\tvirtual std::string name() const = 0;",
+            "\tstatic inline const std::string nameStatic() { return \"\"; }",
+            "\tvirtual inline const std::string name() const = 0;",
             "\tvirtual std::string serialize() const = 0;",
             "\tvirtual unsigned int deserialize(const std::string &, unsigned int = 0) = 0;",
-            "",
             "};",
             "",
             "#endif // _KS_OBJECT_",
@@ -207,13 +205,13 @@ class TypeGenerator:
         code_editor.add_line()
 
         # generate name
-        code_editor.add_line("static std::string nameStatic()")
+        code_editor.add_line("static inline const std::string nameStatic()")
         code_editor.increase_indentation()
         code_editor.add_line("return \"%s\";" % type_name)
         code_editor.decrease_indentation()
         code_editor.add_line()
 
-        code_editor.add_line("virtual std::string name() const")
+        code_editor.add_line("virtual inline const std::string name() const")
         code_editor.increase_indentation()
         code_editor.add_line("return \"%s\";" % type_name)
         code_editor.decrease_indentation()

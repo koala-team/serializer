@@ -188,10 +188,10 @@ attribute2 = attribute_type
 	class KSObject
 	{
 	public:
-		static std::string nameStatic() { return ""; };
-		virtual std::string name() const = 0;
+		static inline const std::string nameStatic() { return ""; }
+		virtual inline const std::string name() const = 0;
 		virtual std::string serialize() const = 0;
-		virtual unsigned int deserialize(const std::string &, unsigned int) = 0;
+		virtual unsigned int deserialize(const std::string &, unsigned int = 0) = 0;
 	};
 	```
 

@@ -15,13 +15,11 @@ namespace ks
 
 class KSObject
 {
-
 public:
-	static std::string nameStatic() { return ""; }
-	virtual std::string name() const = 0;
+	static inline const std::string nameStatic() { return ""; }
+	virtual inline const std::string name() const = 0;
 	virtual std::string serialize() const = 0;
 	virtual unsigned int deserialize(const std::string &, unsigned int = 0) = 0;
-
 };
 
 #endif // _KS_OBJECT_
@@ -88,12 +86,12 @@ public:
 		has_count(false);
 	}
 	
-	static std::string nameStatic()
+	static inline const std::string nameStatic()
 	{
 		return "Parent";
 	}
 	
-	virtual std::string name() const
+	virtual inline const std::string name() const
 	{
 		return "Parent";
 	}
@@ -159,12 +157,12 @@ public:
 	{
 	}
 	
-	static std::string nameStatic()
+	static inline const std::string nameStatic()
 	{
 		return "Child";
 	}
 	
-	virtual std::string name() const
+	virtual inline const std::string name() const
 	{
 		return "Child";
 	}
