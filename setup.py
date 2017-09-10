@@ -1,19 +1,16 @@
 import sys
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
 
 setup(
     name='koala-serializer',
-    version='0.4.0',
+    version='0.5.0',
     description='A tool designed for creating serializable objects among different programming languages',
     long_description='',
     author='k04la',
     author_email='mdan.hagh@gmail.com',
     url='https://github.com/k04la/serializer',
-    keywords=['serialize', 'deserialize', 'object', 'binary'],
+    keywords='serialize deserialize object compile binary',
 
     classifiers=[
         'Environment :: Console',
@@ -24,17 +21,15 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Topic :: Utilities'
     ],
-    
+
     license='GPL License, Version 3.0',
+
     install_requires=[
         'configparser==3.5.0',
         'enum34==1.1.6'
     ],
 
-    packages=[
-        'koala_serializer',
-        'koala_serializer.code_generators'
-    ],
+    packages=find_packages(),
 
     # Make this executable from command line when installed
     scripts=['koalasc'],
