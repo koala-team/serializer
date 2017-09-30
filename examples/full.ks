@@ -51,3 +51,7 @@ v18 = map<char, list< map<double, EColor> > >
 
 v19 = array[10] <byte>
 v20 = array[10][20] < list<string> >
+
+v21 = list <Child>
+v22 = map <string, Child>
+v23 = array[5][10] <Child>

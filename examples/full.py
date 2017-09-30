@@ -165,11 +165,11 @@ class Test(object):
 		return 'Test'
 
 
-	def __init__(self, v0=None, v1=None, v2=None, v3=None, v4=None, v5=None, v6=None, v7=None, v8=None, v9=None, v10=None, v11=None, v12=None, v13=None, v14=None, v15=None, v16=None, v17=None, v18=None, v19=None, v20=None):
-		self.initialize(v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20)
+	def __init__(self, v0=None, v1=None, v2=None, v3=None, v4=None, v5=None, v6=None, v7=None, v8=None, v9=None, v10=None, v11=None, v12=None, v13=None, v14=None, v15=None, v16=None, v17=None, v18=None, v19=None, v20=None, v21=None, v22=None, v23=None):
+		self.initialize(v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23)
 	
 
-	def initialize(self, v0=None, v1=None, v2=None, v3=None, v4=None, v5=None, v6=None, v7=None, v8=None, v9=None, v10=None, v11=None, v12=None, v13=None, v14=None, v15=None, v16=None, v17=None, v18=None, v19=None, v20=None):
+	def initialize(self, v0=None, v1=None, v2=None, v3=None, v4=None, v5=None, v6=None, v7=None, v8=None, v9=None, v10=None, v11=None, v12=None, v13=None, v14=None, v15=None, v16=None, v17=None, v18=None, v19=None, v20=None, v21=None, v22=None, v23=None):
 		self.v0 = v0
 		self.v1 = v1
 		self.v2 = v2
@@ -191,6 +191,9 @@ class Test(object):
 		self.v18 = v18
 		self.v19 = v19
 		self.v20 = v20
+		self.v21 = v21
+		self.v22 = v22
+		self.v23 = v23
 	
 
 	def serialize(self):
@@ -418,23 +421,72 @@ class Test(object):
 								
 								s += tmp27.encode('ISO-8859-1') if PY3 else tmp27
 		
+		# serialize self.v21
+		s += b'\x00' if self.v21 is None else b'\x01'
+		if self.v21 is not None:
+			tmp29 = b''
+			tmp29 += struct.pack('I', len(self.v21))
+			while len(tmp29) and tmp29[-1] == b'\x00'[0]:
+				tmp29 = tmp29[:-1]
+			s += struct.pack('B', len(tmp29))
+			s += tmp29
+			
+			for tmp30 in self.v21:
+				s += b'\x00' if tmp30 is None else b'\x01'
+				if tmp30 is not None:
+					s += tmp30.serialize()
+		
+		# serialize self.v22
+		s += b'\x00' if self.v22 is None else b'\x01'
+		if self.v22 is not None:
+			tmp31 = b''
+			tmp31 += struct.pack('I', len(self.v22))
+			while len(tmp31) and tmp31[-1] == b'\x00'[0]:
+				tmp31 = tmp31[:-1]
+			s += struct.pack('B', len(tmp31))
+			s += tmp31
+			
+			for tmp32 in self.v22:
+				s += b'\x00' if tmp32 is None else b'\x01'
+				if tmp32 is not None:
+					tmp33 = b''
+					tmp33 += struct.pack('I', len(tmp32))
+					while len(tmp33) and tmp33[-1] == b'\x00'[0]:
+						tmp33 = tmp33[:-1]
+					s += struct.pack('B', len(tmp33))
+					s += tmp33
+					
+					s += tmp32.encode('ISO-8859-1') if PY3 else tmp32
+				s += b'\x00' if self.v22[tmp32] is None else b'\x01'
+				if self.v22[tmp32] is not None:
+					s += self.v22[tmp32].serialize()
+		
+		# serialize self.v23
+		s += b'\x00' if self.v23 is None else b'\x01'
+		if self.v23 is not None:
+			for tmp34 in range(5):
+				for tmp35 in range(10):
+					s += b'\x00' if self.v23[tmp34][tmp35] is None else b'\x01'
+					if self.v23[tmp34][tmp35] is not None:
+						s += self.v23[tmp34][tmp35].serialize()
+		
 		return s
 	
 
 	def deserialize(self, s, offset=0):
 		# deserialize self.v0
-		tmp29 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp36 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp29:
+		if tmp36:
 			self.v0 = struct.unpack('?', s[offset:offset + 1])[0]
 			offset += 1
 		else:
 			self.v0 = None
 		
 		# deserialize self.v1
-		tmp30 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp37 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp30:
+		if tmp37:
 			self.v1 = struct.unpack('c', s[offset:offset + 1])[0]
 			offset += 1
 			self.v1 = self.v1.decode('ISO-8859-1') if PY3 else self.v1
@@ -442,132 +494,96 @@ class Test(object):
 			self.v1 = None
 		
 		# deserialize self.v2
-		tmp31 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp38 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp31:
+		if tmp38:
 			self.v2 = struct.unpack('b', s[offset:offset + 1])[0]
 			offset += 1
 		else:
 			self.v2 = None
 		
 		# deserialize self.v3
-		tmp32 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp39 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp32:
+		if tmp39:
 			self.v3 = struct.unpack('B', s[offset:offset + 1])[0]
 			offset += 1
 		else:
 			self.v3 = None
 		
 		# deserialize self.v4
-		tmp33 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp40 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp33:
+		if tmp40:
 			self.v4 = struct.unpack('h', s[offset:offset + 2])[0]
 			offset += 2
 		else:
 			self.v4 = None
 		
 		# deserialize self.v5
-		tmp34 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp41 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp34:
+		if tmp41:
 			self.v5 = struct.unpack('H', s[offset:offset + 2])[0]
 			offset += 2
 		else:
 			self.v5 = None
 		
 		# deserialize self.v6
-		tmp35 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp42 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp35:
+		if tmp42:
 			self.v6 = struct.unpack('i', s[offset:offset + 4])[0]
 			offset += 4
 		else:
 			self.v6 = None
 		
 		# deserialize self.v7
-		tmp36 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp43 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp36:
+		if tmp43:
 			self.v7 = struct.unpack('I', s[offset:offset + 4])[0]
 			offset += 4
 		else:
 			self.v7 = None
 		
 		# deserialize self.v8
-		tmp37 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp44 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp37:
+		if tmp44:
 			self.v8 = struct.unpack('q', s[offset:offset + 8])[0]
 			offset += 8
 		else:
 			self.v8 = None
 		
 		# deserialize self.v9
-		tmp38 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp45 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp38:
+		if tmp45:
 			self.v9 = struct.unpack('Q', s[offset:offset + 8])[0]
 			offset += 8
 		else:
 			self.v9 = None
 		
 		# deserialize self.v10
-		tmp39 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp46 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp39:
+		if tmp46:
 			self.v10 = struct.unpack('f', s[offset:offset + 4])[0]
 			offset += 4
 		else:
 			self.v10 = None
 		
 		# deserialize self.v11
-		tmp40 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp47 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp40:
+		if tmp47:
 			self.v11 = struct.unpack('d', s[offset:offset + 8])[0]
 			offset += 8
 		else:
 			self.v11 = None
 		
 		# deserialize self.v12
-		tmp41 = struct.unpack('B', s[offset:offset + 1])[0]
-		offset += 1
-		if tmp41:
-			tmp42 = struct.unpack('B', s[offset:offset + 1])[0]
-			offset += 1
-			tmp43 = s[offset:offset + tmp42]
-			offset += tmp42
-			tmp43 += b'\x00' * (4 - tmp42)
-			tmp44 = struct.unpack('I', tmp43)[0]
-			
-			self.v12 = s[offset:offset + tmp44].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp44]
-			offset += tmp44
-		else:
-			self.v12 = None
-		
-		# deserialize self.v13
-		tmp45 = struct.unpack('B', s[offset:offset + 1])[0]
-		offset += 1
-		if tmp45:
-			tmp46 = struct.unpack('b', s[offset:offset + 1])[0]
-			offset += 1
-			self.v13 = EColor(tmp46)
-		else:
-			self.v13 = None
-		
-		# deserialize self.v14
-		tmp47 = struct.unpack('B', s[offset:offset + 1])[0]
-		offset += 1
-		if tmp47:
-			if self.v14 is None:
-				self.v14 = Child()
-			offset = self.v14.deserialize(s, offset)
-		else:
-			self.v14 = None
-		
-		# deserialize self.v15
 		tmp48 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
 		if tmp48:
@@ -578,20 +594,31 @@ class Test(object):
 			tmp50 += b'\x00' * (4 - tmp49)
 			tmp51 = struct.unpack('I', tmp50)[0]
 			
-			self.v15 = []
-			for tmp52 in range(tmp51):
-				tmp54 = struct.unpack('B', s[offset:offset + 1])[0]
-				offset += 1
-				if tmp54:
-					tmp53 = struct.unpack('i', s[offset:offset + 4])[0]
-					offset += 4
-				else:
-					tmp53 = None
-				self.v15.append(tmp53)
+			self.v12 = s[offset:offset + tmp51].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp51]
+			offset += tmp51
 		else:
-			self.v15 = None
+			self.v12 = None
 		
-		# deserialize self.v16
+		# deserialize self.v13
+		tmp52 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		if tmp52:
+			tmp53 = struct.unpack('b', s[offset:offset + 1])[0]
+			offset += 1
+			self.v13 = EColor(tmp53)
+		else:
+			self.v13 = None
+		
+		# deserialize self.v14
+		tmp54 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		if tmp54:
+			self.v14 = Child()
+			offset = self.v14.deserialize(s, offset)
+		else:
+			self.v14 = None
+		
+		# deserialize self.v15
 		tmp55 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
 		if tmp55:
@@ -602,196 +629,299 @@ class Test(object):
 			tmp57 += b'\x00' * (4 - tmp56)
 			tmp58 = struct.unpack('I', tmp57)[0]
 			
-			self.v16 = []
+			self.v15 = []
 			for tmp59 in range(tmp58):
 				tmp61 = struct.unpack('B', s[offset:offset + 1])[0]
 				offset += 1
 				if tmp61:
-					tmp62 = struct.unpack('B', s[offset:offset + 1])[0]
-					offset += 1
-					tmp63 = s[offset:offset + tmp62]
-					offset += tmp62
-					tmp63 += b'\x00' * (4 - tmp62)
-					tmp64 = struct.unpack('I', tmp63)[0]
-					
-					tmp60 = []
-					for tmp65 in range(tmp64):
-						tmp67 = struct.unpack('B', s[offset:offset + 1])[0]
-						offset += 1
-						if tmp67:
-							tmp66 = struct.unpack('c', s[offset:offset + 1])[0]
-							offset += 1
-							tmp66 = tmp66.decode('ISO-8859-1') if PY3 else tmp66
-						else:
-							tmp66 = None
-						tmp60.append(tmp66)
+					tmp60 = struct.unpack('i', s[offset:offset + 4])[0]
+					offset += 4
 				else:
 					tmp60 = None
-				self.v16.append(tmp60)
+				self.v15.append(tmp60)
+		else:
+			self.v15 = None
+		
+		# deserialize self.v16
+		tmp62 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		if tmp62:
+			tmp63 = struct.unpack('B', s[offset:offset + 1])[0]
+			offset += 1
+			tmp64 = s[offset:offset + tmp63]
+			offset += tmp63
+			tmp64 += b'\x00' * (4 - tmp63)
+			tmp65 = struct.unpack('I', tmp64)[0]
+			
+			self.v16 = []
+			for tmp66 in range(tmp65):
+				tmp68 = struct.unpack('B', s[offset:offset + 1])[0]
+				offset += 1
+				if tmp68:
+					tmp69 = struct.unpack('B', s[offset:offset + 1])[0]
+					offset += 1
+					tmp70 = s[offset:offset + tmp69]
+					offset += tmp69
+					tmp70 += b'\x00' * (4 - tmp69)
+					tmp71 = struct.unpack('I', tmp70)[0]
+					
+					tmp67 = []
+					for tmp72 in range(tmp71):
+						tmp74 = struct.unpack('B', s[offset:offset + 1])[0]
+						offset += 1
+						if tmp74:
+							tmp73 = struct.unpack('c', s[offset:offset + 1])[0]
+							offset += 1
+							tmp73 = tmp73.decode('ISO-8859-1') if PY3 else tmp73
+						else:
+							tmp73 = None
+						tmp67.append(tmp73)
+				else:
+					tmp67 = None
+				self.v16.append(tmp67)
 		else:
 			self.v16 = None
 		
 		# deserialize self.v17
-		tmp68 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp75 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp68:
-			tmp69 = struct.unpack('B', s[offset:offset + 1])[0]
+		if tmp75:
+			tmp76 = struct.unpack('B', s[offset:offset + 1])[0]
 			offset += 1
-			tmp70 = s[offset:offset + tmp69]
-			offset += tmp69
-			tmp70 += b'\x00' * (4 - tmp69)
-			tmp71 = struct.unpack('I', tmp70)[0]
+			tmp77 = s[offset:offset + tmp76]
+			offset += tmp76
+			tmp77 += b'\x00' * (4 - tmp76)
+			tmp78 = struct.unpack('I', tmp77)[0]
 			
 			self.v17 = {}
-			for tmp72 in range(tmp71):
-				tmp75 = struct.unpack('B', s[offset:offset + 1])[0]
+			for tmp79 in range(tmp78):
+				tmp82 = struct.unpack('B', s[offset:offset + 1])[0]
 				offset += 1
-				if tmp75:
-					tmp76 = struct.unpack('B', s[offset:offset + 1])[0]
+				if tmp82:
+					tmp83 = struct.unpack('B', s[offset:offset + 1])[0]
 					offset += 1
-					tmp77 = s[offset:offset + tmp76]
-					offset += tmp76
-					tmp77 += b'\x00' * (4 - tmp76)
-					tmp78 = struct.unpack('I', tmp77)[0]
+					tmp84 = s[offset:offset + tmp83]
+					offset += tmp83
+					tmp84 += b'\x00' * (4 - tmp83)
+					tmp85 = struct.unpack('I', tmp84)[0]
 					
-					tmp73 = s[offset:offset + tmp78].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp78]
-					offset += tmp78
+					tmp80 = s[offset:offset + tmp85].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp85]
+					offset += tmp85
 				else:
-					tmp73 = None
-				tmp79 = struct.unpack('B', s[offset:offset + 1])[0]
+					tmp80 = None
+				tmp86 = struct.unpack('B', s[offset:offset + 1])[0]
 				offset += 1
-				if tmp79:
-					tmp74 = struct.unpack('i', s[offset:offset + 4])[0]
+				if tmp86:
+					tmp81 = struct.unpack('i', s[offset:offset + 4])[0]
 					offset += 4
 				else:
-					tmp74 = None
-				self.v17[tmp73] = tmp74
+					tmp81 = None
+				self.v17[tmp80] = tmp81
 		else:
 			self.v17 = None
 		
 		# deserialize self.v18
-		tmp80 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp87 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp80:
-			tmp81 = struct.unpack('B', s[offset:offset + 1])[0]
+		if tmp87:
+			tmp88 = struct.unpack('B', s[offset:offset + 1])[0]
 			offset += 1
-			tmp82 = s[offset:offset + tmp81]
-			offset += tmp81
-			tmp82 += b'\x00' * (4 - tmp81)
-			tmp83 = struct.unpack('I', tmp82)[0]
+			tmp89 = s[offset:offset + tmp88]
+			offset += tmp88
+			tmp89 += b'\x00' * (4 - tmp88)
+			tmp90 = struct.unpack('I', tmp89)[0]
 			
 			self.v18 = {}
-			for tmp84 in range(tmp83):
-				tmp87 = struct.unpack('B', s[offset:offset + 1])[0]
+			for tmp91 in range(tmp90):
+				tmp94 = struct.unpack('B', s[offset:offset + 1])[0]
 				offset += 1
-				if tmp87:
-					tmp85 = struct.unpack('c', s[offset:offset + 1])[0]
+				if tmp94:
+					tmp92 = struct.unpack('c', s[offset:offset + 1])[0]
 					offset += 1
-					tmp85 = tmp85.decode('ISO-8859-1') if PY3 else tmp85
+					tmp92 = tmp92.decode('ISO-8859-1') if PY3 else tmp92
 				else:
-					tmp85 = None
-				tmp88 = struct.unpack('B', s[offset:offset + 1])[0]
+					tmp92 = None
+				tmp95 = struct.unpack('B', s[offset:offset + 1])[0]
 				offset += 1
-				if tmp88:
-					tmp89 = struct.unpack('B', s[offset:offset + 1])[0]
+				if tmp95:
+					tmp96 = struct.unpack('B', s[offset:offset + 1])[0]
 					offset += 1
-					tmp90 = s[offset:offset + tmp89]
-					offset += tmp89
-					tmp90 += b'\x00' * (4 - tmp89)
-					tmp91 = struct.unpack('I', tmp90)[0]
+					tmp97 = s[offset:offset + tmp96]
+					offset += tmp96
+					tmp97 += b'\x00' * (4 - tmp96)
+					tmp98 = struct.unpack('I', tmp97)[0]
 					
-					tmp86 = []
-					for tmp92 in range(tmp91):
-						tmp94 = struct.unpack('B', s[offset:offset + 1])[0]
+					tmp93 = []
+					for tmp99 in range(tmp98):
+						tmp101 = struct.unpack('B', s[offset:offset + 1])[0]
 						offset += 1
-						if tmp94:
-							tmp95 = struct.unpack('B', s[offset:offset + 1])[0]
+						if tmp101:
+							tmp102 = struct.unpack('B', s[offset:offset + 1])[0]
 							offset += 1
-							tmp96 = s[offset:offset + tmp95]
-							offset += tmp95
-							tmp96 += b'\x00' * (4 - tmp95)
-							tmp97 = struct.unpack('I', tmp96)[0]
+							tmp103 = s[offset:offset + tmp102]
+							offset += tmp102
+							tmp103 += b'\x00' * (4 - tmp102)
+							tmp104 = struct.unpack('I', tmp103)[0]
 							
-							tmp93 = {}
-							for tmp98 in range(tmp97):
-								tmp101 = struct.unpack('B', s[offset:offset + 1])[0]
+							tmp100 = {}
+							for tmp105 in range(tmp104):
+								tmp108 = struct.unpack('B', s[offset:offset + 1])[0]
 								offset += 1
-								if tmp101:
-									tmp99 = struct.unpack('d', s[offset:offset + 8])[0]
+								if tmp108:
+									tmp106 = struct.unpack('d', s[offset:offset + 8])[0]
 									offset += 8
 								else:
-									tmp99 = None
-								tmp102 = struct.unpack('B', s[offset:offset + 1])[0]
+									tmp106 = None
+								tmp109 = struct.unpack('B', s[offset:offset + 1])[0]
 								offset += 1
-								if tmp102:
-									tmp103 = struct.unpack('b', s[offset:offset + 1])[0]
+								if tmp109:
+									tmp110 = struct.unpack('b', s[offset:offset + 1])[0]
 									offset += 1
-									tmp100 = EColor(tmp103)
+									tmp107 = EColor(tmp110)
 								else:
-									tmp100 = None
-								tmp93[tmp99] = tmp100
+									tmp107 = None
+								tmp100[tmp106] = tmp107
 						else:
-							tmp93 = None
-						tmp86.append(tmp93)
+							tmp100 = None
+						tmp93.append(tmp100)
 				else:
-					tmp86 = None
-				self.v18[tmp85] = tmp86
+					tmp93 = None
+				self.v18[tmp92] = tmp93
 		else:
 			self.v18 = None
 		
 		# deserialize self.v19
-		tmp104 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp111 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp104:
+		if tmp111:
 			self.v19 = [None for _ in range(10)]
-			for tmp105 in range(10):
-				tmp106 = struct.unpack('B', s[offset:offset + 1])[0]
+			for tmp112 in range(10):
+				tmp113 = struct.unpack('B', s[offset:offset + 1])[0]
 				offset += 1
-				if tmp106:
-					self.v19[tmp105] = struct.unpack('b', s[offset:offset + 1])[0]
+				if tmp113:
+					self.v19[tmp112] = struct.unpack('b', s[offset:offset + 1])[0]
 					offset += 1
 				else:
-					self.v19[tmp105] = None
+					self.v19[tmp112] = None
 		else:
 			self.v19 = None
 		
 		# deserialize self.v20
-		tmp107 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp114 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp107:
+		if tmp114:
 			self.v20 = [[None for _ in range(10)] for _ in range(20)]
-			for tmp108 in range(10):
-				for tmp109 in range(20):
-					tmp110 = struct.unpack('B', s[offset:offset + 1])[0]
+			for tmp115 in range(10):
+				for tmp116 in range(20):
+					tmp117 = struct.unpack('B', s[offset:offset + 1])[0]
 					offset += 1
-					if tmp110:
-						tmp111 = struct.unpack('B', s[offset:offset + 1])[0]
+					if tmp117:
+						tmp118 = struct.unpack('B', s[offset:offset + 1])[0]
 						offset += 1
-						tmp112 = s[offset:offset + tmp111]
-						offset += tmp111
-						tmp112 += b'\x00' * (4 - tmp111)
-						tmp113 = struct.unpack('I', tmp112)[0]
+						tmp119 = s[offset:offset + tmp118]
+						offset += tmp118
+						tmp119 += b'\x00' * (4 - tmp118)
+						tmp120 = struct.unpack('I', tmp119)[0]
 						
-						self.v20[tmp108][tmp109] = []
-						for tmp114 in range(tmp113):
-							tmp116 = struct.unpack('B', s[offset:offset + 1])[0]
+						self.v20[tmp115][tmp116] = []
+						for tmp121 in range(tmp120):
+							tmp123 = struct.unpack('B', s[offset:offset + 1])[0]
 							offset += 1
-							if tmp116:
-								tmp117 = struct.unpack('B', s[offset:offset + 1])[0]
+							if tmp123:
+								tmp124 = struct.unpack('B', s[offset:offset + 1])[0]
 								offset += 1
-								tmp118 = s[offset:offset + tmp117]
-								offset += tmp117
-								tmp118 += b'\x00' * (4 - tmp117)
-								tmp119 = struct.unpack('I', tmp118)[0]
+								tmp125 = s[offset:offset + tmp124]
+								offset += tmp124
+								tmp125 += b'\x00' * (4 - tmp124)
+								tmp126 = struct.unpack('I', tmp125)[0]
 								
-								tmp115 = s[offset:offset + tmp119].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp119]
-								offset += tmp119
+								tmp122 = s[offset:offset + tmp126].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp126]
+								offset += tmp126
 							else:
-								tmp115 = None
-							self.v20[tmp108][tmp109].append(tmp115)
+								tmp122 = None
+							self.v20[tmp115][tmp116].append(tmp122)
 					else:
-						self.v20[tmp108][tmp109] = None
+						self.v20[tmp115][tmp116] = None
 		else:
 			self.v20 = None
+		
+		# deserialize self.v21
+		tmp127 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		if tmp127:
+			tmp128 = struct.unpack('B', s[offset:offset + 1])[0]
+			offset += 1
+			tmp129 = s[offset:offset + tmp128]
+			offset += tmp128
+			tmp129 += b'\x00' * (4 - tmp128)
+			tmp130 = struct.unpack('I', tmp129)[0]
+			
+			self.v21 = []
+			for tmp131 in range(tmp130):
+				tmp133 = struct.unpack('B', s[offset:offset + 1])[0]
+				offset += 1
+				if tmp133:
+					tmp132 = Child()
+					offset = tmp132.deserialize(s, offset)
+				else:
+					tmp132 = None
+				self.v21.append(tmp132)
+		else:
+			self.v21 = None
+		
+		# deserialize self.v22
+		tmp134 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		if tmp134:
+			tmp135 = struct.unpack('B', s[offset:offset + 1])[0]
+			offset += 1
+			tmp136 = s[offset:offset + tmp135]
+			offset += tmp135
+			tmp136 += b'\x00' * (4 - tmp135)
+			tmp137 = struct.unpack('I', tmp136)[0]
+			
+			self.v22 = {}
+			for tmp138 in range(tmp137):
+				tmp141 = struct.unpack('B', s[offset:offset + 1])[0]
+				offset += 1
+				if tmp141:
+					tmp142 = struct.unpack('B', s[offset:offset + 1])[0]
+					offset += 1
+					tmp143 = s[offset:offset + tmp142]
+					offset += tmp142
+					tmp143 += b'\x00' * (4 - tmp142)
+					tmp144 = struct.unpack('I', tmp143)[0]
+					
+					tmp139 = s[offset:offset + tmp144].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp144]
+					offset += tmp144
+				else:
+					tmp139 = None
+				tmp145 = struct.unpack('B', s[offset:offset + 1])[0]
+				offset += 1
+				if tmp145:
+					tmp140 = Child()
+					offset = tmp140.deserialize(s, offset)
+				else:
+					tmp140 = None
+				self.v22[tmp139] = tmp140
+		else:
+			self.v22 = None
+		
+		# deserialize self.v23
+		tmp146 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		if tmp146:
+			self.v23 = [[None for _ in range(5)] for _ in range(10)]
+			for tmp147 in range(5):
+				for tmp148 in range(10):
+					tmp149 = struct.unpack('B', s[offset:offset + 1])[0]
+					offset += 1
+					if tmp149:
+						self.v23[tmp147][tmp148] = Child()
+						offset = self.v23[tmp147][tmp148].deserialize(s, offset)
+					else:
+						self.v23[tmp147][tmp148] = None
+		else:
+			self.v23 = None
 		
 		return offset
