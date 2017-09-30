@@ -1,4 +1,4 @@
-# K04lA Object Serializer
+# Koala Object Serializer
 KoalaSerializer is a tool designed for creating serializable objects. This is useful when you want to send an object via a socket. For example consider having a server written in C++ and a client written in Python. Suppose you want to send an object from your server to the client. Imagine a game server that wants to send a snapshot of the game world to clients. The snapshot object must be serialized in the server, sent via a socket, and deserialized in the client. KoalaSerializer enables you to do the first and last steps easily.
 
 
@@ -11,7 +11,7 @@ KoalaSerializer is a tool designed for creating serializable objects. This is us
 
 ### Generate Codes
 
-After installation, define your objects in a **ks** file. Examples can be found [here](https://github.com/k04la/serializer/tree/master/examples).
+After installation, define your objects in a **ks** file. Examples can be found [here](https://github.com/koala-team/serializer/tree/master/examples).
 To generate source codes run the command below (the *output_dir* is optional):
 
 	$ koalasc <ks_path> <programming_language> <output_dir>
@@ -215,15 +215,15 @@ name = string
 
 Python generated code:
 
-See [inheritance.py](https://github.com/k04la/serializer/tree/master/examples/inheritance.py)
+See [inheritance.py](https://github.com/koala-team/serializer/tree/master/examples/inheritance.py)
 
 C++ generated code:
 
-See [inheritance.h](https://github.com/k04la/serializer/tree/master/examples/inheritance.h)
+See [inheritance.h](https://github.com/koala-team/serializer/tree/master/examples/inheritance.h)
 
 ## Full Example
 
-See [full.ks](https://github.com/k04la/serializer/tree/master/examples/full.ks) example and run the below commands as noted:
+See [full.ks](https://github.com/koala-team/serializer/tree/master/examples/full.ks) example and run the below commands as noted:
 
 ### Python:
 
@@ -234,11 +234,12 @@ In bash:
 In python shell:
 
 ```python
->>> from full import Test
+>>> from full import Test, Child
 >>> t1 = Test()
 >>> t1.v12 = "hello"
 >>> t1.v15 = [1, 2, 3]
 >>> t1.v17 = {'one': 1, 'two': 2}
+>>> t1.v22 = {'one': Child(c='first'), 'two': Child(c='second')}
 >>> s = t1.serialize()
 
 >>> t2 = Test()
@@ -246,6 +247,7 @@ In python shell:
 >>> assert t1.v12 == t2.v12
 >>> assert t1.v15 == t2.v15
 >>> assert t1.v17 == t2.v17
+>>> assert t1.v22['one'].__dict__ == t2.v22['one'].__dict__ and t1.v22['two'].__dict__ == t2.v22['two'].__dict__
 ```
 
 ### C++:
@@ -280,6 +282,13 @@ int main()
 	v17["two"] = 2;
 	t1.v17(v17);
 
+	map<string, Child> v22;
+	v22["one"] = Child();
+	v22["two"] = Child();
+	v22["one"].c("first");
+	v22["two"].c("second");
+	t1.v22(v22);
+
 	string s = t1.serialize();
 
 	Test t2;
@@ -287,6 +296,7 @@ int main()
 	assert(t1.v12() == t2.v12());
 	assert(t1.v15() == t2.v15());
 	assert(t1.v17() == t2.v17());
+	assert(t1.v22()["one"].c() == t2.v22()["one"].c() && t1.v22()["two"].c() == t2.v22()["two"].c());
 	assert(t1.has_v12() == true);
 	assert(t1.has_v11() == false);
 }
