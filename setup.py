@@ -4,17 +4,17 @@ from setuptools import setup, find_packages
 
 setup(
     name='koala-serializer',
-    version='0.5.0',
+    version='0.5.1',
     description='A tool designed for creating serializable objects among different programming languages',
     long_description='',
-    author='k04la',
+    author='Koala',
     author_email='mdan.hagh@gmail.com',
-    url='https://github.com/k04la/serializer',
+    url='https://github.com/koala-team/serializer',
     keywords='serialize deserialize object compile binary',
 
     classifiers=[
         'Environment :: Console',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'License :: OSI Approved :: MIT License',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
@@ -22,7 +22,7 @@ setup(
         'Topic :: Utilities'
     ],
 
-    license='GPL License, Version 3.0',
+    license='MIT',
 
     install_requires=[
         'configparser==3.5.0',
