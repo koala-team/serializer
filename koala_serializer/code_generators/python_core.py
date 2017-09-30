@@ -376,8 +376,7 @@ class DeserializerGenerator:
     def _gen_deserializer_class(self, data_name, offset_name, value_name, tree):
         code_editor = self._code_editor
 
-        code_editor.add_line("if %s is None:" % value_name)
-        code_editor.add_line("%s = %s()" % (value_name, tree[0]), 1)
+        code_editor.add_line("%s = %s()" % (value_name, tree[0]))
         code_editor.add_line("%s = %s.deserialize(%s, %s)" % 
                              (offset_name, value_name, data_name, offset_name))
 
