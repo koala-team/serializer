@@ -2,12 +2,13 @@
 
 # project imports
 from .cpp_core import HeaderGenerator, FooterGenerator, TypeGenerator
+from .code_editor import CodeEditor
 
 
 class CppCodeGenerator:
 
     def __init__(self):
-        self._code_editor = CodeEditor()
+        self._code_editor = CppCodeEditor()
         self._header_generator = HeaderGenerator(self._code_editor)
         self._type_generator = TypeGenerator(self._code_editor)
         self._footer_generator = FooterGenerator(self._code_editor)
@@ -30,19 +31,7 @@ class CppCodeGenerator:
 
 
 
-class CodeEditor:
-
-    def __init__(self):
-        self._code = ""
-        self._global_indent = 0
-        self._temp_variable_number = 0
-
-
-    def get_code(self):
-        while self._code[-1] == '\n':
-            self._code = self._code[:-1]
-        self._code += '\n'
-        return self._code
+class CppCodeEditor(CodeEditor):
 
 
     def add_line(self, text="", local_indent=0):
@@ -66,9 +55,3 @@ class CodeEditor:
         if put_accolade:
             semi = ';' if add_semi else ''
             self.add_line('}' + semi)
-
-
-    def new_tempvar(self):
-        var = "tmp%s" % self._temp_variable_number
-        self._temp_variable_number += 1
-        return var
