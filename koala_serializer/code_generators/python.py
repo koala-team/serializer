@@ -29,16 +29,4 @@ class PythonCodeGenerator:
 
 class PythonCodeEditor(CodeEditor):
 
-
-    def add_line(self, text="", local_indent=0):
-        local_indent += self._global_indent
-        self._code += '\t' * local_indent + text + '\n'
-
-
-    def increase_indentation(self, count=1):
-        self._global_indent += count
-
-
-    def decrease_indentation(self, count=1):
-        self._global_indent -= count
-
+    pass

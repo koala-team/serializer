@@ -33,25 +33,14 @@ class CppCodeGenerator:
 
 class CppCodeEditor(CodeEditor):
 
-
-    def add_line(self, text="", local_indent=0):
-        local_indent += self._global_indent
-        self._code += '\t' * local_indent + text + '\n'
-
-
-    def add_lines(self, lines, local_indent=0):
-        for text in lines:
-            self.add_line(text, local_indent)
-
-
     def increase_indentation(self, put_accolade=True):
         if put_accolade:
             self.add_line('{')
-        self._global_indent += 1
+        super(CppCodeEditor, self).increase_indentation()
 
 
     def decrease_indentation(self, put_accolade=True, add_semi=False):
-        self._global_indent -= 1
+        super(CppCodeEditor, self).decrease_indentation()
         if put_accolade:
             semi = ';' if add_semi else ''
             self.add_line('}' + semi)
