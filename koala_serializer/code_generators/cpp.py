@@ -2,12 +2,13 @@
 
 # project imports
 from .cpp_core import HeaderGenerator, FooterGenerator, TypeGenerator
+from .code_editor import CodeEditor
 
 
 class CppCodeGenerator:
 
     def __init__(self):
-        self._code_editor = CodeEditor()
+        self._code_editor = CppCodeEditor()
         self._header_generator = HeaderGenerator(self._code_editor)
         self._type_generator = TypeGenerator(self._code_editor)
         self._footer_generator = FooterGenerator(self._code_editor)
@@ -30,45 +31,16 @@ class CppCodeGenerator:
 
 
 
-class CodeEditor:
-
-    def __init__(self):
-        self._code = ""
-        self._global_indent = 0
-        self._temp_variable_number = 0
-
-
-    def get_code(self):
-        while self._code[-1] == '\n':
-            self._code = self._code[:-1]
-        self._code += '\n'
-        return self._code
-
-
-    def add_line(self, text="", local_indent=0):
-        local_indent += self._global_indent
-        self._code += '\t' * local_indent + text + '\n'
-
-
-    def add_lines(self, lines, local_indent=0):
-        for text in lines:
-            self.add_line(text, local_indent)
-
+class CppCodeEditor(CodeEditor):
 
     def increase_indentation(self, put_accolade=True):
         if put_accolade:
             self.add_line('{')
-        self._global_indent += 1
+        super(CppCodeEditor, self).increase_indentation()
 
 
     def decrease_indentation(self, put_accolade=True, add_semi=False):
-        self._global_indent -= 1
+        super(CppCodeEditor, self).decrease_indentation()
         if put_accolade:
             semi = ';' if add_semi else ''
             self.add_line('}' + semi)
-
-
-    def new_tempvar(self):
-        var = "tmp%s" % self._temp_variable_number
-        self._temp_variable_number += 1
-        return var

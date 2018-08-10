@@ -2,12 +2,13 @@
 
 # project imports
 from .python_core import HeaderGenerator, TypeGenerator
+from .code_editor import CodeEditor
 
 
 class PythonCodeGenerator:
 
     def __init__(self):
-        self._code_editor = CodeEditor()
+        self._code_editor = PythonCodeEditor()
         self._header_generator = HeaderGenerator(self._code_editor)
         self._type_generator = TypeGenerator(self._code_editor)
 
@@ -26,35 +27,6 @@ class PythonCodeGenerator:
 
 
 
-class CodeEditor:
+class PythonCodeEditor(CodeEditor):
 
-    def __init__(self):
-        self._code = ""
-        self._global_indent = 0
-        self._temp_variable_number = 0
-
-
-    def get_code(self):
-        while self._code[-1] == '\n':
-            self._code = self._code[:-1]
-        self._code += '\n'
-        return self._code
-
-
-    def add_line(self, text="", local_indent=0):
-        local_indent += self._global_indent
-        self._code += '\t' * local_indent + text + '\n'
-
-
-    def increase_indentation(self, count=1):
-        self._global_indent += count
-
-
-    def decrease_indentation(self, count=1):
-        self._global_indent -= count
-
-
-    def new_tempvar(self):
-        var = "tmp%s" % self._temp_variable_number
-        self._temp_variable_number += 1
-        return var
+    pass
