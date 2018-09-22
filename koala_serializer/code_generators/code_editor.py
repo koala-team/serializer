@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class CodeEditor:
+class CodeEditor(object):
 
     def __init__(self):
         self._code = ""
