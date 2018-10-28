@@ -1,3 +1,4 @@
+; Color enum
 [EColor]
 _def = enum <byte> 
 	{
@@ -9,21 +10,25 @@ _def = enum <byte>
 	}
 
 
+; Parent1 class
 [Parent1]
 _def = class
 p1 = uint
 
 
+; Parent2 class
 [Parent2]
 _def = class
 p2 = long
 
 
+# Child class
 [Child]
 _def = class(Parent1, Parent2)
 c = string
 
 
+# Test class
 [Test]
 _def = class
 v0 = boolean
