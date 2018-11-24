@@ -10,21 +10,15 @@ _def = enum <byte>
 	}
 
 
-; Parent1 class
-[Parent1]
+; Parent class
+[Parent]
 _def = class
 p1 = uint
 
 
-; Parent2 class
-[Parent2]
-_def = class
-p2 = long
-
-
 # Child class
 [Child]
-_def = class(Parent1, Parent2)
+_def = class(Parent)
 c = string
 
 
@@ -49,14 +43,14 @@ v13 = EColor
 v14 = Child
 
 v15 = list<int>
-v16 = list< list<char> >
+v16 = list<list<char>>
 
 v17 = map<string, int>
-v18 = map<char, list< map<double, EColor> > >
+v18 = map<char, list<map<double, EColor>>>
 
 v19 = array[10] <byte>
-v20 = array[10][20] < list<string> >
+v20 = array[10][20] <list<string>>
 
-v21 = list <Child>
-v22 = map <string, Child>
+v21 = list<array[4] <Child>>
+v22 = map<string, Child>
 v23 = array[5][10] <Child>
