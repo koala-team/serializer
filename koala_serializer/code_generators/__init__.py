@@ -6,6 +6,7 @@ import os
 # project imports
 from .python import PythonCodeGenerator
 from .cpp import CppCodeGenerator
+from .cs import CsCodeGenerator
 
 
 class CodeGenerator:
@@ -13,7 +14,8 @@ class CodeGenerator:
     def __init__(self, source_path, programming_language, destination_dir):
         self._generators = {
             'python': PythonCodeGenerator(),
-            'cpp': CppCodeGenerator()
+            'cpp': CppCodeGenerator(),
+            'cs': CsCodeGenerator()
         }
 
         self._module_name = os.path.splitext(os.path.basename(source_path))[0]
@@ -22,6 +24,7 @@ class CodeGenerator:
 
 
     def generate(self, parse_tree):
-        code, filename = self._generators[self._programming_language].generate(parse_tree, self._module_name)
-        with open(os.path.join(self._destination_dir, filename), 'w') as f:
-            f.write(code)
+        result = self._generators[self._programming_language].generate(parse_tree, self._module_name)
+        for code, filename in result:
+            with open(os.path.join(self._destination_dir, filename), 'w') as f:
+                f.write(code)

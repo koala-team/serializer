@@ -16,7 +16,7 @@ class PythonCodeGenerator:
     def generate(self, parse_tree, module_name):
         self._generate(parse_tree)
         filename = '%s.py' % module_name
-        return self._code_editor.get_code(), filename
+        return [(self._code_editor.get_code(), filename)]
 
 
     def _generate(self, parse_tree):
