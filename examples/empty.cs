@@ -6,7 +6,7 @@ namespace ks.empty
 {
 	public class Parent : KSObject
 	{
-		public uint? count { get; set; }
+		public uint? Count { get; set; }
 		
 
 		public Parent()
@@ -21,11 +21,11 @@ namespace ks.empty
 		{
 			List<byte> s = new List<byte>();
 			
-			// serialize count
-			s.Add((byte)((count == null) ? 0 : 1));
-			if (count != null)
+			// serialize Count
+			s.Add((byte)((Count == null) ? 0 : 1));
+			if (Count != null)
 			{
-				s.AddRange(BitConverter.GetBytes((uint)count));
+				s.AddRange(BitConverter.GetBytes((uint)Count));
 			}
 			
 			return s.ToArray();
@@ -33,17 +33,17 @@ namespace ks.empty
 		
 		public override uint Deserialize(byte[] s, uint offset = 0)
 		{
-			// deserialize count
+			// deserialize Count
 			byte tmp0;
 			tmp0 = (byte)s[(int)offset];
 			offset += sizeof(byte);
 			if (tmp0 == 1)
 			{
-				count = BitConverter.ToUInt32(s, (int)offset);
+				Count = BitConverter.ToUInt32(s, (int)offset);
 				offset += sizeof(uint);
 			}
 			else
-				count = null;
+				Count = null;
 			
 			return offset;
 		}

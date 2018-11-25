@@ -43,49 +43,77 @@ class Parent : public KSObject
 
 protected:
 
-	unsigned int __p1;
+	std::string __firstName;
+	std::string ___lastName_;
 
-	bool __has_p1;
+	bool __has_firstName;
+	bool __has__lastName_;
 
 
 public: // getters
 
-	inline unsigned int p1() const
+	inline std::string firstName() const
 	{
-		return __p1;
+		return __firstName;
+	}
+	
+	inline std::string _lastName_() const
+	{
+		return ___lastName_;
 	}
 	
 
 public: // reference getters
 
-	inline unsigned int &ref_p1() const
+	inline std::string &ref_firstName() const
 	{
-		return (unsigned int&) __p1;
+		return (std::string&) __firstName;
+	}
+	
+	inline std::string &ref__lastName_() const
+	{
+		return (std::string&) ___lastName_;
 	}
 	
 
 public: // setters
 
-	inline void p1(const unsigned int &p1)
+	inline void firstName(const std::string &firstName)
 	{
-		__p1 = p1;
-		has_p1(true);
+		__firstName = firstName;
+		has_firstName(true);
+	}
+	
+	inline void _lastName_(const std::string &_lastName_)
+	{
+		___lastName_ = _lastName_;
+		has__lastName_(true);
 	}
 	
 
 public: // has_attribute getters
 
-	inline bool has_p1() const
+	inline bool has_firstName() const
 	{
-		return __has_p1;
+		return __has_firstName;
+	}
+	
+	inline bool has__lastName_() const
+	{
+		return __has__lastName_;
 	}
 	
 
 public: // has_attribute setters
 
-	inline void has_p1(const bool &has_p1)
+	inline void has_firstName(const bool &has_firstName)
 	{
-		__has_p1 = has_p1;
+		__has_firstName = has_firstName;
+	}
+	
+	inline void has__lastName_(const bool &has__lastName_)
+	{
+		__has__lastName_ = has__lastName_;
 	}
 	
 
@@ -93,7 +121,8 @@ public:
 
 	Parent()
 	{
-		has_p1(false);
+		has_firstName(false);
+		has__lastName_(false);
 	}
 	
 	static inline const std::string nameStatic()
@@ -110,13 +139,40 @@ public:
 	{
 		std::string s = "";
 		
-		// serialize p1
-		s += __has_p1;
-		if (__has_p1)
+		// serialize firstName
+		s += __has_firstName;
+		if (__has_firstName)
 		{
-			unsigned int tmp1 = __p1;
-			auto tmp2 = reinterpret_cast<char*>(&tmp1);
-			s += std::string(tmp2, sizeof(unsigned int));
+			std::string tmp0 = "";
+			unsigned int tmp2 = __firstName.size();
+			auto tmp3 = reinterpret_cast<char*>(&tmp2);
+			tmp0 += std::string(tmp3, sizeof(unsigned int));
+			while (tmp0.size() && tmp0.back() == 0)
+				tmp0.pop_back();
+			unsigned char tmp5 = tmp0.size();
+			auto tmp6 = reinterpret_cast<char*>(&tmp5);
+			s += std::string(tmp6, sizeof(unsigned char));
+			s += tmp0;
+			
+			s += __firstName;
+		}
+		
+		// serialize _lastName_
+		s += __has__lastName_;
+		if (__has__lastName_)
+		{
+			std::string tmp7 = "";
+			unsigned int tmp9 = ___lastName_.size();
+			auto tmp10 = reinterpret_cast<char*>(&tmp9);
+			tmp7 += std::string(tmp10, sizeof(unsigned int));
+			while (tmp7.size() && tmp7.back() == 0)
+				tmp7.pop_back();
+			unsigned char tmp12 = tmp7.size();
+			auto tmp13 = reinterpret_cast<char*>(&tmp12);
+			s += std::string(tmp13, sizeof(unsigned char));
+			s += tmp7;
+			
+			s += ___lastName_;
 		}
 		
 		return s;
@@ -124,13 +180,42 @@ public:
 	
 	unsigned int deserialize(const std::string &s, unsigned int offset=0)
 	{
-		// deserialize p1
-		__has_p1 = *((unsigned char*) (&s[offset]));
+		// deserialize firstName
+		__has_firstName = *((unsigned char*) (&s[offset]));
 		offset += sizeof(unsigned char);
-		if (__has_p1)
+		if (__has_firstName)
 		{
-			__p1 = *((unsigned int*) (&s[offset]));
-			offset += sizeof(unsigned int);
+			unsigned char tmp14;
+			tmp14 = *((unsigned char*) (&s[offset]));
+			offset += sizeof(unsigned char);
+			std::string tmp15 = std::string(&s[offset], tmp14);
+			offset += tmp14;
+			while (tmp15.size() < sizeof(unsigned int))
+				tmp15 += '\x00';
+			unsigned int tmp16;
+			tmp16 = *((unsigned int*) (&tmp15[0]));
+			
+			__firstName = s.substr(offset, tmp16);
+			offset += tmp16;
+		}
+		
+		// deserialize _lastName_
+		__has__lastName_ = *((unsigned char*) (&s[offset]));
+		offset += sizeof(unsigned char);
+		if (__has__lastName_)
+		{
+			unsigned char tmp17;
+			tmp17 = *((unsigned char*) (&s[offset]));
+			offset += sizeof(unsigned char);
+			std::string tmp18 = std::string(&s[offset], tmp17);
+			offset += tmp17;
+			while (tmp18.size() < sizeof(unsigned int))
+				tmp18 += '\x00';
+			unsigned int tmp19;
+			tmp19 = *((unsigned int*) (&tmp18[0]));
+			
+			___lastName_ = s.substr(offset, tmp19);
+			offset += tmp19;
 		}
 		
 		return offset;
@@ -217,16 +302,16 @@ public:
 		s += __has_c;
 		if (__has_c)
 		{
-			std::string tmp3 = "";
-			unsigned int tmp5 = __c.size();
-			auto tmp6 = reinterpret_cast<char*>(&tmp5);
-			tmp3 += std::string(tmp6, sizeof(unsigned int));
-			while (tmp3.size() && tmp3.back() == 0)
-				tmp3.pop_back();
-			unsigned char tmp8 = tmp3.size();
-			auto tmp9 = reinterpret_cast<char*>(&tmp8);
-			s += std::string(tmp9, sizeof(unsigned char));
-			s += tmp3;
+			std::string tmp20 = "";
+			unsigned int tmp22 = __c.size();
+			auto tmp23 = reinterpret_cast<char*>(&tmp22);
+			tmp20 += std::string(tmp23, sizeof(unsigned int));
+			while (tmp20.size() && tmp20.back() == 0)
+				tmp20.pop_back();
+			unsigned char tmp25 = tmp20.size();
+			auto tmp26 = reinterpret_cast<char*>(&tmp25);
+			s += std::string(tmp26, sizeof(unsigned char));
+			s += tmp20;
 			
 			s += __c;
 		}
@@ -244,18 +329,18 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_c)
 		{
-			unsigned char tmp10;
-			tmp10 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp27;
+			tmp27 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp11 = std::string(&s[offset], tmp10);
-			offset += tmp10;
-			while (tmp11.size() < sizeof(unsigned int))
-				tmp11 += '\x00';
-			unsigned int tmp12;
-			tmp12 = *((unsigned int*) (&tmp11[0]));
+			std::string tmp28 = std::string(&s[offset], tmp27);
+			offset += tmp27;
+			while (tmp28.size() < sizeof(unsigned int))
+				tmp28 += '\x00';
+			unsigned int tmp29;
+			tmp29 = *((unsigned int*) (&tmp28[0]));
 			
-			__c = s.substr(offset, tmp12);
-			offset += tmp12;
+			__c = s.substr(offset, tmp29);
+			offset += tmp29;
 		}
 		
 		return offset;
@@ -1006,124 +1091,124 @@ public:
 		s += __has_v0;
 		if (__has_v0)
 		{
-			bool tmp14 = __v0;
-			auto tmp15 = reinterpret_cast<char*>(&tmp14);
-			s += std::string(tmp15, sizeof(bool));
+			bool tmp31 = __v0;
+			auto tmp32 = reinterpret_cast<char*>(&tmp31);
+			s += std::string(tmp32, sizeof(bool));
 		}
 		
 		// serialize v1
 		s += __has_v1;
 		if (__has_v1)
 		{
-			char tmp17 = __v1;
-			auto tmp18 = reinterpret_cast<char*>(&tmp17);
-			s += std::string(tmp18, sizeof(char));
+			char tmp34 = __v1;
+			auto tmp35 = reinterpret_cast<char*>(&tmp34);
+			s += std::string(tmp35, sizeof(char));
 		}
 		
 		// serialize v2
 		s += __has_v2;
 		if (__has_v2)
 		{
-			char tmp20 = __v2;
-			auto tmp21 = reinterpret_cast<char*>(&tmp20);
-			s += std::string(tmp21, sizeof(char));
+			char tmp37 = __v2;
+			auto tmp38 = reinterpret_cast<char*>(&tmp37);
+			s += std::string(tmp38, sizeof(char));
 		}
 		
 		// serialize v3
 		s += __has_v3;
 		if (__has_v3)
 		{
-			unsigned char tmp23 = __v3;
-			auto tmp24 = reinterpret_cast<char*>(&tmp23);
-			s += std::string(tmp24, sizeof(unsigned char));
+			unsigned char tmp40 = __v3;
+			auto tmp41 = reinterpret_cast<char*>(&tmp40);
+			s += std::string(tmp41, sizeof(unsigned char));
 		}
 		
 		// serialize v4
 		s += __has_v4;
 		if (__has_v4)
 		{
-			short tmp26 = __v4;
-			auto tmp27 = reinterpret_cast<char*>(&tmp26);
-			s += std::string(tmp27, sizeof(short));
+			short tmp43 = __v4;
+			auto tmp44 = reinterpret_cast<char*>(&tmp43);
+			s += std::string(tmp44, sizeof(short));
 		}
 		
 		// serialize v5
 		s += __has_v5;
 		if (__has_v5)
 		{
-			unsigned short tmp29 = __v5;
-			auto tmp30 = reinterpret_cast<char*>(&tmp29);
-			s += std::string(tmp30, sizeof(unsigned short));
+			unsigned short tmp46 = __v5;
+			auto tmp47 = reinterpret_cast<char*>(&tmp46);
+			s += std::string(tmp47, sizeof(unsigned short));
 		}
 		
 		// serialize v6
 		s += __has_v6;
 		if (__has_v6)
 		{
-			int tmp32 = __v6;
-			auto tmp33 = reinterpret_cast<char*>(&tmp32);
-			s += std::string(tmp33, sizeof(int));
+			int tmp49 = __v6;
+			auto tmp50 = reinterpret_cast<char*>(&tmp49);
+			s += std::string(tmp50, sizeof(int));
 		}
 		
 		// serialize v7
 		s += __has_v7;
 		if (__has_v7)
 		{
-			unsigned int tmp35 = __v7;
-			auto tmp36 = reinterpret_cast<char*>(&tmp35);
-			s += std::string(tmp36, sizeof(unsigned int));
+			unsigned int tmp52 = __v7;
+			auto tmp53 = reinterpret_cast<char*>(&tmp52);
+			s += std::string(tmp53, sizeof(unsigned int));
 		}
 		
 		// serialize v8
 		s += __has_v8;
 		if (__has_v8)
 		{
-			long long tmp38 = __v8;
-			auto tmp39 = reinterpret_cast<char*>(&tmp38);
-			s += std::string(tmp39, sizeof(long long));
+			long long tmp55 = __v8;
+			auto tmp56 = reinterpret_cast<char*>(&tmp55);
+			s += std::string(tmp56, sizeof(long long));
 		}
 		
 		// serialize v9
 		s += __has_v9;
 		if (__has_v9)
 		{
-			unsigned long long tmp41 = __v9;
-			auto tmp42 = reinterpret_cast<char*>(&tmp41);
-			s += std::string(tmp42, sizeof(unsigned long long));
+			unsigned long long tmp58 = __v9;
+			auto tmp59 = reinterpret_cast<char*>(&tmp58);
+			s += std::string(tmp59, sizeof(unsigned long long));
 		}
 		
 		// serialize v10
 		s += __has_v10;
 		if (__has_v10)
 		{
-			float tmp44 = __v10;
-			auto tmp45 = reinterpret_cast<char*>(&tmp44);
-			s += std::string(tmp45, sizeof(float));
+			float tmp61 = __v10;
+			auto tmp62 = reinterpret_cast<char*>(&tmp61);
+			s += std::string(tmp62, sizeof(float));
 		}
 		
 		// serialize v11
 		s += __has_v11;
 		if (__has_v11)
 		{
-			double tmp47 = __v11;
-			auto tmp48 = reinterpret_cast<char*>(&tmp47);
-			s += std::string(tmp48, sizeof(double));
+			double tmp64 = __v11;
+			auto tmp65 = reinterpret_cast<char*>(&tmp64);
+			s += std::string(tmp65, sizeof(double));
 		}
 		
 		// serialize v12
 		s += __has_v12;
 		if (__has_v12)
 		{
-			std::string tmp49 = "";
-			unsigned int tmp51 = __v12.size();
-			auto tmp52 = reinterpret_cast<char*>(&tmp51);
-			tmp49 += std::string(tmp52, sizeof(unsigned int));
-			while (tmp49.size() && tmp49.back() == 0)
-				tmp49.pop_back();
-			unsigned char tmp54 = tmp49.size();
-			auto tmp55 = reinterpret_cast<char*>(&tmp54);
-			s += std::string(tmp55, sizeof(unsigned char));
-			s += tmp49;
+			std::string tmp66 = "";
+			unsigned int tmp68 = __v12.size();
+			auto tmp69 = reinterpret_cast<char*>(&tmp68);
+			tmp66 += std::string(tmp69, sizeof(unsigned int));
+			while (tmp66.size() && tmp66.back() == 0)
+				tmp66.pop_back();
+			unsigned char tmp71 = tmp66.size();
+			auto tmp72 = reinterpret_cast<char*>(&tmp71);
+			s += std::string(tmp72, sizeof(unsigned char));
+			s += tmp66;
 			
 			s += __v12;
 		}
@@ -1132,9 +1217,9 @@ public:
 		s += __has_v13;
 		if (__has_v13)
 		{
-			char tmp57 = (char) __v13;
-			auto tmp58 = reinterpret_cast<char*>(&tmp57);
-			s += std::string(tmp58, sizeof(char));
+			char tmp74 = (char) __v13;
+			auto tmp75 = reinterpret_cast<char*>(&tmp74);
+			s += std::string(tmp75, sizeof(char));
 		}
 		
 		// serialize v14
@@ -1148,23 +1233,23 @@ public:
 		s += __has_v15;
 		if (__has_v15)
 		{
-			std::string tmp59 = "";
-			unsigned int tmp61 = __v15.size();
-			auto tmp62 = reinterpret_cast<char*>(&tmp61);
-			tmp59 += std::string(tmp62, sizeof(unsigned int));
-			while (tmp59.size() && tmp59.back() == 0)
-				tmp59.pop_back();
-			unsigned char tmp64 = tmp59.size();
-			auto tmp65 = reinterpret_cast<char*>(&tmp64);
-			s += std::string(tmp65, sizeof(unsigned char));
-			s += tmp59;
+			std::string tmp76 = "";
+			unsigned int tmp78 = __v15.size();
+			auto tmp79 = reinterpret_cast<char*>(&tmp78);
+			tmp76 += std::string(tmp79, sizeof(unsigned int));
+			while (tmp76.size() && tmp76.back() == 0)
+				tmp76.pop_back();
+			unsigned char tmp81 = tmp76.size();
+			auto tmp82 = reinterpret_cast<char*>(&tmp81);
+			s += std::string(tmp82, sizeof(unsigned char));
+			s += tmp76;
 			
-			for (auto &tmp66 : __v15)
+			for (auto &tmp83 : __v15)
 			{
 				s += '\x01';
-				int tmp68 = tmp66;
-				auto tmp69 = reinterpret_cast<char*>(&tmp68);
-				s += std::string(tmp69, sizeof(int));
+				int tmp85 = tmp83;
+				auto tmp86 = reinterpret_cast<char*>(&tmp85);
+				s += std::string(tmp86, sizeof(int));
 			}
 		}
 		
@@ -1172,37 +1257,37 @@ public:
 		s += __has_v16;
 		if (__has_v16)
 		{
-			std::string tmp70 = "";
-			unsigned int tmp72 = __v16.size();
-			auto tmp73 = reinterpret_cast<char*>(&tmp72);
-			tmp70 += std::string(tmp73, sizeof(unsigned int));
-			while (tmp70.size() && tmp70.back() == 0)
-				tmp70.pop_back();
-			unsigned char tmp75 = tmp70.size();
-			auto tmp76 = reinterpret_cast<char*>(&tmp75);
-			s += std::string(tmp76, sizeof(unsigned char));
-			s += tmp70;
+			std::string tmp87 = "";
+			unsigned int tmp89 = __v16.size();
+			auto tmp90 = reinterpret_cast<char*>(&tmp89);
+			tmp87 += std::string(tmp90, sizeof(unsigned int));
+			while (tmp87.size() && tmp87.back() == 0)
+				tmp87.pop_back();
+			unsigned char tmp92 = tmp87.size();
+			auto tmp93 = reinterpret_cast<char*>(&tmp92);
+			s += std::string(tmp93, sizeof(unsigned char));
+			s += tmp87;
 			
-			for (auto &tmp77 : __v16)
+			for (auto &tmp94 : __v16)
 			{
 				s += '\x01';
-				std::string tmp78 = "";
-				unsigned int tmp80 = tmp77.size();
-				auto tmp81 = reinterpret_cast<char*>(&tmp80);
-				tmp78 += std::string(tmp81, sizeof(unsigned int));
-				while (tmp78.size() && tmp78.back() == 0)
-					tmp78.pop_back();
-				unsigned char tmp83 = tmp78.size();
-				auto tmp84 = reinterpret_cast<char*>(&tmp83);
-				s += std::string(tmp84, sizeof(unsigned char));
-				s += tmp78;
+				std::string tmp95 = "";
+				unsigned int tmp97 = tmp94.size();
+				auto tmp98 = reinterpret_cast<char*>(&tmp97);
+				tmp95 += std::string(tmp98, sizeof(unsigned int));
+				while (tmp95.size() && tmp95.back() == 0)
+					tmp95.pop_back();
+				unsigned char tmp100 = tmp95.size();
+				auto tmp101 = reinterpret_cast<char*>(&tmp100);
+				s += std::string(tmp101, sizeof(unsigned char));
+				s += tmp95;
 				
-				for (auto &tmp85 : tmp77)
+				for (auto &tmp102 : tmp94)
 				{
 					s += '\x01';
-					char tmp87 = tmp85;
-					auto tmp88 = reinterpret_cast<char*>(&tmp87);
-					s += std::string(tmp88, sizeof(char));
+					char tmp104 = tmp102;
+					auto tmp105 = reinterpret_cast<char*>(&tmp104);
+					s += std::string(tmp105, sizeof(char));
 				}
 			}
 		}
@@ -1211,37 +1296,37 @@ public:
 		s += __has_v17;
 		if (__has_v17)
 		{
-			std::string tmp89 = "";
-			unsigned int tmp91 = __v17.size();
-			auto tmp92 = reinterpret_cast<char*>(&tmp91);
-			tmp89 += std::string(tmp92, sizeof(unsigned int));
-			while (tmp89.size() && tmp89.back() == 0)
-				tmp89.pop_back();
-			unsigned char tmp94 = tmp89.size();
-			auto tmp95 = reinterpret_cast<char*>(&tmp94);
-			s += std::string(tmp95, sizeof(unsigned char));
-			s += tmp89;
+			std::string tmp106 = "";
+			unsigned int tmp108 = __v17.size();
+			auto tmp109 = reinterpret_cast<char*>(&tmp108);
+			tmp106 += std::string(tmp109, sizeof(unsigned int));
+			while (tmp106.size() && tmp106.back() == 0)
+				tmp106.pop_back();
+			unsigned char tmp111 = tmp106.size();
+			auto tmp112 = reinterpret_cast<char*>(&tmp111);
+			s += std::string(tmp112, sizeof(unsigned char));
+			s += tmp106;
 			
-			for (auto &tmp96 : __v17)
+			for (auto &tmp113 : __v17)
 			{
 				s += '\x01';
-				std::string tmp97 = "";
-				unsigned int tmp99 = tmp96.first.size();
-				auto tmp100 = reinterpret_cast<char*>(&tmp99);
-				tmp97 += std::string(tmp100, sizeof(unsigned int));
-				while (tmp97.size() && tmp97.back() == 0)
-					tmp97.pop_back();
-				unsigned char tmp102 = tmp97.size();
-				auto tmp103 = reinterpret_cast<char*>(&tmp102);
-				s += std::string(tmp103, sizeof(unsigned char));
-				s += tmp97;
+				std::string tmp114 = "";
+				unsigned int tmp116 = tmp113.first.size();
+				auto tmp117 = reinterpret_cast<char*>(&tmp116);
+				tmp114 += std::string(tmp117, sizeof(unsigned int));
+				while (tmp114.size() && tmp114.back() == 0)
+					tmp114.pop_back();
+				unsigned char tmp119 = tmp114.size();
+				auto tmp120 = reinterpret_cast<char*>(&tmp119);
+				s += std::string(tmp120, sizeof(unsigned char));
+				s += tmp114;
 				
-				s += tmp96.first;
+				s += tmp113.first;
 				
 				s += '\x01';
-				int tmp105 = tmp96.second;
-				auto tmp106 = reinterpret_cast<char*>(&tmp105);
-				s += std::string(tmp106, sizeof(int));
+				int tmp122 = tmp113.second;
+				auto tmp123 = reinterpret_cast<char*>(&tmp122);
+				s += std::string(tmp123, sizeof(int));
 			}
 		}
 		
@@ -1249,61 +1334,61 @@ public:
 		s += __has_v18;
 		if (__has_v18)
 		{
-			std::string tmp107 = "";
-			unsigned int tmp109 = __v18.size();
-			auto tmp110 = reinterpret_cast<char*>(&tmp109);
-			tmp107 += std::string(tmp110, sizeof(unsigned int));
-			while (tmp107.size() && tmp107.back() == 0)
-				tmp107.pop_back();
-			unsigned char tmp112 = tmp107.size();
-			auto tmp113 = reinterpret_cast<char*>(&tmp112);
-			s += std::string(tmp113, sizeof(unsigned char));
-			s += tmp107;
+			std::string tmp124 = "";
+			unsigned int tmp126 = __v18.size();
+			auto tmp127 = reinterpret_cast<char*>(&tmp126);
+			tmp124 += std::string(tmp127, sizeof(unsigned int));
+			while (tmp124.size() && tmp124.back() == 0)
+				tmp124.pop_back();
+			unsigned char tmp129 = tmp124.size();
+			auto tmp130 = reinterpret_cast<char*>(&tmp129);
+			s += std::string(tmp130, sizeof(unsigned char));
+			s += tmp124;
 			
-			for (auto &tmp114 : __v18)
+			for (auto &tmp131 : __v18)
 			{
 				s += '\x01';
-				char tmp116 = tmp114.first;
-				auto tmp117 = reinterpret_cast<char*>(&tmp116);
-				s += std::string(tmp117, sizeof(char));
+				char tmp133 = tmp131.first;
+				auto tmp134 = reinterpret_cast<char*>(&tmp133);
+				s += std::string(tmp134, sizeof(char));
 				
 				s += '\x01';
-				std::string tmp118 = "";
-				unsigned int tmp120 = tmp114.second.size();
-				auto tmp121 = reinterpret_cast<char*>(&tmp120);
-				tmp118 += std::string(tmp121, sizeof(unsigned int));
-				while (tmp118.size() && tmp118.back() == 0)
-					tmp118.pop_back();
-				unsigned char tmp123 = tmp118.size();
-				auto tmp124 = reinterpret_cast<char*>(&tmp123);
-				s += std::string(tmp124, sizeof(unsigned char));
-				s += tmp118;
+				std::string tmp135 = "";
+				unsigned int tmp137 = tmp131.second.size();
+				auto tmp138 = reinterpret_cast<char*>(&tmp137);
+				tmp135 += std::string(tmp138, sizeof(unsigned int));
+				while (tmp135.size() && tmp135.back() == 0)
+					tmp135.pop_back();
+				unsigned char tmp140 = tmp135.size();
+				auto tmp141 = reinterpret_cast<char*>(&tmp140);
+				s += std::string(tmp141, sizeof(unsigned char));
+				s += tmp135;
 				
-				for (auto &tmp125 : tmp114.second)
+				for (auto &tmp142 : tmp131.second)
 				{
 					s += '\x01';
-					std::string tmp126 = "";
-					unsigned int tmp128 = tmp125.size();
-					auto tmp129 = reinterpret_cast<char*>(&tmp128);
-					tmp126 += std::string(tmp129, sizeof(unsigned int));
-					while (tmp126.size() && tmp126.back() == 0)
-						tmp126.pop_back();
-					unsigned char tmp131 = tmp126.size();
-					auto tmp132 = reinterpret_cast<char*>(&tmp131);
-					s += std::string(tmp132, sizeof(unsigned char));
-					s += tmp126;
+					std::string tmp143 = "";
+					unsigned int tmp145 = tmp142.size();
+					auto tmp146 = reinterpret_cast<char*>(&tmp145);
+					tmp143 += std::string(tmp146, sizeof(unsigned int));
+					while (tmp143.size() && tmp143.back() == 0)
+						tmp143.pop_back();
+					unsigned char tmp148 = tmp143.size();
+					auto tmp149 = reinterpret_cast<char*>(&tmp148);
+					s += std::string(tmp149, sizeof(unsigned char));
+					s += tmp143;
 					
-					for (auto &tmp133 : tmp125)
+					for (auto &tmp150 : tmp142)
 					{
 						s += '\x01';
-						double tmp135 = tmp133.first;
-						auto tmp136 = reinterpret_cast<char*>(&tmp135);
-						s += std::string(tmp136, sizeof(double));
+						double tmp152 = tmp150.first;
+						auto tmp153 = reinterpret_cast<char*>(&tmp152);
+						s += std::string(tmp153, sizeof(double));
 						
 						s += '\x01';
-						char tmp138 = (char) tmp133.second;
-						auto tmp139 = reinterpret_cast<char*>(&tmp138);
-						s += std::string(tmp139, sizeof(char));
+						char tmp155 = (char) tmp150.second;
+						auto tmp156 = reinterpret_cast<char*>(&tmp155);
+						s += std::string(tmp156, sizeof(char));
 					}
 				}
 			}
@@ -1313,12 +1398,12 @@ public:
 		s += __has_v19;
 		if (__has_v19)
 		{
-			for (unsigned int tmp140 = 0; tmp140 < 10; tmp140++)
+			for (unsigned int tmp157 = 0; tmp157 < 10; tmp157++)
 			{
 				s += '\x01';
-				char tmp142 = __v19[tmp140];
-				auto tmp143 = reinterpret_cast<char*>(&tmp142);
-				s += std::string(tmp143, sizeof(char));
+				char tmp159 = __v19[tmp157];
+				auto tmp160 = reinterpret_cast<char*>(&tmp159);
+				s += std::string(tmp160, sizeof(char));
 			}
 		}
 		
@@ -1326,37 +1411,37 @@ public:
 		s += __has_v20;
 		if (__has_v20)
 		{
-			for (unsigned int tmp144 = 0; tmp144 < 10; tmp144++)
+			for (unsigned int tmp161 = 0; tmp161 < 10; tmp161++)
 			{
-				for (unsigned int tmp145 = 0; tmp145 < 20; tmp145++)
+				for (unsigned int tmp162 = 0; tmp162 < 20; tmp162++)
 				{
 					s += '\x01';
-					std::string tmp146 = "";
-					unsigned int tmp148 = __v20[tmp144][tmp145].size();
-					auto tmp149 = reinterpret_cast<char*>(&tmp148);
-					tmp146 += std::string(tmp149, sizeof(unsigned int));
-					while (tmp146.size() && tmp146.back() == 0)
-						tmp146.pop_back();
-					unsigned char tmp151 = tmp146.size();
-					auto tmp152 = reinterpret_cast<char*>(&tmp151);
-					s += std::string(tmp152, sizeof(unsigned char));
-					s += tmp146;
+					std::string tmp163 = "";
+					unsigned int tmp165 = __v20[tmp161][tmp162].size();
+					auto tmp166 = reinterpret_cast<char*>(&tmp165);
+					tmp163 += std::string(tmp166, sizeof(unsigned int));
+					while (tmp163.size() && tmp163.back() == 0)
+						tmp163.pop_back();
+					unsigned char tmp168 = tmp163.size();
+					auto tmp169 = reinterpret_cast<char*>(&tmp168);
+					s += std::string(tmp169, sizeof(unsigned char));
+					s += tmp163;
 					
-					for (auto &tmp153 : __v20[tmp144][tmp145])
+					for (auto &tmp170 : __v20[tmp161][tmp162])
 					{
 						s += '\x01';
-						std::string tmp154 = "";
-						unsigned int tmp156 = tmp153.size();
-						auto tmp157 = reinterpret_cast<char*>(&tmp156);
-						tmp154 += std::string(tmp157, sizeof(unsigned int));
-						while (tmp154.size() && tmp154.back() == 0)
-							tmp154.pop_back();
-						unsigned char tmp159 = tmp154.size();
-						auto tmp160 = reinterpret_cast<char*>(&tmp159);
-						s += std::string(tmp160, sizeof(unsigned char));
-						s += tmp154;
+						std::string tmp171 = "";
+						unsigned int tmp173 = tmp170.size();
+						auto tmp174 = reinterpret_cast<char*>(&tmp173);
+						tmp171 += std::string(tmp174, sizeof(unsigned int));
+						while (tmp171.size() && tmp171.back() == 0)
+							tmp171.pop_back();
+						unsigned char tmp176 = tmp171.size();
+						auto tmp177 = reinterpret_cast<char*>(&tmp176);
+						s += std::string(tmp177, sizeof(unsigned char));
+						s += tmp171;
 						
-						s += tmp153;
+						s += tmp170;
 					}
 				}
 			}
@@ -1366,24 +1451,24 @@ public:
 		s += __has_v21;
 		if (__has_v21)
 		{
-			std::string tmp161 = "";
-			unsigned int tmp163 = __v21.size();
-			auto tmp164 = reinterpret_cast<char*>(&tmp163);
-			tmp161 += std::string(tmp164, sizeof(unsigned int));
-			while (tmp161.size() && tmp161.back() == 0)
-				tmp161.pop_back();
-			unsigned char tmp166 = tmp161.size();
-			auto tmp167 = reinterpret_cast<char*>(&tmp166);
-			s += std::string(tmp167, sizeof(unsigned char));
-			s += tmp161;
+			std::string tmp178 = "";
+			unsigned int tmp180 = __v21.size();
+			auto tmp181 = reinterpret_cast<char*>(&tmp180);
+			tmp178 += std::string(tmp181, sizeof(unsigned int));
+			while (tmp178.size() && tmp178.back() == 0)
+				tmp178.pop_back();
+			unsigned char tmp183 = tmp178.size();
+			auto tmp184 = reinterpret_cast<char*>(&tmp183);
+			s += std::string(tmp184, sizeof(unsigned char));
+			s += tmp178;
 			
-			for (auto &tmp168 : __v21)
+			for (auto &tmp185 : __v21)
 			{
 				s += '\x01';
-				for (unsigned int tmp169 = 0; tmp169 < 4; tmp169++)
+				for (unsigned int tmp186 = 0; tmp186 < 4; tmp186++)
 				{
 					s += '\x01';
-					s += tmp168[tmp169].serialize();
+					s += tmp185[tmp186].serialize();
 				}
 			}
 		}
@@ -1392,35 +1477,35 @@ public:
 		s += __has_v22;
 		if (__has_v22)
 		{
-			std::string tmp170 = "";
-			unsigned int tmp172 = __v22.size();
-			auto tmp173 = reinterpret_cast<char*>(&tmp172);
-			tmp170 += std::string(tmp173, sizeof(unsigned int));
-			while (tmp170.size() && tmp170.back() == 0)
-				tmp170.pop_back();
-			unsigned char tmp175 = tmp170.size();
-			auto tmp176 = reinterpret_cast<char*>(&tmp175);
-			s += std::string(tmp176, sizeof(unsigned char));
-			s += tmp170;
+			std::string tmp187 = "";
+			unsigned int tmp189 = __v22.size();
+			auto tmp190 = reinterpret_cast<char*>(&tmp189);
+			tmp187 += std::string(tmp190, sizeof(unsigned int));
+			while (tmp187.size() && tmp187.back() == 0)
+				tmp187.pop_back();
+			unsigned char tmp192 = tmp187.size();
+			auto tmp193 = reinterpret_cast<char*>(&tmp192);
+			s += std::string(tmp193, sizeof(unsigned char));
+			s += tmp187;
 			
-			for (auto &tmp177 : __v22)
+			for (auto &tmp194 : __v22)
 			{
 				s += '\x01';
-				std::string tmp178 = "";
-				unsigned int tmp180 = tmp177.first.size();
-				auto tmp181 = reinterpret_cast<char*>(&tmp180);
-				tmp178 += std::string(tmp181, sizeof(unsigned int));
-				while (tmp178.size() && tmp178.back() == 0)
-					tmp178.pop_back();
-				unsigned char tmp183 = tmp178.size();
-				auto tmp184 = reinterpret_cast<char*>(&tmp183);
-				s += std::string(tmp184, sizeof(unsigned char));
-				s += tmp178;
+				std::string tmp195 = "";
+				unsigned int tmp197 = tmp194.first.size();
+				auto tmp198 = reinterpret_cast<char*>(&tmp197);
+				tmp195 += std::string(tmp198, sizeof(unsigned int));
+				while (tmp195.size() && tmp195.back() == 0)
+					tmp195.pop_back();
+				unsigned char tmp200 = tmp195.size();
+				auto tmp201 = reinterpret_cast<char*>(&tmp200);
+				s += std::string(tmp201, sizeof(unsigned char));
+				s += tmp195;
 				
-				s += tmp177.first;
+				s += tmp194.first;
 				
 				s += '\x01';
-				s += tmp177.second.serialize();
+				s += tmp194.second.serialize();
 			}
 		}
 		
@@ -1428,12 +1513,12 @@ public:
 		s += __has_v23;
 		if (__has_v23)
 		{
-			for (unsigned int tmp185 = 0; tmp185 < 5; tmp185++)
+			for (unsigned int tmp202 = 0; tmp202 < 5; tmp202++)
 			{
-				for (unsigned int tmp186 = 0; tmp186 < 10; tmp186++)
+				for (unsigned int tmp203 = 0; tmp203 < 10; tmp203++)
 				{
 					s += '\x01';
-					s += __v23[tmp185][tmp186].serialize();
+					s += __v23[tmp202][tmp203].serialize();
 				}
 			}
 		}
@@ -1556,18 +1641,18 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v12)
 		{
-			unsigned char tmp187;
-			tmp187 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp204;
+			tmp204 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp188 = std::string(&s[offset], tmp187);
-			offset += tmp187;
-			while (tmp188.size() < sizeof(unsigned int))
-				tmp188 += '\x00';
-			unsigned int tmp189;
-			tmp189 = *((unsigned int*) (&tmp188[0]));
+			std::string tmp205 = std::string(&s[offset], tmp204);
+			offset += tmp204;
+			while (tmp205.size() < sizeof(unsigned int))
+				tmp205 += '\x00';
+			unsigned int tmp206;
+			tmp206 = *((unsigned int*) (&tmp205[0]));
 			
-			__v12 = s.substr(offset, tmp189);
-			offset += tmp189;
+			__v12 = s.substr(offset, tmp206);
+			offset += tmp206;
 		}
 		
 		// deserialize v13
@@ -1575,10 +1660,10 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v13)
 		{
-			char tmp190;
-			tmp190 = *((char*) (&s[offset]));
+			char tmp207;
+			tmp207 = *((char*) (&s[offset]));
 			offset += sizeof(char);
-			__v13 = (EColor) tmp190;
+			__v13 = (EColor) tmp207;
 		}
 		
 		// deserialize v14
@@ -1594,24 +1679,24 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v15)
 		{
-			unsigned char tmp191;
-			tmp191 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp208;
+			tmp208 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp192 = std::string(&s[offset], tmp191);
-			offset += tmp191;
-			while (tmp192.size() < sizeof(unsigned int))
-				tmp192 += '\x00';
-			unsigned int tmp193;
-			tmp193 = *((unsigned int*) (&tmp192[0]));
+			std::string tmp209 = std::string(&s[offset], tmp208);
+			offset += tmp208;
+			while (tmp209.size() < sizeof(unsigned int))
+				tmp209 += '\x00';
+			unsigned int tmp210;
+			tmp210 = *((unsigned int*) (&tmp209[0]));
 			
 			__v15.clear();
-			for (unsigned int tmp194 = 0; tmp194 < tmp193; tmp194++)
+			for (unsigned int tmp211 = 0; tmp211 < tmp210; tmp211++)
 			{
-				int tmp195;
+				int tmp212;
 				offset++;
-				tmp195 = *((int*) (&s[offset]));
+				tmp212 = *((int*) (&s[offset]));
 				offset += sizeof(int);
-				__v15.push_back(tmp195);
+				__v15.push_back(tmp212);
 			}
 		}
 		
@@ -1620,41 +1705,41 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v16)
 		{
-			unsigned char tmp196;
-			tmp196 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp213;
+			tmp213 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp197 = std::string(&s[offset], tmp196);
-			offset += tmp196;
-			while (tmp197.size() < sizeof(unsigned int))
-				tmp197 += '\x00';
-			unsigned int tmp198;
-			tmp198 = *((unsigned int*) (&tmp197[0]));
+			std::string tmp214 = std::string(&s[offset], tmp213);
+			offset += tmp213;
+			while (tmp214.size() < sizeof(unsigned int))
+				tmp214 += '\x00';
+			unsigned int tmp215;
+			tmp215 = *((unsigned int*) (&tmp214[0]));
 			
 			__v16.clear();
-			for (unsigned int tmp199 = 0; tmp199 < tmp198; tmp199++)
+			for (unsigned int tmp216 = 0; tmp216 < tmp215; tmp216++)
 			{
-				std::vector<char> tmp200;
+				std::vector<char> tmp217;
 				offset++;
-				unsigned char tmp201;
-				tmp201 = *((unsigned char*) (&s[offset]));
+				unsigned char tmp218;
+				tmp218 = *((unsigned char*) (&s[offset]));
 				offset += sizeof(unsigned char);
-				std::string tmp202 = std::string(&s[offset], tmp201);
-				offset += tmp201;
-				while (tmp202.size() < sizeof(unsigned int))
-					tmp202 += '\x00';
-				unsigned int tmp203;
-				tmp203 = *((unsigned int*) (&tmp202[0]));
+				std::string tmp219 = std::string(&s[offset], tmp218);
+				offset += tmp218;
+				while (tmp219.size() < sizeof(unsigned int))
+					tmp219 += '\x00';
+				unsigned int tmp220;
+				tmp220 = *((unsigned int*) (&tmp219[0]));
 				
-				tmp200.clear();
-				for (unsigned int tmp204 = 0; tmp204 < tmp203; tmp204++)
+				tmp217.clear();
+				for (unsigned int tmp221 = 0; tmp221 < tmp220; tmp221++)
 				{
-					char tmp205;
+					char tmp222;
 					offset++;
-					tmp205 = *((char*) (&s[offset]));
+					tmp222 = *((char*) (&s[offset]));
 					offset += sizeof(char);
-					tmp200.push_back(tmp205);
+					tmp217.push_back(tmp222);
 				}
-				__v16.push_back(tmp200);
+				__v16.push_back(tmp217);
 			}
 		}
 		
@@ -1663,40 +1748,40 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v17)
 		{
-			unsigned char tmp206;
-			tmp206 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp223;
+			tmp223 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp207 = std::string(&s[offset], tmp206);
-			offset += tmp206;
-			while (tmp207.size() < sizeof(unsigned int))
-				tmp207 += '\x00';
-			unsigned int tmp208;
-			tmp208 = *((unsigned int*) (&tmp207[0]));
+			std::string tmp224 = std::string(&s[offset], tmp223);
+			offset += tmp223;
+			while (tmp224.size() < sizeof(unsigned int))
+				tmp224 += '\x00';
+			unsigned int tmp225;
+			tmp225 = *((unsigned int*) (&tmp224[0]));
 			
 			__v17.clear();
-			for (unsigned int tmp209 = 0; tmp209 < tmp208; tmp209++)
+			for (unsigned int tmp226 = 0; tmp226 < tmp225; tmp226++)
 			{
-				std::string tmp210;
+				std::string tmp227;
 				offset++;
-				unsigned char tmp212;
-				tmp212 = *((unsigned char*) (&s[offset]));
+				unsigned char tmp229;
+				tmp229 = *((unsigned char*) (&s[offset]));
 				offset += sizeof(unsigned char);
-				std::string tmp213 = std::string(&s[offset], tmp212);
-				offset += tmp212;
-				while (tmp213.size() < sizeof(unsigned int))
-					tmp213 += '\x00';
-				unsigned int tmp214;
-				tmp214 = *((unsigned int*) (&tmp213[0]));
+				std::string tmp230 = std::string(&s[offset], tmp229);
+				offset += tmp229;
+				while (tmp230.size() < sizeof(unsigned int))
+					tmp230 += '\x00';
+				unsigned int tmp231;
+				tmp231 = *((unsigned int*) (&tmp230[0]));
 				
-				tmp210 = s.substr(offset, tmp214);
-				offset += tmp214;
+				tmp227 = s.substr(offset, tmp231);
+				offset += tmp231;
 				
-				int tmp211;
+				int tmp228;
 				offset++;
-				tmp211 = *((int*) (&s[offset]));
+				tmp228 = *((int*) (&s[offset]));
 				offset += sizeof(int);
 				
-				__v17[tmp210] = tmp211;
+				__v17[tmp227] = tmp228;
 			}
 		}
 		
@@ -1705,72 +1790,72 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v18)
 		{
-			unsigned char tmp215;
-			tmp215 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp232;
+			tmp232 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp216 = std::string(&s[offset], tmp215);
-			offset += tmp215;
-			while (tmp216.size() < sizeof(unsigned int))
-				tmp216 += '\x00';
-			unsigned int tmp217;
-			tmp217 = *((unsigned int*) (&tmp216[0]));
+			std::string tmp233 = std::string(&s[offset], tmp232);
+			offset += tmp232;
+			while (tmp233.size() < sizeof(unsigned int))
+				tmp233 += '\x00';
+			unsigned int tmp234;
+			tmp234 = *((unsigned int*) (&tmp233[0]));
 			
 			__v18.clear();
-			for (unsigned int tmp218 = 0; tmp218 < tmp217; tmp218++)
+			for (unsigned int tmp235 = 0; tmp235 < tmp234; tmp235++)
 			{
-				char tmp219;
+				char tmp236;
 				offset++;
-				tmp219 = *((char*) (&s[offset]));
+				tmp236 = *((char*) (&s[offset]));
 				offset += sizeof(char);
 				
-				std::vector<std::map<double, EColor>> tmp220;
+				std::vector<std::map<double, EColor>> tmp237;
 				offset++;
-				unsigned char tmp221;
-				tmp221 = *((unsigned char*) (&s[offset]));
+				unsigned char tmp238;
+				tmp238 = *((unsigned char*) (&s[offset]));
 				offset += sizeof(unsigned char);
-				std::string tmp222 = std::string(&s[offset], tmp221);
-				offset += tmp221;
-				while (tmp222.size() < sizeof(unsigned int))
-					tmp222 += '\x00';
-				unsigned int tmp223;
-				tmp223 = *((unsigned int*) (&tmp222[0]));
+				std::string tmp239 = std::string(&s[offset], tmp238);
+				offset += tmp238;
+				while (tmp239.size() < sizeof(unsigned int))
+					tmp239 += '\x00';
+				unsigned int tmp240;
+				tmp240 = *((unsigned int*) (&tmp239[0]));
 				
-				tmp220.clear();
-				for (unsigned int tmp224 = 0; tmp224 < tmp223; tmp224++)
+				tmp237.clear();
+				for (unsigned int tmp241 = 0; tmp241 < tmp240; tmp241++)
 				{
-					std::map<double, EColor> tmp225;
+					std::map<double, EColor> tmp242;
 					offset++;
-					unsigned char tmp226;
-					tmp226 = *((unsigned char*) (&s[offset]));
+					unsigned char tmp243;
+					tmp243 = *((unsigned char*) (&s[offset]));
 					offset += sizeof(unsigned char);
-					std::string tmp227 = std::string(&s[offset], tmp226);
-					offset += tmp226;
-					while (tmp227.size() < sizeof(unsigned int))
-						tmp227 += '\x00';
-					unsigned int tmp228;
-					tmp228 = *((unsigned int*) (&tmp227[0]));
+					std::string tmp244 = std::string(&s[offset], tmp243);
+					offset += tmp243;
+					while (tmp244.size() < sizeof(unsigned int))
+						tmp244 += '\x00';
+					unsigned int tmp245;
+					tmp245 = *((unsigned int*) (&tmp244[0]));
 					
-					tmp225.clear();
-					for (unsigned int tmp229 = 0; tmp229 < tmp228; tmp229++)
+					tmp242.clear();
+					for (unsigned int tmp246 = 0; tmp246 < tmp245; tmp246++)
 					{
-						double tmp230;
+						double tmp247;
 						offset++;
-						tmp230 = *((double*) (&s[offset]));
+						tmp247 = *((double*) (&s[offset]));
 						offset += sizeof(double);
 						
-						EColor tmp231;
+						EColor tmp248;
 						offset++;
-						char tmp232;
-						tmp232 = *((char*) (&s[offset]));
+						char tmp249;
+						tmp249 = *((char*) (&s[offset]));
 						offset += sizeof(char);
-						tmp231 = (EColor) tmp232;
+						tmp248 = (EColor) tmp249;
 						
-						tmp225[tmp230] = tmp231;
+						tmp242[tmp247] = tmp248;
 					}
-					tmp220.push_back(tmp225);
+					tmp237.push_back(tmp242);
 				}
 				
-				__v18[tmp219] = tmp220;
+				__v18[tmp236] = tmp237;
 			}
 		}
 		
@@ -1779,10 +1864,10 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v19)
 		{
-			for (unsigned int tmp233 = 0; tmp233 < 10; tmp233++)
+			for (unsigned int tmp250 = 0; tmp250 < 10; tmp250++)
 			{
 				offset++;
-				__v19[tmp233] = *((char*) (&s[offset]));
+				__v19[tmp250] = *((char*) (&s[offset]));
 				offset += sizeof(char);
 			}
 		}
@@ -1792,39 +1877,39 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v20)
 		{
-			for (unsigned int tmp234 = 0; tmp234 < 10; tmp234++)
+			for (unsigned int tmp251 = 0; tmp251 < 10; tmp251++)
 			{
-				for (unsigned int tmp235 = 0; tmp235 < 20; tmp235++)
+				for (unsigned int tmp252 = 0; tmp252 < 20; tmp252++)
 				{
 					offset++;
-					unsigned char tmp236;
-					tmp236 = *((unsigned char*) (&s[offset]));
+					unsigned char tmp253;
+					tmp253 = *((unsigned char*) (&s[offset]));
 					offset += sizeof(unsigned char);
-					std::string tmp237 = std::string(&s[offset], tmp236);
-					offset += tmp236;
-					while (tmp237.size() < sizeof(unsigned int))
-						tmp237 += '\x00';
-					unsigned int tmp238;
-					tmp238 = *((unsigned int*) (&tmp237[0]));
+					std::string tmp254 = std::string(&s[offset], tmp253);
+					offset += tmp253;
+					while (tmp254.size() < sizeof(unsigned int))
+						tmp254 += '\x00';
+					unsigned int tmp255;
+					tmp255 = *((unsigned int*) (&tmp254[0]));
 					
-					__v20[tmp234][tmp235].clear();
-					for (unsigned int tmp239 = 0; tmp239 < tmp238; tmp239++)
+					__v20[tmp251][tmp252].clear();
+					for (unsigned int tmp256 = 0; tmp256 < tmp255; tmp256++)
 					{
-						std::string tmp240;
+						std::string tmp257;
 						offset++;
-						unsigned char tmp241;
-						tmp241 = *((unsigned char*) (&s[offset]));
+						unsigned char tmp258;
+						tmp258 = *((unsigned char*) (&s[offset]));
 						offset += sizeof(unsigned char);
-						std::string tmp242 = std::string(&s[offset], tmp241);
-						offset += tmp241;
-						while (tmp242.size() < sizeof(unsigned int))
-							tmp242 += '\x00';
-						unsigned int tmp243;
-						tmp243 = *((unsigned int*) (&tmp242[0]));
+						std::string tmp259 = std::string(&s[offset], tmp258);
+						offset += tmp258;
+						while (tmp259.size() < sizeof(unsigned int))
+							tmp259 += '\x00';
+						unsigned int tmp260;
+						tmp260 = *((unsigned int*) (&tmp259[0]));
 						
-						tmp240 = s.substr(offset, tmp243);
-						offset += tmp243;
-						__v20[tmp234][tmp235].push_back(tmp240);
+						tmp257 = s.substr(offset, tmp260);
+						offset += tmp260;
+						__v20[tmp251][tmp252].push_back(tmp257);
 					}
 				}
 			}
@@ -1835,27 +1920,27 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v21)
 		{
-			unsigned char tmp244;
-			tmp244 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp261;
+			tmp261 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp245 = std::string(&s[offset], tmp244);
-			offset += tmp244;
-			while (tmp245.size() < sizeof(unsigned int))
-				tmp245 += '\x00';
-			unsigned int tmp246;
-			tmp246 = *((unsigned int*) (&tmp245[0]));
+			std::string tmp262 = std::string(&s[offset], tmp261);
+			offset += tmp261;
+			while (tmp262.size() < sizeof(unsigned int))
+				tmp262 += '\x00';
+			unsigned int tmp263;
+			tmp263 = *((unsigned int*) (&tmp262[0]));
 			
 			__v21.clear();
-			for (unsigned int tmp247 = 0; tmp247 < tmp246; tmp247++)
+			for (unsigned int tmp264 = 0; tmp264 < tmp263; tmp264++)
 			{
-				std::array<Child, 4> tmp248;
+				std::array<Child, 4> tmp265;
 				offset++;
-				for (unsigned int tmp249 = 0; tmp249 < 4; tmp249++)
+				for (unsigned int tmp266 = 0; tmp266 < 4; tmp266++)
 				{
 					offset++;
-					offset = tmp248[tmp249].deserialize(s, offset);
+					offset = tmp265[tmp266].deserialize(s, offset);
 				}
-				__v21.push_back(tmp248);
+				__v21.push_back(tmp265);
 			}
 		}
 		
@@ -1864,39 +1949,39 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v22)
 		{
-			unsigned char tmp250;
-			tmp250 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp267;
+			tmp267 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp251 = std::string(&s[offset], tmp250);
-			offset += tmp250;
-			while (tmp251.size() < sizeof(unsigned int))
-				tmp251 += '\x00';
-			unsigned int tmp252;
-			tmp252 = *((unsigned int*) (&tmp251[0]));
+			std::string tmp268 = std::string(&s[offset], tmp267);
+			offset += tmp267;
+			while (tmp268.size() < sizeof(unsigned int))
+				tmp268 += '\x00';
+			unsigned int tmp269;
+			tmp269 = *((unsigned int*) (&tmp268[0]));
 			
 			__v22.clear();
-			for (unsigned int tmp253 = 0; tmp253 < tmp252; tmp253++)
+			for (unsigned int tmp270 = 0; tmp270 < tmp269; tmp270++)
 			{
-				std::string tmp254;
+				std::string tmp271;
 				offset++;
-				unsigned char tmp256;
-				tmp256 = *((unsigned char*) (&s[offset]));
+				unsigned char tmp273;
+				tmp273 = *((unsigned char*) (&s[offset]));
 				offset += sizeof(unsigned char);
-				std::string tmp257 = std::string(&s[offset], tmp256);
-				offset += tmp256;
-				while (tmp257.size() < sizeof(unsigned int))
-					tmp257 += '\x00';
-				unsigned int tmp258;
-				tmp258 = *((unsigned int*) (&tmp257[0]));
+				std::string tmp274 = std::string(&s[offset], tmp273);
+				offset += tmp273;
+				while (tmp274.size() < sizeof(unsigned int))
+					tmp274 += '\x00';
+				unsigned int tmp275;
+				tmp275 = *((unsigned int*) (&tmp274[0]));
 				
-				tmp254 = s.substr(offset, tmp258);
-				offset += tmp258;
+				tmp271 = s.substr(offset, tmp275);
+				offset += tmp275;
 				
-				Child tmp255;
+				Child tmp272;
 				offset++;
-				offset = tmp255.deserialize(s, offset);
+				offset = tmp272.deserialize(s, offset);
 				
-				__v22[tmp254] = tmp255;
+				__v22[tmp271] = tmp272;
 			}
 		}
 		
@@ -1905,12 +1990,12 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_v23)
 		{
-			for (unsigned int tmp259 = 0; tmp259 < 5; tmp259++)
+			for (unsigned int tmp276 = 0; tmp276 < 5; tmp276++)
 			{
-				for (unsigned int tmp260 = 0; tmp260 < 10; tmp260++)
+				for (unsigned int tmp277 = 0; tmp277 < 10; tmp277++)
 				{
 					offset++;
-					offset = __v23[tmp259][tmp260].deserialize(s, offset);
+					offset = __v23[tmp276][tmp277].deserialize(s, offset);
 				}
 			}
 		}

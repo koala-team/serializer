@@ -6,7 +6,7 @@ namespace ks.inheritance
 {
 	public class Parent1 : KSObject
 	{
-		public uint? count { get; set; }
+		public uint? Count { get; set; }
 		
 
 		public Parent1()
@@ -21,11 +21,11 @@ namespace ks.inheritance
 		{
 			List<byte> s = new List<byte>();
 			
-			// serialize count
-			s.Add((byte)((count == null) ? 0 : 1));
-			if (count != null)
+			// serialize Count
+			s.Add((byte)((Count == null) ? 0 : 1));
+			if (Count != null)
 			{
-				s.AddRange(BitConverter.GetBytes((uint)count));
+				s.AddRange(BitConverter.GetBytes((uint)Count));
 			}
 			
 			return s.ToArray();
@@ -33,17 +33,17 @@ namespace ks.inheritance
 		
 		public override uint Deserialize(byte[] s, uint offset = 0)
 		{
-			// deserialize count
+			// deserialize Count
 			byte tmp0;
 			tmp0 = (byte)s[(int)offset];
 			offset += sizeof(byte);
 			if (tmp0 == 1)
 			{
-				count = BitConverter.ToUInt32(s, (int)offset);
+				Count = BitConverter.ToUInt32(s, (int)offset);
 				offset += sizeof(uint);
 			}
 			else
-				count = null;
+				Count = null;
 			
 			return offset;
 		}
@@ -51,7 +51,7 @@ namespace ks.inheritance
 	
 	public class Parent2 : KSObject
 	{
-		public long? number { get; set; }
+		public long? Number { get; set; }
 		
 
 		public Parent2()
@@ -66,11 +66,11 @@ namespace ks.inheritance
 		{
 			List<byte> s = new List<byte>();
 			
-			// serialize number
-			s.Add((byte)((number == null) ? 0 : 1));
-			if (number != null)
+			// serialize Number
+			s.Add((byte)((Number == null) ? 0 : 1));
+			if (Number != null)
 			{
-				s.AddRange(BitConverter.GetBytes((long)number));
+				s.AddRange(BitConverter.GetBytes((long)Number));
 			}
 			
 			return s.ToArray();
@@ -78,17 +78,17 @@ namespace ks.inheritance
 		
 		public override uint Deserialize(byte[] s, uint offset = 0)
 		{
-			// deserialize number
+			// deserialize Number
 			byte tmp1;
 			tmp1 = (byte)s[(int)offset];
 			offset += sizeof(byte);
 			if (tmp1 == 1)
 			{
-				number = BitConverter.ToInt64(s, (int)offset);
+				Number = BitConverter.ToInt64(s, (int)offset);
 				offset += sizeof(long);
 			}
 			else
-				number = null;
+				Number = null;
 			
 			return offset;
 		}
@@ -96,7 +96,7 @@ namespace ks.inheritance
 	
 	public class Child : Parent1
 	{
-		public string name { get; set; }
+		public string Name { get; set; }
 		
 
 		public Child()
@@ -114,18 +114,18 @@ namespace ks.inheritance
 			// serialize parents
 			s.AddRange(base.Serialize());
 			
-			// serialize name
-			s.Add((byte)((name == null) ? 0 : 1));
-			if (name != null)
+			// serialize Name
+			s.Add((byte)((Name == null) ? 0 : 1));
+			if (Name != null)
 			{
 				List<byte> tmp2 = new List<byte>();
-				tmp2.AddRange(BitConverter.GetBytes((uint)name.Count()));
+				tmp2.AddRange(BitConverter.GetBytes((uint)Name.Count()));
 				while (tmp2.Count > 0 && tmp2.Last() == 0)
 					tmp2.RemoveAt(tmp2.Count - 1);
 				s.Add((byte)tmp2.Count);
 				s.AddRange(tmp2);
 				
-				s.AddRange(System.Text.Encoding.ASCII.GetBytes(name));
+				s.AddRange(System.Text.Encoding.ASCII.GetBytes(Name));
 			}
 			
 			return s.ToArray();
@@ -136,7 +136,7 @@ namespace ks.inheritance
 			// deserialize parents
 			offset = base.Deserialize(s, offset);
 			
-			// deserialize name
+			// deserialize Name
 			byte tmp3;
 			tmp3 = (byte)s[(int)offset];
 			offset += sizeof(byte);
@@ -151,11 +151,11 @@ namespace ks.inheritance
 				uint tmp6;
 				tmp6 = BitConverter.ToUInt32(tmp5, (int)0);
 				
-				name = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp6).ToArray());
+				Name = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp6).ToArray());
 				offset += tmp6;
 			}
 			else
-				name = null;
+				Name = null;
 			
 			return offset;
 		}

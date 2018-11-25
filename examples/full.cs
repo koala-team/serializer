@@ -15,7 +15,8 @@ namespace ks.full
 	
 	public class Parent : KSObject
 	{
-		public uint? p1 { get; set; }
+		public string FirstName { get; set; }
+		public string _LastName_ { get; set; }
 		
 
 		public Parent()
@@ -30,11 +31,32 @@ namespace ks.full
 		{
 			List<byte> s = new List<byte>();
 			
-			// serialize p1
-			s.Add((byte)((p1 == null) ? 0 : 1));
-			if (p1 != null)
+			// serialize FirstName
+			s.Add((byte)((FirstName == null) ? 0 : 1));
+			if (FirstName != null)
 			{
-				s.AddRange(BitConverter.GetBytes((uint)p1));
+				List<byte> tmp0 = new List<byte>();
+				tmp0.AddRange(BitConverter.GetBytes((uint)FirstName.Count()));
+				while (tmp0.Count > 0 && tmp0.Last() == 0)
+					tmp0.RemoveAt(tmp0.Count - 1);
+				s.Add((byte)tmp0.Count);
+				s.AddRange(tmp0);
+				
+				s.AddRange(System.Text.Encoding.ASCII.GetBytes(FirstName));
+			}
+			
+			// serialize _LastName_
+			s.Add((byte)((_LastName_ == null) ? 0 : 1));
+			if (_LastName_ != null)
+			{
+				List<byte> tmp1 = new List<byte>();
+				tmp1.AddRange(BitConverter.GetBytes((uint)_LastName_.Count()));
+				while (tmp1.Count > 0 && tmp1.Last() == 0)
+					tmp1.RemoveAt(tmp1.Count - 1);
+				s.Add((byte)tmp1.Count);
+				s.AddRange(tmp1);
+				
+				s.AddRange(System.Text.Encoding.ASCII.GetBytes(_LastName_));
 			}
 			
 			return s.ToArray();
@@ -42,17 +64,47 @@ namespace ks.full
 		
 		public override uint Deserialize(byte[] s, uint offset = 0)
 		{
-			// deserialize p1
-			byte tmp0;
-			tmp0 = (byte)s[(int)offset];
+			// deserialize FirstName
+			byte tmp2;
+			tmp2 = (byte)s[(int)offset];
 			offset += sizeof(byte);
-			if (tmp0 == 1)
+			if (tmp2 == 1)
 			{
-				p1 = BitConverter.ToUInt32(s, (int)offset);
-				offset += sizeof(uint);
+				byte tmp3;
+				tmp3 = (byte)s[(int)offset];
+				offset += sizeof(byte);
+				byte[] tmp4 = new byte[sizeof(uint)];
+				Array.Copy(s, offset, tmp4, 0, tmp3);
+				offset += tmp3;
+				uint tmp5;
+				tmp5 = BitConverter.ToUInt32(tmp4, (int)0);
+				
+				FirstName = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp5).ToArray());
+				offset += tmp5;
 			}
 			else
-				p1 = null;
+				FirstName = null;
+			
+			// deserialize _LastName_
+			byte tmp6;
+			tmp6 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp6 == 1)
+			{
+				byte tmp7;
+				tmp7 = (byte)s[(int)offset];
+				offset += sizeof(byte);
+				byte[] tmp8 = new byte[sizeof(uint)];
+				Array.Copy(s, offset, tmp8, 0, tmp7);
+				offset += tmp7;
+				uint tmp9;
+				tmp9 = BitConverter.ToUInt32(tmp8, (int)0);
+				
+				_LastName_ = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp9).ToArray());
+				offset += tmp9;
+			}
+			else
+				_LastName_ = null;
 			
 			return offset;
 		}
@@ -60,7 +112,7 @@ namespace ks.full
 	
 	public class Child : Parent
 	{
-		public string c { get; set; }
+		public string C { get; set; }
 		
 
 		public Child()
@@ -78,18 +130,18 @@ namespace ks.full
 			// serialize parents
 			s.AddRange(base.Serialize());
 			
-			// serialize c
-			s.Add((byte)((c == null) ? 0 : 1));
-			if (c != null)
+			// serialize C
+			s.Add((byte)((C == null) ? 0 : 1));
+			if (C != null)
 			{
-				List<byte> tmp1 = new List<byte>();
-				tmp1.AddRange(BitConverter.GetBytes((uint)c.Count()));
-				while (tmp1.Count > 0 && tmp1.Last() == 0)
-					tmp1.RemoveAt(tmp1.Count - 1);
-				s.Add((byte)tmp1.Count);
-				s.AddRange(tmp1);
+				List<byte> tmp10 = new List<byte>();
+				tmp10.AddRange(BitConverter.GetBytes((uint)C.Count()));
+				while (tmp10.Count > 0 && tmp10.Last() == 0)
+					tmp10.RemoveAt(tmp10.Count - 1);
+				s.Add((byte)tmp10.Count);
+				s.AddRange(tmp10);
 				
-				s.AddRange(System.Text.Encoding.ASCII.GetBytes(c));
+				s.AddRange(System.Text.Encoding.ASCII.GetBytes(C));
 			}
 			
 			return s.ToArray();
@@ -100,26 +152,26 @@ namespace ks.full
 			// deserialize parents
 			offset = base.Deserialize(s, offset);
 			
-			// deserialize c
-			byte tmp2;
-			tmp2 = (byte)s[(int)offset];
+			// deserialize C
+			byte tmp11;
+			tmp11 = (byte)s[(int)offset];
 			offset += sizeof(byte);
-			if (tmp2 == 1)
+			if (tmp11 == 1)
 			{
-				byte tmp3;
-				tmp3 = (byte)s[(int)offset];
+				byte tmp12;
+				tmp12 = (byte)s[(int)offset];
 				offset += sizeof(byte);
-				byte[] tmp4 = new byte[sizeof(uint)];
-				Array.Copy(s, offset, tmp4, 0, tmp3);
-				offset += tmp3;
-				uint tmp5;
-				tmp5 = BitConverter.ToUInt32(tmp4, (int)0);
+				byte[] tmp13 = new byte[sizeof(uint)];
+				Array.Copy(s, offset, tmp13, 0, tmp12);
+				offset += tmp12;
+				uint tmp14;
+				tmp14 = BitConverter.ToUInt32(tmp13, (int)0);
 				
-				c = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp5).ToArray());
-				offset += tmp5;
+				C = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp14).ToArray());
+				offset += tmp14;
 			}
 			else
-				c = null;
+				C = null;
 			
 			return offset;
 		}
@@ -127,30 +179,30 @@ namespace ks.full
 	
 	public class Test : KSObject
 	{
-		public bool? v0 { get; set; }
-		public char? v1 { get; set; }
-		public sbyte? v2 { get; set; }
-		public byte? v3 { get; set; }
-		public short? v4 { get; set; }
-		public ushort? v5 { get; set; }
-		public int? v6 { get; set; }
-		public uint? v7 { get; set; }
-		public long? v8 { get; set; }
-		public ulong? v9 { get; set; }
-		public float? v10 { get; set; }
-		public double? v11 { get; set; }
-		public string v12 { get; set; }
-		public EColor? v13 { get; set; }
-		public Child v14 { get; set; }
-		public List<int?> v15 { get; set; }
-		public List<List<char?>> v16 { get; set; }
-		public Dictionary<string, int?> v17 { get; set; }
-		public Dictionary<char?, List<Dictionary<double?, EColor?>>> v18 { get; set; }
-		public sbyte?[] v19 { get; set; }
-		public List<string>[,] v20 { get; set; }
-		public List<Child[]> v21 { get; set; }
-		public Dictionary<string, Child> v22 { get; set; }
-		public Child[,] v23 { get; set; }
+		public bool? V0 { get; set; }
+		public char? V1 { get; set; }
+		public sbyte? V2 { get; set; }
+		public byte? V3 { get; set; }
+		public short? V4 { get; set; }
+		public ushort? V5 { get; set; }
+		public int? V6 { get; set; }
+		public uint? V7 { get; set; }
+		public long? V8 { get; set; }
+		public ulong? V9 { get; set; }
+		public float? V10 { get; set; }
+		public double? V11 { get; set; }
+		public string V12 { get; set; }
+		public EColor? V13 { get; set; }
+		public Child V14 { get; set; }
+		public List<int?> V15 { get; set; }
+		public List<List<char?>> V16 { get; set; }
+		public Dictionary<string, int?> V17 { get; set; }
+		public Dictionary<char?, List<Dictionary<double?, EColor?>>> V18 { get; set; }
+		public sbyte?[] V19 { get; set; }
+		public List<string>[,] V20 { get; set; }
+		public List<Child[]> V21 { get; set; }
+		public Dictionary<string, Child> V22 { get; set; }
+		public Child[,] V23 { get; set; }
 		
 
 		public Test()
@@ -165,261 +217,261 @@ namespace ks.full
 		{
 			List<byte> s = new List<byte>();
 			
-			// serialize v0
-			s.Add((byte)((v0 == null) ? 0 : 1));
-			if (v0 != null)
+			// serialize V0
+			s.Add((byte)((V0 == null) ? 0 : 1));
+			if (V0 != null)
 			{
-				s.AddRange(BitConverter.GetBytes((bool)v0));
+				s.AddRange(BitConverter.GetBytes((bool)V0));
 			}
 			
-			// serialize v1
-			s.Add((byte)((v1 == null) ? 0 : 1));
-			if (v1 != null)
+			// serialize V1
+			s.Add((byte)((V1 == null) ? 0 : 1));
+			if (V1 != null)
 			{
-				s.AddRange(BitConverter.GetBytes((char)v1));
+				s.AddRange(BitConverter.GetBytes((char)V1));
 			}
 			
-			// serialize v2
-			s.Add((byte)((v2 == null) ? 0 : 1));
-			if (v2 != null)
+			// serialize V2
+			s.Add((byte)((V2 == null) ? 0 : 1));
+			if (V2 != null)
 			{
-				s.Add((byte)v2);
+				s.Add((byte)V2);
 			}
 			
-			// serialize v3
-			s.Add((byte)((v3 == null) ? 0 : 1));
-			if (v3 != null)
+			// serialize V3
+			s.Add((byte)((V3 == null) ? 0 : 1));
+			if (V3 != null)
 			{
-				s.Add((byte)v3);
+				s.Add((byte)V3);
 			}
 			
-			// serialize v4
-			s.Add((byte)((v4 == null) ? 0 : 1));
-			if (v4 != null)
+			// serialize V4
+			s.Add((byte)((V4 == null) ? 0 : 1));
+			if (V4 != null)
 			{
-				s.AddRange(BitConverter.GetBytes((short)v4));
+				s.AddRange(BitConverter.GetBytes((short)V4));
 			}
 			
-			// serialize v5
-			s.Add((byte)((v5 == null) ? 0 : 1));
-			if (v5 != null)
+			// serialize V5
+			s.Add((byte)((V5 == null) ? 0 : 1));
+			if (V5 != null)
 			{
-				s.AddRange(BitConverter.GetBytes((ushort)v5));
+				s.AddRange(BitConverter.GetBytes((ushort)V5));
 			}
 			
-			// serialize v6
-			s.Add((byte)((v6 == null) ? 0 : 1));
-			if (v6 != null)
+			// serialize V6
+			s.Add((byte)((V6 == null) ? 0 : 1));
+			if (V6 != null)
 			{
-				s.AddRange(BitConverter.GetBytes((int)v6));
+				s.AddRange(BitConverter.GetBytes((int)V6));
 			}
 			
-			// serialize v7
-			s.Add((byte)((v7 == null) ? 0 : 1));
-			if (v7 != null)
+			// serialize V7
+			s.Add((byte)((V7 == null) ? 0 : 1));
+			if (V7 != null)
 			{
-				s.AddRange(BitConverter.GetBytes((uint)v7));
+				s.AddRange(BitConverter.GetBytes((uint)V7));
 			}
 			
-			// serialize v8
-			s.Add((byte)((v8 == null) ? 0 : 1));
-			if (v8 != null)
+			// serialize V8
+			s.Add((byte)((V8 == null) ? 0 : 1));
+			if (V8 != null)
 			{
-				s.AddRange(BitConverter.GetBytes((long)v8));
+				s.AddRange(BitConverter.GetBytes((long)V8));
 			}
 			
-			// serialize v9
-			s.Add((byte)((v9 == null) ? 0 : 1));
-			if (v9 != null)
+			// serialize V9
+			s.Add((byte)((V9 == null) ? 0 : 1));
+			if (V9 != null)
 			{
-				s.AddRange(BitConverter.GetBytes((ulong)v9));
+				s.AddRange(BitConverter.GetBytes((ulong)V9));
 			}
 			
-			// serialize v10
-			s.Add((byte)((v10 == null) ? 0 : 1));
-			if (v10 != null)
+			// serialize V10
+			s.Add((byte)((V10 == null) ? 0 : 1));
+			if (V10 != null)
 			{
-				s.AddRange(BitConverter.GetBytes((float)v10));
+				s.AddRange(BitConverter.GetBytes((float)V10));
 			}
 			
-			// serialize v11
-			s.Add((byte)((v11 == null) ? 0 : 1));
-			if (v11 != null)
+			// serialize V11
+			s.Add((byte)((V11 == null) ? 0 : 1));
+			if (V11 != null)
 			{
-				s.AddRange(BitConverter.GetBytes((double)v11));
+				s.AddRange(BitConverter.GetBytes((double)V11));
 			}
 			
-			// serialize v12
-			s.Add((byte)((v12 == null) ? 0 : 1));
-			if (v12 != null)
+			// serialize V12
+			s.Add((byte)((V12 == null) ? 0 : 1));
+			if (V12 != null)
 			{
-				List<byte> tmp6 = new List<byte>();
-				tmp6.AddRange(BitConverter.GetBytes((uint)v12.Count()));
-				while (tmp6.Count > 0 && tmp6.Last() == 0)
-					tmp6.RemoveAt(tmp6.Count - 1);
-				s.Add((byte)tmp6.Count);
-				s.AddRange(tmp6);
+				List<byte> tmp15 = new List<byte>();
+				tmp15.AddRange(BitConverter.GetBytes((uint)V12.Count()));
+				while (tmp15.Count > 0 && tmp15.Last() == 0)
+					tmp15.RemoveAt(tmp15.Count - 1);
+				s.Add((byte)tmp15.Count);
+				s.AddRange(tmp15);
 				
-				s.AddRange(System.Text.Encoding.ASCII.GetBytes(v12));
+				s.AddRange(System.Text.Encoding.ASCII.GetBytes(V12));
 			}
 			
-			// serialize v13
-			s.Add((byte)((v13 == null) ? 0 : 1));
-			if (v13 != null)
+			// serialize V13
+			s.Add((byte)((V13 == null) ? 0 : 1));
+			if (V13 != null)
 			{
-				s.Add((byte)((sbyte)v13));
+				s.Add((byte)((sbyte)V13));
 			}
 			
-			// serialize v14
-			s.Add((byte)((v14 == null) ? 0 : 1));
-			if (v14 != null)
+			// serialize V14
+			s.Add((byte)((V14 == null) ? 0 : 1));
+			if (V14 != null)
 			{
-				s.AddRange(v14.Serialize());
+				s.AddRange(V14.Serialize());
 			}
 			
-			// serialize v15
-			s.Add((byte)((v15 == null) ? 0 : 1));
-			if (v15 != null)
-			{
-				List<byte> tmp7 = new List<byte>();
-				tmp7.AddRange(BitConverter.GetBytes((uint)v15.Count()));
-				while (tmp7.Count > 0 && tmp7.Last() == 0)
-					tmp7.RemoveAt(tmp7.Count - 1);
-				s.Add((byte)tmp7.Count);
-				s.AddRange(tmp7);
-				
-				foreach (var tmp8 in v15)
-				{
-					s.Add((byte)((tmp8 == null) ? 0 : 1));
-					if (tmp8 != null)
-					{
-						s.AddRange(BitConverter.GetBytes((int)tmp8));
-					}
-				}
-			}
-			
-			// serialize v16
-			s.Add((byte)((v16 == null) ? 0 : 1));
-			if (v16 != null)
-			{
-				List<byte> tmp9 = new List<byte>();
-				tmp9.AddRange(BitConverter.GetBytes((uint)v16.Count()));
-				while (tmp9.Count > 0 && tmp9.Last() == 0)
-					tmp9.RemoveAt(tmp9.Count - 1);
-				s.Add((byte)tmp9.Count);
-				s.AddRange(tmp9);
-				
-				foreach (var tmp10 in v16)
-				{
-					s.Add((byte)((tmp10 == null) ? 0 : 1));
-					if (tmp10 != null)
-					{
-						List<byte> tmp11 = new List<byte>();
-						tmp11.AddRange(BitConverter.GetBytes((uint)tmp10.Count()));
-						while (tmp11.Count > 0 && tmp11.Last() == 0)
-							tmp11.RemoveAt(tmp11.Count - 1);
-						s.Add((byte)tmp11.Count);
-						s.AddRange(tmp11);
-						
-						foreach (var tmp12 in tmp10)
-						{
-							s.Add((byte)((tmp12 == null) ? 0 : 1));
-							if (tmp12 != null)
-							{
-								s.AddRange(BitConverter.GetBytes((char)tmp12));
-							}
-						}
-					}
-				}
-			}
-			
-			// serialize v17
-			s.Add((byte)((v17 == null) ? 0 : 1));
-			if (v17 != null)
-			{
-				List<byte> tmp13 = new List<byte>();
-				tmp13.AddRange(BitConverter.GetBytes((uint)v17.Count()));
-				while (tmp13.Count > 0 && tmp13.Last() == 0)
-					tmp13.RemoveAt(tmp13.Count - 1);
-				s.Add((byte)tmp13.Count);
-				s.AddRange(tmp13);
-				
-				foreach (var tmp14 in v17)
-				{
-					s.Add((byte)((tmp14.Key == null) ? 0 : 1));
-					if (tmp14.Key != null)
-					{
-						List<byte> tmp15 = new List<byte>();
-						tmp15.AddRange(BitConverter.GetBytes((uint)tmp14.Key.Count()));
-						while (tmp15.Count > 0 && tmp15.Last() == 0)
-							tmp15.RemoveAt(tmp15.Count - 1);
-						s.Add((byte)tmp15.Count);
-						s.AddRange(tmp15);
-						
-						s.AddRange(System.Text.Encoding.ASCII.GetBytes(tmp14.Key));
-					}
-					
-					s.Add((byte)((tmp14.Value == null) ? 0 : 1));
-					if (tmp14.Value != null)
-					{
-						s.AddRange(BitConverter.GetBytes((int)tmp14.Value));
-					}
-				}
-			}
-			
-			// serialize v18
-			s.Add((byte)((v18 == null) ? 0 : 1));
-			if (v18 != null)
+			// serialize V15
+			s.Add((byte)((V15 == null) ? 0 : 1));
+			if (V15 != null)
 			{
 				List<byte> tmp16 = new List<byte>();
-				tmp16.AddRange(BitConverter.GetBytes((uint)v18.Count()));
+				tmp16.AddRange(BitConverter.GetBytes((uint)V15.Count()));
 				while (tmp16.Count > 0 && tmp16.Last() == 0)
 					tmp16.RemoveAt(tmp16.Count - 1);
 				s.Add((byte)tmp16.Count);
 				s.AddRange(tmp16);
 				
-				foreach (var tmp17 in v18)
+				foreach (var tmp17 in V15)
 				{
-					s.Add((byte)((tmp17.Key == null) ? 0 : 1));
-					if (tmp17.Key != null)
+					s.Add((byte)((tmp17 == null) ? 0 : 1));
+					if (tmp17 != null)
 					{
-						s.AddRange(BitConverter.GetBytes((char)tmp17.Key));
+						s.AddRange(BitConverter.GetBytes((int)tmp17));
+					}
+				}
+			}
+			
+			// serialize V16
+			s.Add((byte)((V16 == null) ? 0 : 1));
+			if (V16 != null)
+			{
+				List<byte> tmp18 = new List<byte>();
+				tmp18.AddRange(BitConverter.GetBytes((uint)V16.Count()));
+				while (tmp18.Count > 0 && tmp18.Last() == 0)
+					tmp18.RemoveAt(tmp18.Count - 1);
+				s.Add((byte)tmp18.Count);
+				s.AddRange(tmp18);
+				
+				foreach (var tmp19 in V16)
+				{
+					s.Add((byte)((tmp19 == null) ? 0 : 1));
+					if (tmp19 != null)
+					{
+						List<byte> tmp20 = new List<byte>();
+						tmp20.AddRange(BitConverter.GetBytes((uint)tmp19.Count()));
+						while (tmp20.Count > 0 && tmp20.Last() == 0)
+							tmp20.RemoveAt(tmp20.Count - 1);
+						s.Add((byte)tmp20.Count);
+						s.AddRange(tmp20);
+						
+						foreach (var tmp21 in tmp19)
+						{
+							s.Add((byte)((tmp21 == null) ? 0 : 1));
+							if (tmp21 != null)
+							{
+								s.AddRange(BitConverter.GetBytes((char)tmp21));
+							}
+						}
+					}
+				}
+			}
+			
+			// serialize V17
+			s.Add((byte)((V17 == null) ? 0 : 1));
+			if (V17 != null)
+			{
+				List<byte> tmp22 = new List<byte>();
+				tmp22.AddRange(BitConverter.GetBytes((uint)V17.Count()));
+				while (tmp22.Count > 0 && tmp22.Last() == 0)
+					tmp22.RemoveAt(tmp22.Count - 1);
+				s.Add((byte)tmp22.Count);
+				s.AddRange(tmp22);
+				
+				foreach (var tmp23 in V17)
+				{
+					s.Add((byte)((tmp23.Key == null) ? 0 : 1));
+					if (tmp23.Key != null)
+					{
+						List<byte> tmp24 = new List<byte>();
+						tmp24.AddRange(BitConverter.GetBytes((uint)tmp23.Key.Count()));
+						while (tmp24.Count > 0 && tmp24.Last() == 0)
+							tmp24.RemoveAt(tmp24.Count - 1);
+						s.Add((byte)tmp24.Count);
+						s.AddRange(tmp24);
+						
+						s.AddRange(System.Text.Encoding.ASCII.GetBytes(tmp23.Key));
 					}
 					
-					s.Add((byte)((tmp17.Value == null) ? 0 : 1));
-					if (tmp17.Value != null)
+					s.Add((byte)((tmp23.Value == null) ? 0 : 1));
+					if (tmp23.Value != null)
 					{
-						List<byte> tmp18 = new List<byte>();
-						tmp18.AddRange(BitConverter.GetBytes((uint)tmp17.Value.Count()));
-						while (tmp18.Count > 0 && tmp18.Last() == 0)
-							tmp18.RemoveAt(tmp18.Count - 1);
-						s.Add((byte)tmp18.Count);
-						s.AddRange(tmp18);
+						s.AddRange(BitConverter.GetBytes((int)tmp23.Value));
+					}
+				}
+			}
+			
+			// serialize V18
+			s.Add((byte)((V18 == null) ? 0 : 1));
+			if (V18 != null)
+			{
+				List<byte> tmp25 = new List<byte>();
+				tmp25.AddRange(BitConverter.GetBytes((uint)V18.Count()));
+				while (tmp25.Count > 0 && tmp25.Last() == 0)
+					tmp25.RemoveAt(tmp25.Count - 1);
+				s.Add((byte)tmp25.Count);
+				s.AddRange(tmp25);
+				
+				foreach (var tmp26 in V18)
+				{
+					s.Add((byte)((tmp26.Key == null) ? 0 : 1));
+					if (tmp26.Key != null)
+					{
+						s.AddRange(BitConverter.GetBytes((char)tmp26.Key));
+					}
+					
+					s.Add((byte)((tmp26.Value == null) ? 0 : 1));
+					if (tmp26.Value != null)
+					{
+						List<byte> tmp27 = new List<byte>();
+						tmp27.AddRange(BitConverter.GetBytes((uint)tmp26.Value.Count()));
+						while (tmp27.Count > 0 && tmp27.Last() == 0)
+							tmp27.RemoveAt(tmp27.Count - 1);
+						s.Add((byte)tmp27.Count);
+						s.AddRange(tmp27);
 						
-						foreach (var tmp19 in tmp17.Value)
+						foreach (var tmp28 in tmp26.Value)
 						{
-							s.Add((byte)((tmp19 == null) ? 0 : 1));
-							if (tmp19 != null)
+							s.Add((byte)((tmp28 == null) ? 0 : 1));
+							if (tmp28 != null)
 							{
-								List<byte> tmp20 = new List<byte>();
-								tmp20.AddRange(BitConverter.GetBytes((uint)tmp19.Count()));
-								while (tmp20.Count > 0 && tmp20.Last() == 0)
-									tmp20.RemoveAt(tmp20.Count - 1);
-								s.Add((byte)tmp20.Count);
-								s.AddRange(tmp20);
+								List<byte> tmp29 = new List<byte>();
+								tmp29.AddRange(BitConverter.GetBytes((uint)tmp28.Count()));
+								while (tmp29.Count > 0 && tmp29.Last() == 0)
+									tmp29.RemoveAt(tmp29.Count - 1);
+								s.Add((byte)tmp29.Count);
+								s.AddRange(tmp29);
 								
-								foreach (var tmp21 in tmp19)
+								foreach (var tmp30 in tmp28)
 								{
-									s.Add((byte)((tmp21.Key == null) ? 0 : 1));
-									if (tmp21.Key != null)
+									s.Add((byte)((tmp30.Key == null) ? 0 : 1));
+									if (tmp30.Key != null)
 									{
-										s.AddRange(BitConverter.GetBytes((double)tmp21.Key));
+										s.AddRange(BitConverter.GetBytes((double)tmp30.Key));
 									}
 									
-									s.Add((byte)((tmp21.Value == null) ? 0 : 1));
-									if (tmp21.Value != null)
+									s.Add((byte)((tmp30.Value == null) ? 0 : 1));
+									if (tmp30.Value != null)
 									{
-										s.Add((byte)((sbyte)tmp21.Value));
+										s.Add((byte)((sbyte)tmp30.Value));
 									}
 								}
 							}
@@ -428,51 +480,51 @@ namespace ks.full
 				}
 			}
 			
-			// serialize v19
-			s.Add((byte)((v19 == null) ? 0 : 1));
-			if (v19 != null)
+			// serialize V19
+			s.Add((byte)((V19 == null) ? 0 : 1));
+			if (V19 != null)
 			{
-				for (uint tmp22 = 0; tmp22 < 10; tmp22++)
+				for (uint tmp31 = 0; tmp31 < 10; tmp31++)
 				{
-					s.Add((byte)((v19[tmp22] == null) ? 0 : 1));
-					if (v19[tmp22] != null)
+					s.Add((byte)((V19[tmp31] == null) ? 0 : 1));
+					if (V19[tmp31] != null)
 					{
-						s.Add((byte)v19[tmp22]);
+						s.Add((byte)V19[tmp31]);
 					}
 				}
 			}
 			
-			// serialize v20
-			s.Add((byte)((v20 == null) ? 0 : 1));
-			if (v20 != null)
+			// serialize V20
+			s.Add((byte)((V20 == null) ? 0 : 1));
+			if (V20 != null)
 			{
-				for (uint tmp23 = 0; tmp23 < 10; tmp23++)
+				for (uint tmp32 = 0; tmp32 < 10; tmp32++)
 				{
-					for (uint tmp24 = 0; tmp24 < 20; tmp24++)
+					for (uint tmp33 = 0; tmp33 < 20; tmp33++)
 					{
-						s.Add((byte)((v20[tmp23, tmp24] == null) ? 0 : 1));
-						if (v20[tmp23, tmp24] != null)
+						s.Add((byte)((V20[tmp32, tmp33] == null) ? 0 : 1));
+						if (V20[tmp32, tmp33] != null)
 						{
-							List<byte> tmp25 = new List<byte>();
-							tmp25.AddRange(BitConverter.GetBytes((uint)v20[tmp23, tmp24].Count()));
-							while (tmp25.Count > 0 && tmp25.Last() == 0)
-								tmp25.RemoveAt(tmp25.Count - 1);
-							s.Add((byte)tmp25.Count);
-							s.AddRange(tmp25);
+							List<byte> tmp34 = new List<byte>();
+							tmp34.AddRange(BitConverter.GetBytes((uint)V20[tmp32, tmp33].Count()));
+							while (tmp34.Count > 0 && tmp34.Last() == 0)
+								tmp34.RemoveAt(tmp34.Count - 1);
+							s.Add((byte)tmp34.Count);
+							s.AddRange(tmp34);
 							
-							foreach (var tmp26 in v20[tmp23, tmp24])
+							foreach (var tmp35 in V20[tmp32, tmp33])
 							{
-								s.Add((byte)((tmp26 == null) ? 0 : 1));
-								if (tmp26 != null)
+								s.Add((byte)((tmp35 == null) ? 0 : 1));
+								if (tmp35 != null)
 								{
-									List<byte> tmp27 = new List<byte>();
-									tmp27.AddRange(BitConverter.GetBytes((uint)tmp26.Count()));
-									while (tmp27.Count > 0 && tmp27.Last() == 0)
-										tmp27.RemoveAt(tmp27.Count - 1);
-									s.Add((byte)tmp27.Count);
-									s.AddRange(tmp27);
+									List<byte> tmp36 = new List<byte>();
+									tmp36.AddRange(BitConverter.GetBytes((uint)tmp35.Count()));
+									while (tmp36.Count > 0 && tmp36.Last() == 0)
+										tmp36.RemoveAt(tmp36.Count - 1);
+									s.Add((byte)tmp36.Count);
+									s.AddRange(tmp36);
 									
-									s.AddRange(System.Text.Encoding.ASCII.GetBytes(tmp26));
+									s.AddRange(System.Text.Encoding.ASCII.GetBytes(tmp35));
 								}
 							}
 						}
@@ -480,80 +532,80 @@ namespace ks.full
 				}
 			}
 			
-			// serialize v21
-			s.Add((byte)((v21 == null) ? 0 : 1));
-			if (v21 != null)
+			// serialize V21
+			s.Add((byte)((V21 == null) ? 0 : 1));
+			if (V21 != null)
 			{
-				List<byte> tmp28 = new List<byte>();
-				tmp28.AddRange(BitConverter.GetBytes((uint)v21.Count()));
-				while (tmp28.Count > 0 && tmp28.Last() == 0)
-					tmp28.RemoveAt(tmp28.Count - 1);
-				s.Add((byte)tmp28.Count);
-				s.AddRange(tmp28);
+				List<byte> tmp37 = new List<byte>();
+				tmp37.AddRange(BitConverter.GetBytes((uint)V21.Count()));
+				while (tmp37.Count > 0 && tmp37.Last() == 0)
+					tmp37.RemoveAt(tmp37.Count - 1);
+				s.Add((byte)tmp37.Count);
+				s.AddRange(tmp37);
 				
-				foreach (var tmp29 in v21)
+				foreach (var tmp38 in V21)
 				{
-					s.Add((byte)((tmp29 == null) ? 0 : 1));
-					if (tmp29 != null)
+					s.Add((byte)((tmp38 == null) ? 0 : 1));
+					if (tmp38 != null)
 					{
-						for (uint tmp30 = 0; tmp30 < 4; tmp30++)
+						for (uint tmp39 = 0; tmp39 < 4; tmp39++)
 						{
-							s.Add((byte)((tmp29[tmp30] == null) ? 0 : 1));
-							if (tmp29[tmp30] != null)
+							s.Add((byte)((tmp38[tmp39] == null) ? 0 : 1));
+							if (tmp38[tmp39] != null)
 							{
-								s.AddRange(tmp29[tmp30].Serialize());
+								s.AddRange(tmp38[tmp39].Serialize());
 							}
 						}
 					}
 				}
 			}
 			
-			// serialize v22
-			s.Add((byte)((v22 == null) ? 0 : 1));
-			if (v22 != null)
+			// serialize V22
+			s.Add((byte)((V22 == null) ? 0 : 1));
+			if (V22 != null)
 			{
-				List<byte> tmp31 = new List<byte>();
-				tmp31.AddRange(BitConverter.GetBytes((uint)v22.Count()));
-				while (tmp31.Count > 0 && tmp31.Last() == 0)
-					tmp31.RemoveAt(tmp31.Count - 1);
-				s.Add((byte)tmp31.Count);
-				s.AddRange(tmp31);
+				List<byte> tmp40 = new List<byte>();
+				tmp40.AddRange(BitConverter.GetBytes((uint)V22.Count()));
+				while (tmp40.Count > 0 && tmp40.Last() == 0)
+					tmp40.RemoveAt(tmp40.Count - 1);
+				s.Add((byte)tmp40.Count);
+				s.AddRange(tmp40);
 				
-				foreach (var tmp32 in v22)
+				foreach (var tmp41 in V22)
 				{
-					s.Add((byte)((tmp32.Key == null) ? 0 : 1));
-					if (tmp32.Key != null)
+					s.Add((byte)((tmp41.Key == null) ? 0 : 1));
+					if (tmp41.Key != null)
 					{
-						List<byte> tmp33 = new List<byte>();
-						tmp33.AddRange(BitConverter.GetBytes((uint)tmp32.Key.Count()));
-						while (tmp33.Count > 0 && tmp33.Last() == 0)
-							tmp33.RemoveAt(tmp33.Count - 1);
-						s.Add((byte)tmp33.Count);
-						s.AddRange(tmp33);
+						List<byte> tmp42 = new List<byte>();
+						tmp42.AddRange(BitConverter.GetBytes((uint)tmp41.Key.Count()));
+						while (tmp42.Count > 0 && tmp42.Last() == 0)
+							tmp42.RemoveAt(tmp42.Count - 1);
+						s.Add((byte)tmp42.Count);
+						s.AddRange(tmp42);
 						
-						s.AddRange(System.Text.Encoding.ASCII.GetBytes(tmp32.Key));
+						s.AddRange(System.Text.Encoding.ASCII.GetBytes(tmp41.Key));
 					}
 					
-					s.Add((byte)((tmp32.Value == null) ? 0 : 1));
-					if (tmp32.Value != null)
+					s.Add((byte)((tmp41.Value == null) ? 0 : 1));
+					if (tmp41.Value != null)
 					{
-						s.AddRange(tmp32.Value.Serialize());
+						s.AddRange(tmp41.Value.Serialize());
 					}
 				}
 			}
 			
-			// serialize v23
-			s.Add((byte)((v23 == null) ? 0 : 1));
-			if (v23 != null)
+			// serialize V23
+			s.Add((byte)((V23 == null) ? 0 : 1));
+			if (V23 != null)
 			{
-				for (uint tmp34 = 0; tmp34 < 5; tmp34++)
+				for (uint tmp43 = 0; tmp43 < 5; tmp43++)
 				{
-					for (uint tmp35 = 0; tmp35 < 10; tmp35++)
+					for (uint tmp44 = 0; tmp44 < 10; tmp44++)
 					{
-						s.Add((byte)((v23[tmp34, tmp35] == null) ? 0 : 1));
-						if (v23[tmp34, tmp35] != null)
+						s.Add((byte)((V23[tmp43, tmp44] == null) ? 0 : 1));
+						if (V23[tmp43, tmp44] != null)
 						{
-							s.AddRange(v23[tmp34, tmp35].Serialize());
+							s.AddRange(V23[tmp43, tmp44].Serialize());
 						}
 					}
 				}
@@ -564,587 +616,540 @@ namespace ks.full
 		
 		public override uint Deserialize(byte[] s, uint offset = 0)
 		{
-			// deserialize v0
-			byte tmp36;
-			tmp36 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp36 == 1)
-			{
-				v0 = BitConverter.ToBoolean(s, (int)offset);
-				offset += sizeof(bool);
-			}
-			else
-				v0 = null;
-			
-			// deserialize v1
-			byte tmp37;
-			tmp37 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp37 == 1)
-			{
-				v1 = BitConverter.ToChar(s, (int)offset);
-				offset += sizeof(char);
-			}
-			else
-				v1 = null;
-			
-			// deserialize v2
-			byte tmp38;
-			tmp38 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp38 == 1)
-			{
-				v2 = (sbyte)s[(int)offset];
-				offset += sizeof(sbyte);
-			}
-			else
-				v2 = null;
-			
-			// deserialize v3
-			byte tmp39;
-			tmp39 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp39 == 1)
-			{
-				v3 = (byte)s[(int)offset];
-				offset += sizeof(byte);
-			}
-			else
-				v3 = null;
-			
-			// deserialize v4
-			byte tmp40;
-			tmp40 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp40 == 1)
-			{
-				v4 = BitConverter.ToInt16(s, (int)offset);
-				offset += sizeof(short);
-			}
-			else
-				v4 = null;
-			
-			// deserialize v5
-			byte tmp41;
-			tmp41 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp41 == 1)
-			{
-				v5 = BitConverter.ToUInt16(s, (int)offset);
-				offset += sizeof(ushort);
-			}
-			else
-				v5 = null;
-			
-			// deserialize v6
-			byte tmp42;
-			tmp42 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp42 == 1)
-			{
-				v6 = BitConverter.ToInt32(s, (int)offset);
-				offset += sizeof(int);
-			}
-			else
-				v6 = null;
-			
-			// deserialize v7
-			byte tmp43;
-			tmp43 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp43 == 1)
-			{
-				v7 = BitConverter.ToUInt32(s, (int)offset);
-				offset += sizeof(uint);
-			}
-			else
-				v7 = null;
-			
-			// deserialize v8
-			byte tmp44;
-			tmp44 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp44 == 1)
-			{
-				v8 = BitConverter.ToInt64(s, (int)offset);
-				offset += sizeof(long);
-			}
-			else
-				v8 = null;
-			
-			// deserialize v9
+			// deserialize V0
 			byte tmp45;
 			tmp45 = (byte)s[(int)offset];
 			offset += sizeof(byte);
 			if (tmp45 == 1)
 			{
-				v9 = BitConverter.ToUInt64(s, (int)offset);
-				offset += sizeof(ulong);
+				V0 = BitConverter.ToBoolean(s, (int)offset);
+				offset += sizeof(bool);
 			}
 			else
-				v9 = null;
+				V0 = null;
 			
-			// deserialize v10
+			// deserialize V1
 			byte tmp46;
 			tmp46 = (byte)s[(int)offset];
 			offset += sizeof(byte);
 			if (tmp46 == 1)
 			{
-				v10 = BitConverter.ToSingle(s, (int)offset);
-				offset += sizeof(float);
+				V1 = BitConverter.ToChar(s, (int)offset);
+				offset += sizeof(char);
 			}
 			else
-				v10 = null;
+				V1 = null;
 			
-			// deserialize v11
+			// deserialize V2
 			byte tmp47;
 			tmp47 = (byte)s[(int)offset];
 			offset += sizeof(byte);
 			if (tmp47 == 1)
 			{
-				v11 = BitConverter.ToDouble(s, (int)offset);
-				offset += sizeof(double);
+				V2 = (sbyte)s[(int)offset];
+				offset += sizeof(sbyte);
 			}
 			else
-				v11 = null;
+				V2 = null;
 			
-			// deserialize v12
+			// deserialize V3
 			byte tmp48;
 			tmp48 = (byte)s[(int)offset];
 			offset += sizeof(byte);
 			if (tmp48 == 1)
 			{
-				byte tmp49;
-				tmp49 = (byte)s[(int)offset];
+				V3 = (byte)s[(int)offset];
 				offset += sizeof(byte);
-				byte[] tmp50 = new byte[sizeof(uint)];
-				Array.Copy(s, offset, tmp50, 0, tmp49);
-				offset += tmp49;
-				uint tmp51;
-				tmp51 = BitConverter.ToUInt32(tmp50, (int)0);
-				
-				v12 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp51).ToArray());
-				offset += tmp51;
 			}
 			else
-				v12 = null;
+				V3 = null;
 			
-			// deserialize v13
+			// deserialize V4
+			byte tmp49;
+			tmp49 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp49 == 1)
+			{
+				V4 = BitConverter.ToInt16(s, (int)offset);
+				offset += sizeof(short);
+			}
+			else
+				V4 = null;
+			
+			// deserialize V5
+			byte tmp50;
+			tmp50 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp50 == 1)
+			{
+				V5 = BitConverter.ToUInt16(s, (int)offset);
+				offset += sizeof(ushort);
+			}
+			else
+				V5 = null;
+			
+			// deserialize V6
+			byte tmp51;
+			tmp51 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp51 == 1)
+			{
+				V6 = BitConverter.ToInt32(s, (int)offset);
+				offset += sizeof(int);
+			}
+			else
+				V6 = null;
+			
+			// deserialize V7
 			byte tmp52;
 			tmp52 = (byte)s[(int)offset];
 			offset += sizeof(byte);
 			if (tmp52 == 1)
 			{
-				sbyte tmp53;
-				tmp53 = (sbyte)s[(int)offset];
-				offset += sizeof(sbyte);
-				v13 = (EColor)tmp53;
+				V7 = BitConverter.ToUInt32(s, (int)offset);
+				offset += sizeof(uint);
 			}
 			else
-				v13 = null;
+				V7 = null;
 			
-			// deserialize v14
+			// deserialize V8
+			byte tmp53;
+			tmp53 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp53 == 1)
+			{
+				V8 = BitConverter.ToInt64(s, (int)offset);
+				offset += sizeof(long);
+			}
+			else
+				V8 = null;
+			
+			// deserialize V9
 			byte tmp54;
 			tmp54 = (byte)s[(int)offset];
 			offset += sizeof(byte);
 			if (tmp54 == 1)
 			{
-				v14 = new Child();
-				offset = v14.Deserialize(s, offset);
+				V9 = BitConverter.ToUInt64(s, (int)offset);
+				offset += sizeof(ulong);
 			}
 			else
-				v14 = null;
+				V9 = null;
 			
-			// deserialize v15
+			// deserialize V10
 			byte tmp55;
 			tmp55 = (byte)s[(int)offset];
 			offset += sizeof(byte);
 			if (tmp55 == 1)
 			{
-				byte tmp56;
-				tmp56 = (byte)s[(int)offset];
+				V10 = BitConverter.ToSingle(s, (int)offset);
+				offset += sizeof(float);
+			}
+			else
+				V10 = null;
+			
+			// deserialize V11
+			byte tmp56;
+			tmp56 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp56 == 1)
+			{
+				V11 = BitConverter.ToDouble(s, (int)offset);
+				offset += sizeof(double);
+			}
+			else
+				V11 = null;
+			
+			// deserialize V12
+			byte tmp57;
+			tmp57 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp57 == 1)
+			{
+				byte tmp58;
+				tmp58 = (byte)s[(int)offset];
 				offset += sizeof(byte);
-				byte[] tmp57 = new byte[sizeof(uint)];
-				Array.Copy(s, offset, tmp57, 0, tmp56);
-				offset += tmp56;
-				uint tmp58;
-				tmp58 = BitConverter.ToUInt32(tmp57, (int)0);
+				byte[] tmp59 = new byte[sizeof(uint)];
+				Array.Copy(s, offset, tmp59, 0, tmp58);
+				offset += tmp58;
+				uint tmp60;
+				tmp60 = BitConverter.ToUInt32(tmp59, (int)0);
 				
-				v15 = new List<int?>();
-				for (uint tmp59 = 0; tmp59 < tmp58; tmp59++)
+				V12 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp60).ToArray());
+				offset += tmp60;
+			}
+			else
+				V12 = null;
+			
+			// deserialize V13
+			byte tmp61;
+			tmp61 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp61 == 1)
+			{
+				sbyte tmp62;
+				tmp62 = (sbyte)s[(int)offset];
+				offset += sizeof(sbyte);
+				V13 = (EColor)tmp62;
+			}
+			else
+				V13 = null;
+			
+			// deserialize V14
+			byte tmp63;
+			tmp63 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp63 == 1)
+			{
+				V14 = new Child();
+				offset = V14.Deserialize(s, offset);
+			}
+			else
+				V14 = null;
+			
+			// deserialize V15
+			byte tmp64;
+			tmp64 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp64 == 1)
+			{
+				byte tmp65;
+				tmp65 = (byte)s[(int)offset];
+				offset += sizeof(byte);
+				byte[] tmp66 = new byte[sizeof(uint)];
+				Array.Copy(s, offset, tmp66, 0, tmp65);
+				offset += tmp65;
+				uint tmp67;
+				tmp67 = BitConverter.ToUInt32(tmp66, (int)0);
+				
+				V15 = new List<int?>();
+				for (uint tmp68 = 0; tmp68 < tmp67; tmp68++)
 				{
-					int? tmp60;
-					byte tmp61;
-					tmp61 = (byte)s[(int)offset];
+					int? tmp69;
+					byte tmp70;
+					tmp70 = (byte)s[(int)offset];
 					offset += sizeof(byte);
-					if (tmp61 == 1)
+					if (tmp70 == 1)
 					{
-						tmp60 = BitConverter.ToInt32(s, (int)offset);
+						tmp69 = BitConverter.ToInt32(s, (int)offset);
 						offset += sizeof(int);
 					}
 					else
-						tmp60 = null;
-					v15.Add(tmp60);
+						tmp69 = null;
+					V15.Add(tmp69);
 				}
 			}
 			else
-				v15 = null;
+				V15 = null;
 			
-			// deserialize v16
-			byte tmp62;
-			tmp62 = (byte)s[(int)offset];
+			// deserialize V16
+			byte tmp71;
+			tmp71 = (byte)s[(int)offset];
 			offset += sizeof(byte);
-			if (tmp62 == 1)
+			if (tmp71 == 1)
 			{
-				byte tmp63;
-				tmp63 = (byte)s[(int)offset];
+				byte tmp72;
+				tmp72 = (byte)s[(int)offset];
 				offset += sizeof(byte);
-				byte[] tmp64 = new byte[sizeof(uint)];
-				Array.Copy(s, offset, tmp64, 0, tmp63);
-				offset += tmp63;
-				uint tmp65;
-				tmp65 = BitConverter.ToUInt32(tmp64, (int)0);
+				byte[] tmp73 = new byte[sizeof(uint)];
+				Array.Copy(s, offset, tmp73, 0, tmp72);
+				offset += tmp72;
+				uint tmp74;
+				tmp74 = BitConverter.ToUInt32(tmp73, (int)0);
 				
-				v16 = new List<List<char?>>();
-				for (uint tmp66 = 0; tmp66 < tmp65; tmp66++)
+				V16 = new List<List<char?>>();
+				for (uint tmp75 = 0; tmp75 < tmp74; tmp75++)
 				{
-					List<char?> tmp67;
-					byte tmp68;
-					tmp68 = (byte)s[(int)offset];
+					List<char?> tmp76;
+					byte tmp77;
+					tmp77 = (byte)s[(int)offset];
 					offset += sizeof(byte);
-					if (tmp68 == 1)
+					if (tmp77 == 1)
 					{
-						byte tmp69;
-						tmp69 = (byte)s[(int)offset];
+						byte tmp78;
+						tmp78 = (byte)s[(int)offset];
 						offset += sizeof(byte);
-						byte[] tmp70 = new byte[sizeof(uint)];
-						Array.Copy(s, offset, tmp70, 0, tmp69);
-						offset += tmp69;
-						uint tmp71;
-						tmp71 = BitConverter.ToUInt32(tmp70, (int)0);
+						byte[] tmp79 = new byte[sizeof(uint)];
+						Array.Copy(s, offset, tmp79, 0, tmp78);
+						offset += tmp78;
+						uint tmp80;
+						tmp80 = BitConverter.ToUInt32(tmp79, (int)0);
 						
-						tmp67 = new List<char?>();
-						for (uint tmp72 = 0; tmp72 < tmp71; tmp72++)
+						tmp76 = new List<char?>();
+						for (uint tmp81 = 0; tmp81 < tmp80; tmp81++)
 						{
-							char? tmp73;
-							byte tmp74;
-							tmp74 = (byte)s[(int)offset];
+							char? tmp82;
+							byte tmp83;
+							tmp83 = (byte)s[(int)offset];
 							offset += sizeof(byte);
-							if (tmp74 == 1)
+							if (tmp83 == 1)
 							{
-								tmp73 = BitConverter.ToChar(s, (int)offset);
+								tmp82 = BitConverter.ToChar(s, (int)offset);
 								offset += sizeof(char);
 							}
 							else
-								tmp73 = null;
-							tmp67.Add(tmp73);
+								tmp82 = null;
+							tmp76.Add(tmp82);
 						}
 					}
 					else
-						tmp67 = null;
-					v16.Add(tmp67);
+						tmp76 = null;
+					V16.Add(tmp76);
 				}
 			}
 			else
-				v16 = null;
+				V16 = null;
 			
-			// deserialize v17
-			byte tmp75;
-			tmp75 = (byte)s[(int)offset];
+			// deserialize V17
+			byte tmp84;
+			tmp84 = (byte)s[(int)offset];
 			offset += sizeof(byte);
-			if (tmp75 == 1)
+			if (tmp84 == 1)
 			{
-				byte tmp76;
-				tmp76 = (byte)s[(int)offset];
+				byte tmp85;
+				tmp85 = (byte)s[(int)offset];
 				offset += sizeof(byte);
-				byte[] tmp77 = new byte[sizeof(uint)];
-				Array.Copy(s, offset, tmp77, 0, tmp76);
-				offset += tmp76;
-				uint tmp78;
-				tmp78 = BitConverter.ToUInt32(tmp77, (int)0);
+				byte[] tmp86 = new byte[sizeof(uint)];
+				Array.Copy(s, offset, tmp86, 0, tmp85);
+				offset += tmp85;
+				uint tmp87;
+				tmp87 = BitConverter.ToUInt32(tmp86, (int)0);
 				
-				v17 = new Dictionary<string, int?>();
-				for (uint tmp79 = 0; tmp79 < tmp78; tmp79++)
+				V17 = new Dictionary<string, int?>();
+				for (uint tmp88 = 0; tmp88 < tmp87; tmp88++)
 				{
-					string tmp80;
-					byte tmp82;
-					tmp82 = (byte)s[(int)offset];
+					string tmp89;
+					byte tmp91;
+					tmp91 = (byte)s[(int)offset];
 					offset += sizeof(byte);
-					if (tmp82 == 1)
+					if (tmp91 == 1)
 					{
-						byte tmp83;
-						tmp83 = (byte)s[(int)offset];
+						byte tmp92;
+						tmp92 = (byte)s[(int)offset];
 						offset += sizeof(byte);
-						byte[] tmp84 = new byte[sizeof(uint)];
-						Array.Copy(s, offset, tmp84, 0, tmp83);
-						offset += tmp83;
-						uint tmp85;
-						tmp85 = BitConverter.ToUInt32(tmp84, (int)0);
+						byte[] tmp93 = new byte[sizeof(uint)];
+						Array.Copy(s, offset, tmp93, 0, tmp92);
+						offset += tmp92;
+						uint tmp94;
+						tmp94 = BitConverter.ToUInt32(tmp93, (int)0);
 						
-						tmp80 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp85).ToArray());
-						offset += tmp85;
+						tmp89 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp94).ToArray());
+						offset += tmp94;
 					}
 					else
-						tmp80 = null;
+						tmp89 = null;
 					
-					int? tmp81;
-					byte tmp86;
-					tmp86 = (byte)s[(int)offset];
-					offset += sizeof(byte);
-					if (tmp86 == 1)
-					{
-						tmp81 = BitConverter.ToInt32(s, (int)offset);
-						offset += sizeof(int);
-					}
-					else
-						tmp81 = null;
-					
-					v17[tmp80] = tmp81;
-				}
-			}
-			else
-				v17 = null;
-			
-			// deserialize v18
-			byte tmp87;
-			tmp87 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp87 == 1)
-			{
-				byte tmp88;
-				tmp88 = (byte)s[(int)offset];
-				offset += sizeof(byte);
-				byte[] tmp89 = new byte[sizeof(uint)];
-				Array.Copy(s, offset, tmp89, 0, tmp88);
-				offset += tmp88;
-				uint tmp90;
-				tmp90 = BitConverter.ToUInt32(tmp89, (int)0);
-				
-				v18 = new Dictionary<char?, List<Dictionary<double?, EColor?>>>();
-				for (uint tmp91 = 0; tmp91 < tmp90; tmp91++)
-				{
-					char? tmp92;
-					byte tmp94;
-					tmp94 = (byte)s[(int)offset];
-					offset += sizeof(byte);
-					if (tmp94 == 1)
-					{
-						tmp92 = BitConverter.ToChar(s, (int)offset);
-						offset += sizeof(char);
-					}
-					else
-						tmp92 = null;
-					
-					List<Dictionary<double?, EColor?>> tmp93;
+					int? tmp90;
 					byte tmp95;
 					tmp95 = (byte)s[(int)offset];
 					offset += sizeof(byte);
 					if (tmp95 == 1)
 					{
-						byte tmp96;
-						tmp96 = (byte)s[(int)offset];
+						tmp90 = BitConverter.ToInt32(s, (int)offset);
+						offset += sizeof(int);
+					}
+					else
+						tmp90 = null;
+					
+					V17[tmp89] = tmp90;
+				}
+			}
+			else
+				V17 = null;
+			
+			// deserialize V18
+			byte tmp96;
+			tmp96 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp96 == 1)
+			{
+				byte tmp97;
+				tmp97 = (byte)s[(int)offset];
+				offset += sizeof(byte);
+				byte[] tmp98 = new byte[sizeof(uint)];
+				Array.Copy(s, offset, tmp98, 0, tmp97);
+				offset += tmp97;
+				uint tmp99;
+				tmp99 = BitConverter.ToUInt32(tmp98, (int)0);
+				
+				V18 = new Dictionary<char?, List<Dictionary<double?, EColor?>>>();
+				for (uint tmp100 = 0; tmp100 < tmp99; tmp100++)
+				{
+					char? tmp101;
+					byte tmp103;
+					tmp103 = (byte)s[(int)offset];
+					offset += sizeof(byte);
+					if (tmp103 == 1)
+					{
+						tmp101 = BitConverter.ToChar(s, (int)offset);
+						offset += sizeof(char);
+					}
+					else
+						tmp101 = null;
+					
+					List<Dictionary<double?, EColor?>> tmp102;
+					byte tmp104;
+					tmp104 = (byte)s[(int)offset];
+					offset += sizeof(byte);
+					if (tmp104 == 1)
+					{
+						byte tmp105;
+						tmp105 = (byte)s[(int)offset];
 						offset += sizeof(byte);
-						byte[] tmp97 = new byte[sizeof(uint)];
-						Array.Copy(s, offset, tmp97, 0, tmp96);
-						offset += tmp96;
-						uint tmp98;
-						tmp98 = BitConverter.ToUInt32(tmp97, (int)0);
+						byte[] tmp106 = new byte[sizeof(uint)];
+						Array.Copy(s, offset, tmp106, 0, tmp105);
+						offset += tmp105;
+						uint tmp107;
+						tmp107 = BitConverter.ToUInt32(tmp106, (int)0);
 						
-						tmp93 = new List<Dictionary<double?, EColor?>>();
-						for (uint tmp99 = 0; tmp99 < tmp98; tmp99++)
+						tmp102 = new List<Dictionary<double?, EColor?>>();
+						for (uint tmp108 = 0; tmp108 < tmp107; tmp108++)
 						{
-							Dictionary<double?, EColor?> tmp100;
-							byte tmp101;
-							tmp101 = (byte)s[(int)offset];
+							Dictionary<double?, EColor?> tmp109;
+							byte tmp110;
+							tmp110 = (byte)s[(int)offset];
 							offset += sizeof(byte);
-							if (tmp101 == 1)
+							if (tmp110 == 1)
 							{
-								byte tmp102;
-								tmp102 = (byte)s[(int)offset];
+								byte tmp111;
+								tmp111 = (byte)s[(int)offset];
 								offset += sizeof(byte);
-								byte[] tmp103 = new byte[sizeof(uint)];
-								Array.Copy(s, offset, tmp103, 0, tmp102);
-								offset += tmp102;
-								uint tmp104;
-								tmp104 = BitConverter.ToUInt32(tmp103, (int)0);
+								byte[] tmp112 = new byte[sizeof(uint)];
+								Array.Copy(s, offset, tmp112, 0, tmp111);
+								offset += tmp111;
+								uint tmp113;
+								tmp113 = BitConverter.ToUInt32(tmp112, (int)0);
 								
-								tmp100 = new Dictionary<double?, EColor?>();
-								for (uint tmp105 = 0; tmp105 < tmp104; tmp105++)
+								tmp109 = new Dictionary<double?, EColor?>();
+								for (uint tmp114 = 0; tmp114 < tmp113; tmp114++)
 								{
-									double? tmp106;
-									byte tmp108;
-									tmp108 = (byte)s[(int)offset];
+									double? tmp115;
+									byte tmp117;
+									tmp117 = (byte)s[(int)offset];
 									offset += sizeof(byte);
-									if (tmp108 == 1)
+									if (tmp117 == 1)
 									{
-										tmp106 = BitConverter.ToDouble(s, (int)offset);
+										tmp115 = BitConverter.ToDouble(s, (int)offset);
 										offset += sizeof(double);
 									}
 									else
-										tmp106 = null;
+										tmp115 = null;
 									
-									EColor? tmp107;
-									byte tmp109;
-									tmp109 = (byte)s[(int)offset];
+									EColor? tmp116;
+									byte tmp118;
+									tmp118 = (byte)s[(int)offset];
 									offset += sizeof(byte);
-									if (tmp109 == 1)
+									if (tmp118 == 1)
 									{
-										sbyte tmp110;
-										tmp110 = (sbyte)s[(int)offset];
+										sbyte tmp119;
+										tmp119 = (sbyte)s[(int)offset];
 										offset += sizeof(sbyte);
-										tmp107 = (EColor)tmp110;
+										tmp116 = (EColor)tmp119;
 									}
 									else
-										tmp107 = null;
+										tmp116 = null;
 									
-									tmp100[tmp106] = tmp107;
+									tmp109[tmp115] = tmp116;
 								}
 							}
 							else
-								tmp100 = null;
-							tmp93.Add(tmp100);
+								tmp109 = null;
+							tmp102.Add(tmp109);
 						}
 					}
 					else
-						tmp93 = null;
+						tmp102 = null;
 					
-					v18[tmp92] = tmp93;
+					V18[tmp101] = tmp102;
 				}
 			}
 			else
-				v18 = null;
+				V18 = null;
 			
-			// deserialize v19
-			byte tmp111;
-			tmp111 = (byte)s[(int)offset];
+			// deserialize V19
+			byte tmp120;
+			tmp120 = (byte)s[(int)offset];
 			offset += sizeof(byte);
-			if (tmp111 == 1)
+			if (tmp120 == 1)
 			{
-				v19 = new sbyte?[10];
-				for (uint tmp112 = 0; tmp112 < 10; tmp112++)
+				V19 = new sbyte?[10];
+				for (uint tmp121 = 0; tmp121 < 10; tmp121++)
 				{
-					byte tmp113;
-					tmp113 = (byte)s[(int)offset];
+					byte tmp122;
+					tmp122 = (byte)s[(int)offset];
 					offset += sizeof(byte);
-					if (tmp113 == 1)
+					if (tmp122 == 1)
 					{
-						v19[tmp112] = (sbyte)s[(int)offset];
+						V19[tmp121] = (sbyte)s[(int)offset];
 						offset += sizeof(sbyte);
 					}
 					else
-						v19[tmp112] = null;
+						V19[tmp121] = null;
 				}
 			}
 			else
-				v19 = null;
+				V19 = null;
 			
-			// deserialize v20
-			byte tmp114;
-			tmp114 = (byte)s[(int)offset];
+			// deserialize V20
+			byte tmp123;
+			tmp123 = (byte)s[(int)offset];
 			offset += sizeof(byte);
-			if (tmp114 == 1)
+			if (tmp123 == 1)
 			{
-				v20 = new List<string>[10, 20];
-				for (uint tmp115 = 0; tmp115 < 10; tmp115++)
+				V20 = new List<string>[10, 20];
+				for (uint tmp124 = 0; tmp124 < 10; tmp124++)
 				{
-					for (uint tmp116 = 0; tmp116 < 20; tmp116++)
+					for (uint tmp125 = 0; tmp125 < 20; tmp125++)
 					{
-						byte tmp117;
-						tmp117 = (byte)s[(int)offset];
+						byte tmp126;
+						tmp126 = (byte)s[(int)offset];
 						offset += sizeof(byte);
-						if (tmp117 == 1)
+						if (tmp126 == 1)
 						{
-							byte tmp118;
-							tmp118 = (byte)s[(int)offset];
+							byte tmp127;
+							tmp127 = (byte)s[(int)offset];
 							offset += sizeof(byte);
-							byte[] tmp119 = new byte[sizeof(uint)];
-							Array.Copy(s, offset, tmp119, 0, tmp118);
-							offset += tmp118;
-							uint tmp120;
-							tmp120 = BitConverter.ToUInt32(tmp119, (int)0);
+							byte[] tmp128 = new byte[sizeof(uint)];
+							Array.Copy(s, offset, tmp128, 0, tmp127);
+							offset += tmp127;
+							uint tmp129;
+							tmp129 = BitConverter.ToUInt32(tmp128, (int)0);
 							
-							v20[tmp115, tmp116] = new List<string>();
-							for (uint tmp121 = 0; tmp121 < tmp120; tmp121++)
+							V20[tmp124, tmp125] = new List<string>();
+							for (uint tmp130 = 0; tmp130 < tmp129; tmp130++)
 							{
-								string tmp122;
-								byte tmp123;
-								tmp123 = (byte)s[(int)offset];
+								string tmp131;
+								byte tmp132;
+								tmp132 = (byte)s[(int)offset];
 								offset += sizeof(byte);
-								if (tmp123 == 1)
+								if (tmp132 == 1)
 								{
-									byte tmp124;
-									tmp124 = (byte)s[(int)offset];
+									byte tmp133;
+									tmp133 = (byte)s[(int)offset];
 									offset += sizeof(byte);
-									byte[] tmp125 = new byte[sizeof(uint)];
-									Array.Copy(s, offset, tmp125, 0, tmp124);
-									offset += tmp124;
-									uint tmp126;
-									tmp126 = BitConverter.ToUInt32(tmp125, (int)0);
+									byte[] tmp134 = new byte[sizeof(uint)];
+									Array.Copy(s, offset, tmp134, 0, tmp133);
+									offset += tmp133;
+									uint tmp135;
+									tmp135 = BitConverter.ToUInt32(tmp134, (int)0);
 									
-									tmp122 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp126).ToArray());
-									offset += tmp126;
+									tmp131 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp135).ToArray());
+									offset += tmp135;
 								}
 								else
-									tmp122 = null;
-								v20[tmp115, tmp116].Add(tmp122);
+									tmp131 = null;
+								V20[tmp124, tmp125].Add(tmp131);
 							}
 						}
 						else
-							v20[tmp115, tmp116] = null;
+							V20[tmp124, tmp125] = null;
 					}
 				}
 			}
 			else
-				v20 = null;
+				V20 = null;
 			
-			// deserialize v21
-			byte tmp127;
-			tmp127 = (byte)s[(int)offset];
-			offset += sizeof(byte);
-			if (tmp127 == 1)
-			{
-				byte tmp128;
-				tmp128 = (byte)s[(int)offset];
-				offset += sizeof(byte);
-				byte[] tmp129 = new byte[sizeof(uint)];
-				Array.Copy(s, offset, tmp129, 0, tmp128);
-				offset += tmp128;
-				uint tmp130;
-				tmp130 = BitConverter.ToUInt32(tmp129, (int)0);
-				
-				v21 = new List<Child[]>();
-				for (uint tmp131 = 0; tmp131 < tmp130; tmp131++)
-				{
-					Child[] tmp132;
-					byte tmp133;
-					tmp133 = (byte)s[(int)offset];
-					offset += sizeof(byte);
-					if (tmp133 == 1)
-					{
-						tmp132 = new Child[4];
-						for (uint tmp134 = 0; tmp134 < 4; tmp134++)
-						{
-							byte tmp135;
-							tmp135 = (byte)s[(int)offset];
-							offset += sizeof(byte);
-							if (tmp135 == 1)
-							{
-								tmp132[tmp134] = new Child();
-								offset = tmp132[tmp134].Deserialize(s, offset);
-							}
-							else
-								tmp132[tmp134] = null;
-						}
-					}
-					else
-						tmp132 = null;
-					v21.Add(tmp132);
-				}
-			}
-			else
-				v21 = null;
-			
-			// deserialize v22
+			// deserialize V21
 			byte tmp136;
 			tmp136 = (byte)s[(int)offset];
 			offset += sizeof(byte);
@@ -1159,74 +1164,121 @@ namespace ks.full
 				uint tmp139;
 				tmp139 = BitConverter.ToUInt32(tmp138, (int)0);
 				
-				v22 = new Dictionary<string, Child>();
+				V21 = new List<Child[]>();
 				for (uint tmp140 = 0; tmp140 < tmp139; tmp140++)
 				{
-					string tmp141;
-					byte tmp143;
-					tmp143 = (byte)s[(int)offset];
+					Child[] tmp141;
+					byte tmp142;
+					tmp142 = (byte)s[(int)offset];
 					offset += sizeof(byte);
-					if (tmp143 == 1)
+					if (tmp142 == 1)
 					{
-						byte tmp144;
-						tmp144 = (byte)s[(int)offset];
-						offset += sizeof(byte);
-						byte[] tmp145 = new byte[sizeof(uint)];
-						Array.Copy(s, offset, tmp145, 0, tmp144);
-						offset += tmp144;
-						uint tmp146;
-						tmp146 = BitConverter.ToUInt32(tmp145, (int)0);
-						
-						tmp141 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp146).ToArray());
-						offset += tmp146;
+						tmp141 = new Child[4];
+						for (uint tmp143 = 0; tmp143 < 4; tmp143++)
+						{
+							byte tmp144;
+							tmp144 = (byte)s[(int)offset];
+							offset += sizeof(byte);
+							if (tmp144 == 1)
+							{
+								tmp141[tmp143] = new Child();
+								offset = tmp141[tmp143].Deserialize(s, offset);
+							}
+							else
+								tmp141[tmp143] = null;
+						}
 					}
 					else
 						tmp141 = null;
-					
-					Child tmp142;
-					byte tmp147;
-					tmp147 = (byte)s[(int)offset];
+					V21.Add(tmp141);
+				}
+			}
+			else
+				V21 = null;
+			
+			// deserialize V22
+			byte tmp145;
+			tmp145 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp145 == 1)
+			{
+				byte tmp146;
+				tmp146 = (byte)s[(int)offset];
+				offset += sizeof(byte);
+				byte[] tmp147 = new byte[sizeof(uint)];
+				Array.Copy(s, offset, tmp147, 0, tmp146);
+				offset += tmp146;
+				uint tmp148;
+				tmp148 = BitConverter.ToUInt32(tmp147, (int)0);
+				
+				V22 = new Dictionary<string, Child>();
+				for (uint tmp149 = 0; tmp149 < tmp148; tmp149++)
+				{
+					string tmp150;
+					byte tmp152;
+					tmp152 = (byte)s[(int)offset];
 					offset += sizeof(byte);
-					if (tmp147 == 1)
+					if (tmp152 == 1)
 					{
-						tmp142 = new Child();
-						offset = tmp142.Deserialize(s, offset);
+						byte tmp153;
+						tmp153 = (byte)s[(int)offset];
+						offset += sizeof(byte);
+						byte[] tmp154 = new byte[sizeof(uint)];
+						Array.Copy(s, offset, tmp154, 0, tmp153);
+						offset += tmp153;
+						uint tmp155;
+						tmp155 = BitConverter.ToUInt32(tmp154, (int)0);
+						
+						tmp150 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp155).ToArray());
+						offset += tmp155;
 					}
 					else
-						tmp142 = null;
+						tmp150 = null;
 					
-					v22[tmp141] = tmp142;
+					Child tmp151;
+					byte tmp156;
+					tmp156 = (byte)s[(int)offset];
+					offset += sizeof(byte);
+					if (tmp156 == 1)
+					{
+						tmp151 = new Child();
+						offset = tmp151.Deserialize(s, offset);
+					}
+					else
+						tmp151 = null;
+					
+					V22[tmp150] = tmp151;
 				}
 			}
 			else
-				v22 = null;
+				V22 = null;
 			
-			// deserialize v23
-			byte tmp148;
-			tmp148 = (byte)s[(int)offset];
+			// deserialize V23
+			byte tmp157;
+			tmp157 = (byte)s[(int)offset];
 			offset += sizeof(byte);
-			if (tmp148 == 1)
+			if (tmp157 == 1)
 			{
-				v23 = new Child[5, 10];
-				for (uint tmp149 = 0; tmp149 < 5; tmp149++)
+				V23 = new Child[5, 10];
+				for (uint tmp158 = 0; tmp158 < 5; tmp158++)
 				{
-					for (uint tmp150 = 0; tmp150 < 10; tmp150++)
+					for (uint tmp159 = 0; tmp159 < 10; tmp159++)
 					{
-						byte tmp151;
-						tmp151 = (byte)s[(int)offset];
+						byte tmp160;
+						tmp160 = (byte)s[(int)offset];
 						offset += sizeof(byte);
-						if (tmp151 == 1)
+						if (tmp160 == 1)
 						{
-							v23[tmp149, tmp150] = new Child();
-							offset = v23[tmp149, tmp150].Deserialize(s, offset);
+							V23[tmp158, tmp159] = new Child();
+							offset = V23[tmp158, tmp159].Deserialize(s, offset);
 						}
 						else
-							v23[tmp149, tmp150] = null;
+							V23[tmp158, tmp159] = null;
 					}
 				}
 			}
 			else
-				v23 = null;
+				V23 = null;
 			
 			return offset;
 		}
