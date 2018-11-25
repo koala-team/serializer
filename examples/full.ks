@@ -2,11 +2,11 @@
 [EColor]
 _def = enum <byte> 
 	{
-		white,
-		red(3),
-		green,
-		blue(-2),
-		black
+		White,
+		Red(3),
+		Green,
+		Blue(-2),
+		Black
 	}
 
 

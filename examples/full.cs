@@ -6,11 +6,11 @@ namespace ks.full
 {
 	public enum EColor
 	{
-		white = 0,
-		red = 3,
-		green = 4,
-		blue = -2,
-		black = -1,
+		White = 0,
+		Red = 3,
+		Green = 4,
+		Blue = -2,
+		Black = -1,
 	}
 	
 	public class Parent : KSObject
