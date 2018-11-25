@@ -13,7 +13,8 @@ _def = enum <byte>
 ; Parent class
 [Parent]
 _def = class
-p1 = uint
+first_name = string
+_last_name_ = string
 
 
 # Child class
