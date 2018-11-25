@@ -5,5 +5,4 @@ import sys
 from koala_serializer import generate
 
 
-dest = '.' if len(sys.argv) < 4 else sys.argv[3]
-generate(sys.argv[1], sys.argv[2], dest)
+generate(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

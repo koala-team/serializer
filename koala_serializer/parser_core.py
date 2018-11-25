@@ -197,3 +197,31 @@ class Rules:
         if 0 in dims:
             return None
         return (Tokens.Array, (tuple(dims), array_type))
+
+
+
+def convert_camel_case(name, is_lower):
+    name = list(name)
+    first_underscore_index = -1
+    while name[first_underscore_index + 1] == '_':
+        first_underscore_index += 1
+
+    for i in range(len(name) - 2, first_underscore_index, -1):
+        if name[i] == '_' and name[i + 1] not in ['_', '']:
+            name[i + 1] = name[i + 1].upper()
+            name[i] = ''
+    for i in range(len(name)):
+        if name[i] not in ['_', '']:
+            if is_lower:
+                name[i] = name[i].lower()
+            else:
+                name[i] = name[i].upper()
+            break
+    return ''.join(name)
+
+
+capitalization_rules = {
+    'snake_case': lambda name: name,
+    'camelCase': lambda name: convert_camel_case(name, True),
+    'PascalCase': lambda name: convert_camel_case(name, False)
+}
