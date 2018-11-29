@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # project imports
+from ..parser_core import capitalization_rules
 from .cs_core import RootGenerator, HeaderGenerator, FooterGenerator, TypeGenerator
 from .cpp import CppCodeEditor
 
@@ -18,6 +19,7 @@ class CsCodeGenerator:
 
 
     def generate(self, parse_tree, module_name):
+        module_name = capitalization_rules['PascalCase'](module_name)
         self._generate_root()
         self._generate(parse_tree, module_name)
         root_filename = 'KSObject.cs'

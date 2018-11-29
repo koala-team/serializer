@@ -19,9 +19,9 @@ class RootGenerator:
 
         self._gen_imports()
         code_editor.add_line()
-        self._gen_namespace('ks')
+        self._gen_namespace('KS')
         self._gen_ks_object()
-        self._code_editor.add_line("} // namespace ks")
+        self._code_editor.add_line("} // namespace KS")
 
 
     def _gen_imports(self):
@@ -60,7 +60,7 @@ class HeaderGenerator:
 
         self._gen_imports()
         code_editor.add_line()
-        self._gen_namespace("ks." + module_name)
+        self._gen_namespace("KS." + module_name)
         code_editor.increase_indentation(put_accolade=False)
 
 
@@ -87,7 +87,7 @@ class FooterGenerator:
 
     def gen_footer(self, module_name):
         self._code_editor.decrease_indentation(put_accolade=False)
-        self._gen_namespace("ks." + module_name)
+        self._gen_namespace("KS." + module_name)
 
 
     def _gen_namespace(self, ns_name):
