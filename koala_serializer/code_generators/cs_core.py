@@ -30,7 +30,7 @@ class RootGenerator:
 
     def _gen_ks_object(self):
         self._code_editor.add_lines([
-            "public abstract class KSObject",
+            "public abstract partial class KSObject",
             "{",
             "\tpublic static string NameStatic => \"\";",
             "\tpublic abstract string Name { get; }",
@@ -132,7 +132,7 @@ class TypeGenerator:
 
 
         # generate definitions
-        code_editor.add_line("public class %s : %s" % (type_name, ', '.join(parents)))
+        code_editor.add_line("public partial class %s : %s" % (type_name, ', '.join(parents)))
         code_editor.increase_indentation()
         for attr_name, tree in properties:
             vartype = self._variable_type_generator.gen_vartype(tree)
