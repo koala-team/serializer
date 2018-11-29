@@ -307,9 +307,7 @@ In python shell:
 >>> t1.v12 = "hello"
 >>> t1.v15 = [1, 2, 3]
 >>> t1.v17 = {'one': 1, 'two': 2}
->>> t1.v22 = {'one': Child(c='first'), 'two': Child(c='second')}
->>> t1.v22['two'].first_name = 'baby'
->>> t1.v22['two']._last_name_ = 'knight'
+>>> t1.v22 = {'one': Child(c='first'), 'two': Child(c='second', first_name='baby', _last_name_='knight')}
 >>> s = t1.serialize()
 
 >>> t2 = Test()
