@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace ks.empty
+namespace KS.Empty
 {
-	public class Parent : KSObject
+	public partial class Parent : KSObject
 	{
 		public uint? Count { get; set; }
 		
@@ -49,7 +49,7 @@ namespace ks.empty
 		}
 	}
 	
-	public class Child : Parent
+	public partial class Child : Parent
 	{
 		
 
@@ -79,4 +79,4 @@ namespace ks.empty
 			return offset;
 		}
 	}
-} // namespace ks.empty
+} // namespace KS.Empty

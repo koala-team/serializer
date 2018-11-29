@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace ks.full
+namespace KS.Full
 {
 	public enum EColor
 	{
@@ -13,7 +13,7 @@ namespace ks.full
 		Black = -1,
 	}
 	
-	public class Parent : KSObject
+	public partial class Parent : KSObject
 	{
 		public string FirstName { get; set; }
 		public string _LastName_ { get; set; }
@@ -110,7 +110,7 @@ namespace ks.full
 		}
 	}
 	
-	public class Child : Parent
+	public partial class Child : Parent
 	{
 		public string C { get; set; }
 		
@@ -177,7 +177,7 @@ namespace ks.full
 		}
 	}
 	
-	public class Test : KSObject
+	public partial class Test : KSObject
 	{
 		public bool? V0 { get; set; }
 		public char? V1 { get; set; }
@@ -1283,4 +1283,4 @@ namespace ks.full
 			return offset;
 		}
 	}
-} // namespace ks.full
+} // namespace KS.Full

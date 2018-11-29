@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace ks.inheritance
+namespace KS.Inheritance
 {
-	public class Parent1 : KSObject
+	public partial class Parent1 : KSObject
 	{
 		public uint? Count { get; set; }
 		
@@ -49,7 +49,7 @@ namespace ks.inheritance
 		}
 	}
 	
-	public class Parent2 : KSObject
+	public partial class Parent2 : KSObject
 	{
 		public long? Number { get; set; }
 		
@@ -94,7 +94,7 @@ namespace ks.inheritance
 		}
 	}
 	
-	public class Child : Parent1
+	public partial class Child : Parent1
 	{
 		public string Name { get; set; }
 		
@@ -160,4 +160,4 @@ namespace ks.inheritance
 			return offset;
 		}
 	}
-} // namespace ks.inheritance
+} // namespace KS.Inheritance
