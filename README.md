@@ -253,8 +253,11 @@ In order to use **Capitalization Rules** properly, it is supposed to implement *
 > **Class Names**: PascalCase
 >
 > **Class Attributes**: snake_case
+>
+> **Module Names**: snake_case
 
 Then your selected capitalization rule will just be applied to **Class Attributes**.
+**PascalCase** rule will be used for generating `C#` file names and namespaces.
 
 Example:
 
@@ -284,7 +287,7 @@ See [inheritance.h](https://github.com/koala-team/serializer/tree/master/example
 
 C# generated code:
 
-See [inheritance.cs](https://github.com/koala-team/serializer/tree/master/examples/inheritance.cs)
+See [Inheritance.cs](https://github.com/koala-team/serializer/tree/master/examples/Inheritance.cs)
 
 ## Full Example
 
@@ -388,8 +391,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-using ks;
-using ks.full;
+using KS;
+using KS.Full;
 
 namespace CsTest
 {
@@ -400,22 +403,19 @@ namespace CsTest
             Test t1 = new Test();
             t1.V12 = "hello";
 
-            t1.V15 = new List<int?>();
-            t1.V15.Add(1);
-            t1.V15.Add(2);
-            t1.V15.Add(3);
+            t1.V15 = new List<int?> {1, 2, 3 };
 
-            t1.V17 = new Dictionary<string, int?>();
-            t1.V17["one"] = 1;
-            t1.V17["two"] = 2;
+            t1.V17 = new Dictionary<string, int?>
+            {
+                ["one"] = 1,
+                ["two"] = 2
+            };
 
-            t1.V22 = new Dictionary<string, Child>();
-            t1.V22["one"] = new Child();
-            t1.V22["two"] = new Child();
-            t1.V22["one"].C = "first";
-            t1.V22["two"].C = "second";
-            t1.V22["two"].FirstName = "baby";
-            t1.V22["two"]._LastName_ = "knight";
+            t1.V22 = new Dictionary<string, Child>()
+            {
+                ["one"] = new Child() { C = "first" },
+                ["two"] = new Child() { C = "second", FirstName = "baby", _LastName_ = "knight" }
+            };
 
             byte[] s = t1.Serialize();
 
