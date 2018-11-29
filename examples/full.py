@@ -105,12 +105,12 @@ class Child(Parent):
 		return 'Child'
 
 
-	def __init__(self, c=None):
-		self.initialize(c)
+	def __init__(self, first_name=None, _last_name_=None, c=None):
+		self.initialize(first_name, _last_name_, c)
 	
 
-	def initialize(self, c=None):
-		Parent.initialize(self)
+	def initialize(self, first_name=None, _last_name_=None, c=None):
+		Parent.initialize(self, first_name, _last_name_)
 		
 		self.c = c
 	

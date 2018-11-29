@@ -94,9 +94,34 @@ namespace KS.Inheritance
 		}
 	}
 	
+	public partial class Parent3 : KSObject
+	{
+		
+
+		public Parent3()
+		{
+		}
+		
+		public new static string NameStatic => "Parent3";
+		
+		public override string Name => "Parent3";
+		
+		public override byte[] Serialize()
+		{
+			List<byte> s = new List<byte>();
+			
+			return s.ToArray();
+		}
+		
+		public override uint Deserialize(byte[] s, uint offset = 0)
+		{
+			return offset;
+		}
+	}
+	
 	public partial class Child : Parent1
 	{
-		public string Name { get; set; }
+		public string Firstname { get; set; }
 		
 
 		public Child()
@@ -114,18 +139,18 @@ namespace KS.Inheritance
 			// serialize parents
 			s.AddRange(base.Serialize());
 			
-			// serialize Name
-			s.Add((byte)((Name == null) ? 0 : 1));
-			if (Name != null)
+			// serialize Firstname
+			s.Add((byte)((Firstname == null) ? 0 : 1));
+			if (Firstname != null)
 			{
 				List<byte> tmp2 = new List<byte>();
-				tmp2.AddRange(BitConverter.GetBytes((uint)Name.Count()));
+				tmp2.AddRange(BitConverter.GetBytes((uint)Firstname.Count()));
 				while (tmp2.Count > 0 && tmp2.Last() == 0)
 					tmp2.RemoveAt(tmp2.Count - 1);
 				s.Add((byte)tmp2.Count);
 				s.AddRange(tmp2);
 				
-				s.AddRange(System.Text.Encoding.ASCII.GetBytes(Name));
+				s.AddRange(System.Text.Encoding.ASCII.GetBytes(Firstname));
 			}
 			
 			return s.ToArray();
@@ -136,7 +161,7 @@ namespace KS.Inheritance
 			// deserialize parents
 			offset = base.Deserialize(s, offset);
 			
-			// deserialize Name
+			// deserialize Firstname
 			byte tmp3;
 			tmp3 = (byte)s[(int)offset];
 			offset += sizeof(byte);
@@ -151,11 +176,62 @@ namespace KS.Inheritance
 				uint tmp6;
 				tmp6 = BitConverter.ToUInt32(tmp5, (int)0);
 				
-				Name = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp6).ToArray());
+				Firstname = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp6).ToArray());
 				offset += tmp6;
 			}
 			else
-				Name = null;
+				Firstname = null;
+			
+			return offset;
+		}
+	}
+	
+	public partial class GrandChild : Child
+	{
+		public float? Height { get; set; }
+		
+
+		public GrandChild()
+		{
+		}
+		
+		public new static string NameStatic => "GrandChild";
+		
+		public override string Name => "GrandChild";
+		
+		public override byte[] Serialize()
+		{
+			List<byte> s = new List<byte>();
+			
+			// serialize parents
+			s.AddRange(base.Serialize());
+			
+			// serialize Height
+			s.Add((byte)((Height == null) ? 0 : 1));
+			if (Height != null)
+			{
+				s.AddRange(BitConverter.GetBytes((float)Height));
+			}
+			
+			return s.ToArray();
+		}
+		
+		public override uint Deserialize(byte[] s, uint offset = 0)
+		{
+			// deserialize parents
+			offset = base.Deserialize(s, offset);
+			
+			// deserialize Height
+			byte tmp7;
+			tmp7 = (byte)s[(int)offset];
+			offset += sizeof(byte);
+			if (tmp7 == 1)
+			{
+				Height = BitConverter.ToSingle(s, (int)offset);
+				offset += sizeof(float);
+			}
+			else
+				Height = null;
 			
 			return offset;
 		}

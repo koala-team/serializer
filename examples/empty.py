@@ -54,14 +54,12 @@ class Child(Parent):
 		return 'Child'
 
 
-	def __init__(self):
-		self.initialize()
+	def __init__(self, count=None):
+		self.initialize(count)
 	
 
-	def initialize(self):
-		Parent.initialize(self)
-		
-		return
+	def initialize(self, count=None):
+		Parent.initialize(self, count)
 	
 
 	def serialize(self):

@@ -228,54 +228,107 @@ public:
 };
 
 
+class Parent3 : public KSObject
+{
+
+protected:
+
+
+
+
+public: // getters
+
+
+public: // reference getters
+
+
+public: // setters
+
+
+public: // has_attribute getters
+
+
+public: // has_attribute setters
+
+
+public:
+
+	Parent3()
+	{
+	}
+	
+	static inline const std::string nameStatic()
+	{
+		return "Parent3";
+	}
+	
+	virtual inline const std::string name() const
+	{
+		return "Parent3";
+	}
+	
+	std::string serialize() const
+	{
+		std::string s = "";
+		
+		return s;
+	}
+	
+	unsigned int deserialize(const std::string &s, unsigned int offset=0)
+	{
+		return offset;
+	}
+};
+
+
 class Child : public Parent1, Parent2
 {
 
 protected:
 
-	std::string __name;
+	std::string __firstname;
 
-	bool __has_name;
+	bool __has_firstname;
 
 
 public: // getters
 
-	inline std::string name() const
+	inline std::string firstname() const
 	{
-		return __name;
+		return __firstname;
 	}
 	
 
 public: // reference getters
 
-	inline std::string &ref_name() const
+	inline std::string &ref_firstname() const
 	{
-		return (std::string&) __name;
+		return (std::string&) __firstname;
 	}
 	
 
 public: // setters
 
-	inline void name(const std::string &name)
+	inline void firstname(const std::string &firstname)
 	{
-		__name = name;
-		has_name(true);
+		__firstname = firstname;
+		has_firstname(true);
 	}
 	
 
 public: // has_attribute getters
 
-	inline bool has_name() const
+	inline bool has_firstname() const
 	{
-		return __has_name;
+		return __has_firstname;
 	}
 	
 
 public: // has_attribute setters
 
-	inline void has_name(const bool &has_name)
+	inline void has_firstname(const bool &has_firstname)
 	{
-		__has_name = has_name;
+		__has_firstname = has_firstname;
 	}
 	
 
@@ -283,7 +336,7 @@ public:
 
 	Child()
 	{
-		has_name(false);
+		has_firstname(false);
 	}
 	
 	static inline const std::string nameStatic()
@@ -304,12 +357,12 @@ public:
 		s += Parent1::serialize();
 		s += Parent2::serialize();
 		
-		// serialize name
-		s += __has_name;
-		if (__has_name)
+		// serialize firstname
+		s += __has_firstname;
+		if (__has_firstname)
 		{
 			std::string tmp6 = "";
-			unsigned int tmp8 = __name.size();
+			unsigned int tmp8 = __firstname.size();
 			auto tmp9 = reinterpret_cast<char*>(&tmp8);
 			tmp6 += std::string(tmp9, sizeof(unsigned int));
 			while (tmp6.size() && tmp6.back() == 0)
@@ -319,7 +372,7 @@ public:
 			s += std::string(tmp12, sizeof(unsigned char));
 			s += tmp6;
 			
-			s += __name;
+			s += __firstname;
 		}
 		
 		return s;
@@ -331,10 +384,10 @@ public:
 		offset = Parent1::deserialize(s, offset);
 		offset = Parent2::deserialize(s, offset);
 		
-		// deserialize name
-		__has_name = *((unsigned char*) (&s[offset]));
+		// deserialize firstname
+		__has_firstname = *((unsigned char*) (&s[offset]));
 		offset += sizeof(unsigned char);
-		if (__has_name)
+		if (__has_firstname)
 		{
 			unsigned char tmp13;
 			tmp13 = *((unsigned char*) (&s[offset]));
@@ -346,8 +399,116 @@ public:
 			unsigned int tmp15;
 			tmp15 = *((unsigned int*) (&tmp14[0]));
 			
-			__name = s.substr(offset, tmp15);
+			__firstname = s.substr(offset, tmp15);
 			offset += tmp15;
+		}
+		
+		return offset;
+	}
+};
+
+
+class GrandChild : public Child, Parent3
+{
+
+protected:
+
+	float __height;
+
+	bool __has_height;
+
+
+public: // getters
+
+	inline float height() const
+	{
+		return __height;
+	}
+	
+
+public: // reference getters
+
+	inline float &ref_height() const
+	{
+		return (float&) __height;
+	}
+	
+
+public: // setters
+
+	inline void height(const float &height)
+	{
+		__height = height;
+		has_height(true);
+	}
+	
+
+public: // has_attribute getters
+
+	inline bool has_height() const
+	{
+		return __has_height;
+	}
+	
+
+public: // has_attribute setters
+
+	inline void has_height(const bool &has_height)
+	{
+		__has_height = has_height;
+	}
+	
+
+public:
+
+	GrandChild()
+	{
+		has_height(false);
+	}
+	
+	static inline const std::string nameStatic()
+	{
+		return "GrandChild";
+	}
+	
+	virtual inline const std::string name() const
+	{
+		return "GrandChild";
+	}
+	
+	std::string serialize() const
+	{
+		std::string s = "";
+		
+		// serialize parents
+		s += Child::serialize();
+		s += Parent3::serialize();
+		
+		// serialize height
+		s += __has_height;
+		if (__has_height)
+		{
+			float tmp17 = __height;
+			auto tmp18 = reinterpret_cast<char*>(&tmp17);
+			s += std::string(tmp18, sizeof(float));
+		}
+		
+		return s;
+	}
+	
+	unsigned int deserialize(const std::string &s, unsigned int offset=0)
+	{
+		// deserialize parents
+		offset = Child::deserialize(s, offset);
+		offset = Parent3::deserialize(s, offset);
+		
+		// deserialize height
+		__has_height = *((unsigned char*) (&s[offset]));
+		offset += sizeof(unsigned char);
+		if (__has_height)
+		{
+			__height = *((float*) (&s[offset]));
+			offset += sizeof(float);
 		}
 		
 		return offset;
