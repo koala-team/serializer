@@ -38,7 +38,7 @@ class TypeGenerator:
 
     def __init__(self, code_editor):
         self._user_defined_types = {
-            Tokens.Class: [],
+            Tokens.Class: {},
             Tokens.Enum: {}
         }
 
@@ -59,8 +59,8 @@ class TypeGenerator:
         _def = properties.pop('_def')
         properties = properties.items()
 
-        self._user_defined_types[Tokens.Class].append(type_name)
         parents = ['object'] if len(_def) == 1 else [p[0] for p in _def[1]]
+        self._user_defined_types[Tokens.Class][type_name] = (parents, properties)
 
         # generate definitions
         code_editor.add_line("class %s(%s):" % (type_name, ', '.join(parents)))
@@ -75,7 +75,7 @@ class TypeGenerator:
         code_editor.increase_indentation()
 
         # generate constructor
-        attrs = [p for p, _ in properties]
+        attrs = self._get_attrs(type_name)
         parameters = ', '.join(['self'] + ["%s=None" % a for a in attrs])
         code_editor.add_line("def __init__(%s):" % parameters)
         code_editor.add_line("self.initialize(%s)" % ', '.join(attrs), 1)
@@ -85,16 +85,22 @@ class TypeGenerator:
         code_editor.add_line("def initialize(%s):" % parameters)
         code_editor.increase_indentation()
 
+        is_empty_initialize = True
         if parents[0] != 'object':
+            is_empty_initialize = False
             for parent in parents:
-                code_editor.add_line("%s.initialize(self)" % parent)
-            code_editor.add_line()
+                parent_attrs = self._get_attrs(parent)
+                code_editor.add_line("%s.initialize(%s)" % (parent, ', '.join(['self'] + parent_attrs)))
 
         if properties:
+            if not is_empty_initialize:
+                code_editor.add_line()
+            is_empty_initialize = False
             for attr_name, tree in properties:
                 self._code_editor.add_line("self.%s = %s" % (attr_name, attr_name))
-        else:
-            code_editor.add_line('return')
+
+        if is_empty_initialize:
+            code_editor.add_line('pass')
 
         code_editor.decrease_indentation()
         code_editor.add_line('\n')
@@ -162,6 +168,17 @@ class TypeGenerator:
                 value = attr[1]
             code_editor.add_line("%s = %s" % (name, value), 1)
             value += 1
+
+
+    def _get_attrs(self, type_name):
+        if type_name == 'object':
+            return []
+        parents, properties = self._user_defined_types[Tokens.Class][type_name]
+        result = []
+        for p in parents:
+            result += self._get_attrs(p)
+        result += [p for p, _ in properties]
+        return result
 
 
 ###################################################################################

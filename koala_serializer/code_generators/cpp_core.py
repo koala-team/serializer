@@ -85,7 +85,7 @@ class TypeGenerator:
 
     def __init__(self, code_editor):
         self._user_defined_types = {
-            Tokens.Class: [],
+            Tokens.Class: {},
             Tokens.Enum: {}
         }
 
@@ -107,8 +107,8 @@ class TypeGenerator:
         _def = properties.pop('_def')
         properties = properties.items()
 
-        self._user_defined_types[Tokens.Class].append(type_name)
         parents = ['KSObject'] if len(_def) == 1 else [p[0] for p in _def[1]]
+        self._user_defined_types[Tokens.Class][type_name] = (parents, properties)
 
         # generate definitions
         code_editor.add_line("class %s : public %s" % (type_name, ', '.join(parents)))
