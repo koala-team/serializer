@@ -33,7 +33,7 @@ class RootGenerator:
             "public abstract partial class KSObject",
             "{",
             "\tpublic const string NameStatic = \"\";",
-            "\tpublic abstract string Name { get; }",
+            "\tpublic abstract string Name();",
             "\tpublic abstract byte[] Serialize();",
             "\tpublic abstract uint Deserialize(byte[] s, uint offset = 0);",
             "}",
@@ -149,7 +149,7 @@ class TypeGenerator:
         code_editor.add_line("public new const string NameStatic = \"%s\";" % type_name)
         code_editor.add_line()
 
-        code_editor.add_line("public override string Name => \"%s\";" % type_name)
+        code_editor.add_line("public override string Name() => \"%s\";" % type_name)
         code_editor.add_line()
 
         # generate serializer
