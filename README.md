@@ -219,25 +219,20 @@ attribute2 = attribute_type
 
 * Methods:
 
-> **NameStatic:** A static method that returns the *class name* of a *class*. Do **not** use this method for *instances*. Use the **Name** method instead.
+> **NameStatic:** A static field that returns the *class name* of a *class*. Do **not** use this field for *instances*. Use the **Name** method instead.
 
 * **C#** does not support multiple inheritance. So only first parent will be considered and a warning will be shown when generating the class codes.
 
 * Every generated class inherits **KSObject** class. The **KSObject** is an abstract class that is implemented as below:
 
     ```c#
-    using System;
-
-    namespace ks
+    public abstract partial class KSObject
     {
-        public abstract class KSObject
-        {
-            public static string NameStatic => "";
-            public abstract string Name { get; }
-            public abstract byte[] Serialize();
-            public abstract uint Deserialize(byte[] s, uint offset = 0);
-        }
-    } // namespace ks
+        public const string NameStatic = "";
+        public abstract string Name();
+        public abstract byte[] Serialize();
+        public abstract uint Deserialize(byte[] s, uint offset = 0);
+    }
     ```
 
 * This code can be found in a generated file named **KSObject.cs**.
