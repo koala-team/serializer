@@ -13,9 +13,9 @@ namespace KS.Empty
 		{
 		}
 		
-		public new static string NameStatic => "Parent";
+		public new const string NameStatic = "Parent";
 		
-		public override string Name => "Parent";
+		public override string Name() => "Parent";
 		
 		public override byte[] Serialize()
 		{
@@ -57,9 +57,9 @@ namespace KS.Empty
 		{
 		}
 		
-		public new static string NameStatic => "Child";
+		public new const string NameStatic = "Child";
 		
-		public override string Name => "Child";
+		public override string Name() => "Child";
 		
 		public override byte[] Serialize()
 		{

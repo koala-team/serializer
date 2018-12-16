@@ -13,9 +13,9 @@ namespace KS.Inheritance
 		{
 		}
 		
-		public new static string NameStatic => "Parent1";
+		public new const string NameStatic = "Parent1";
 		
-		public override string Name => "Parent1";
+		public override string Name() => "Parent1";
 		
 		public override byte[] Serialize()
 		{
@@ -58,9 +58,9 @@ namespace KS.Inheritance
 		{
 		}
 		
-		public new static string NameStatic => "Parent2";
+		public new const string NameStatic = "Parent2";
 		
-		public override string Name => "Parent2";
+		public override string Name() => "Parent2";
 		
 		public override byte[] Serialize()
 		{
@@ -102,9 +102,9 @@ namespace KS.Inheritance
 		{
 		}
 		
-		public new static string NameStatic => "Parent3";
+		public new const string NameStatic = "Parent3";
 		
-		public override string Name => "Parent3";
+		public override string Name() => "Parent3";
 		
 		public override byte[] Serialize()
 		{
@@ -128,9 +128,9 @@ namespace KS.Inheritance
 		{
 		}
 		
-		public new static string NameStatic => "Child";
+		public new const string NameStatic = "Child";
 		
-		public override string Name => "Child";
+		public override string Name() => "Child";
 		
 		public override byte[] Serialize()
 		{
@@ -195,9 +195,9 @@ namespace KS.Inheritance
 		{
 		}
 		
-		public new static string NameStatic => "GrandChild";
+		public new const string NameStatic = "GrandChild";
 		
-		public override string Name => "GrandChild";
+		public override string Name() => "GrandChild";
 		
 		public override byte[] Serialize()
 		{
