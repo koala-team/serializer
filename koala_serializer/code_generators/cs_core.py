@@ -341,7 +341,7 @@ class SerializerGenerator:
         self._gen_size(value_name, result_name, tree)
 
         # gen string
-        self._code_editor.add_line("%s.AddRange(System.Text.Encoding.ASCII.GetBytes(%s));" %
+        self._code_editor.add_line("%s.AddRange(System.Text.Encoding.GetEncoding(\"ISO-8859-1\").GetBytes(%s));" %
                                     (result_name, value_name))
 
 
@@ -544,7 +544,7 @@ class DeserializerGenerator:
         size = self._gen_size(data_name, offset_name, value_name, tree)
 
         # gen string
-        self._code_editor.add_line("%s = System.Text.Encoding.ASCII.GetString(%s.Skip((int)%s).Take((int)%s).ToArray());" %
+        self._code_editor.add_line("%s = System.Text.Encoding.GetEncoding(\"ISO-8859-1\").GetString(%s.Skip((int)%s).Take((int)%s).ToArray());" %
                                    (value_name, data_name, offset_name, size))
         self._code_editor.add_line("%s += %s;" % (offset_name, size))
 
