@@ -42,7 +42,7 @@ namespace KS.Full
 				s.Add((byte)tmp0.Count);
 				s.AddRange(tmp0);
 				
-				s.AddRange(System.Text.Encoding.ASCII.GetBytes(FirstName));
+				s.AddRange(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(FirstName));
 			}
 			
 			// serialize _LastName_
@@ -56,7 +56,7 @@ namespace KS.Full
 				s.Add((byte)tmp1.Count);
 				s.AddRange(tmp1);
 				
-				s.AddRange(System.Text.Encoding.ASCII.GetBytes(_LastName_));
+				s.AddRange(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(_LastName_));
 			}
 			
 			return s.ToArray();
@@ -79,7 +79,7 @@ namespace KS.Full
 				uint tmp5;
 				tmp5 = BitConverter.ToUInt32(tmp4, (int)0);
 				
-				FirstName = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp5).ToArray());
+				FirstName = System.Text.Encoding.GetEncoding("ISO-8859-1").GetString(s.Skip((int)offset).Take((int)tmp5).ToArray());
 				offset += tmp5;
 			}
 			else
@@ -100,7 +100,7 @@ namespace KS.Full
 				uint tmp9;
 				tmp9 = BitConverter.ToUInt32(tmp8, (int)0);
 				
-				_LastName_ = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp9).ToArray());
+				_LastName_ = System.Text.Encoding.GetEncoding("ISO-8859-1").GetString(s.Skip((int)offset).Take((int)tmp9).ToArray());
 				offset += tmp9;
 			}
 			else
@@ -141,7 +141,7 @@ namespace KS.Full
 				s.Add((byte)tmp10.Count);
 				s.AddRange(tmp10);
 				
-				s.AddRange(System.Text.Encoding.ASCII.GetBytes(C));
+				s.AddRange(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(C));
 			}
 			
 			return s.ToArray();
@@ -167,7 +167,7 @@ namespace KS.Full
 				uint tmp14;
 				tmp14 = BitConverter.ToUInt32(tmp13, (int)0);
 				
-				C = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp14).ToArray());
+				C = System.Text.Encoding.GetEncoding("ISO-8859-1").GetString(s.Skip((int)offset).Take((int)tmp14).ToArray());
 				offset += tmp14;
 			}
 			else
@@ -312,7 +312,7 @@ namespace KS.Full
 				s.Add((byte)tmp15.Count);
 				s.AddRange(tmp15);
 				
-				s.AddRange(System.Text.Encoding.ASCII.GetBytes(V12));
+				s.AddRange(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(V12));
 			}
 			
 			// serialize V13
@@ -408,7 +408,7 @@ namespace KS.Full
 						s.Add((byte)tmp24.Count);
 						s.AddRange(tmp24);
 						
-						s.AddRange(System.Text.Encoding.ASCII.GetBytes(tmp23.Key));
+						s.AddRange(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(tmp23.Key));
 					}
 					
 					s.Add((byte)((tmp23.Value == null) ? 0 : 1));
@@ -524,7 +524,7 @@ namespace KS.Full
 									s.Add((byte)tmp36.Count);
 									s.AddRange(tmp36);
 									
-									s.AddRange(System.Text.Encoding.ASCII.GetBytes(tmp35));
+									s.AddRange(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(tmp35));
 								}
 							}
 						}
@@ -583,7 +583,7 @@ namespace KS.Full
 						s.Add((byte)tmp42.Count);
 						s.AddRange(tmp42);
 						
-						s.AddRange(System.Text.Encoding.ASCII.GetBytes(tmp41.Key));
+						s.AddRange(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(tmp41.Key));
 					}
 					
 					s.Add((byte)((tmp41.Value == null) ? 0 : 1));
@@ -775,7 +775,7 @@ namespace KS.Full
 				uint tmp60;
 				tmp60 = BitConverter.ToUInt32(tmp59, (int)0);
 				
-				V12 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp60).ToArray());
+				V12 = System.Text.Encoding.GetEncoding("ISO-8859-1").GetString(s.Skip((int)offset).Take((int)tmp60).ToArray());
 				offset += tmp60;
 			}
 			else
@@ -933,7 +933,7 @@ namespace KS.Full
 						uint tmp94;
 						tmp94 = BitConverter.ToUInt32(tmp93, (int)0);
 						
-						tmp89 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp94).ToArray());
+						tmp89 = System.Text.Encoding.GetEncoding("ISO-8859-1").GetString(s.Skip((int)offset).Take((int)tmp94).ToArray());
 						offset += tmp94;
 					}
 					else
@@ -1133,7 +1133,7 @@ namespace KS.Full
 									uint tmp135;
 									tmp135 = BitConverter.ToUInt32(tmp134, (int)0);
 									
-									tmp131 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp135).ToArray());
+									tmp131 = System.Text.Encoding.GetEncoding("ISO-8859-1").GetString(s.Skip((int)offset).Take((int)tmp135).ToArray());
 									offset += tmp135;
 								}
 								else
@@ -1229,7 +1229,7 @@ namespace KS.Full
 						uint tmp155;
 						tmp155 = BitConverter.ToUInt32(tmp154, (int)0);
 						
-						tmp150 = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp155).ToArray());
+						tmp150 = System.Text.Encoding.GetEncoding("ISO-8859-1").GetString(s.Skip((int)offset).Take((int)tmp155).ToArray());
 						offset += tmp155;
 					}
 					else

@@ -150,7 +150,7 @@ namespace KS.Inheritance
 				s.Add((byte)tmp2.Count);
 				s.AddRange(tmp2);
 				
-				s.AddRange(System.Text.Encoding.ASCII.GetBytes(Firstname));
+				s.AddRange(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(Firstname));
 			}
 			
 			return s.ToArray();
@@ -176,7 +176,7 @@ namespace KS.Inheritance
 				uint tmp6;
 				tmp6 = BitConverter.ToUInt32(tmp5, (int)0);
 				
-				Firstname = System.Text.Encoding.ASCII.GetString(s.Skip((int)offset).Take((int)tmp6).ToArray());
+				Firstname = System.Text.Encoding.GetEncoding("ISO-8859-1").GetString(s.Skip((int)offset).Take((int)tmp6).ToArray());
 				offset += tmp6;
 			}
 			else
