@@ -262,7 +262,7 @@ class TypeGenerator:
             "",
             "private static Map<%s, %s> reverseLookup;" % (value_type_cls, type_name),
             "",
-            "public static %s of(byte value)" % type_name,
+            "public static %s of(%s value)" % (type_name, value_type),
             "{",
 			"\tif (reverseLookup == null)",
 			"\t{",
