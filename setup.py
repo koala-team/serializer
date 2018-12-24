@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='koala-serializer',
-    version='0.6.3',
+    version='0.7.0',
     description='A tool designed for creating serializable objects among different programming languages',
     long_description='',
     author='Koala',
