@@ -15,7 +15,7 @@ To generate source codes run the command below (the *output_dir* is optional):
 
     $ koalasc <ks_path> <programming_language> <output_dir> <capitalization_rule>
 
-The *programming_language* can be **python**, **cpp** or **cs**.
+The *programming_language* can be **python**, **cpp**, **cs** or **java**.
 The *capitalization_rule* can be **snake_case**, **camelCase** or **PascalCase**.
 
 ## Usage
@@ -42,29 +42,31 @@ _def = ObjectSpecification
 
 ### Simple Data Types
 
-KS Type  |  Python Type  |  C++ Type  |  C# Type  |  Standard Size
----  |  ---  |  ---  |  ---  | ---
-boolean  |  bool  |  bool  |  bool  |  1
-char  |  str (of size 1)  |  char  |  char  |  1
-byte  |  int  |  signed char  |  sbyte  |  1
-ubyte  |  int  |  unsigned char  |  byte  |  1
-short  |  int  |  short  |  short  |  2
-ushort  |  int  |  unsigned short  |  ushort  |  2
-int  |  int  |  int  |  int  |  4
-uint  |  int  |  unsigned int  |  uint  |  4
-long  |  int  |  long long  |  long  |  8
-ulong  |  int  |  unsigned long long  |  ulong  |  8
-float  |  float  |  float  |  float  |  4
-double  |  float  |  double  |  double  |  8
-string  |  str  |  std::string  |  string  |
+KS Type  |  Python Type  |  C++ Type  |  C# Type  |  Java Type  |  Standard Size
+---  |  ---  |  ---  |  ---  | ---  | ---
+boolean  |  bool  |  bool  |  bool?  |  Boolean  |  1
+char  |  str (of size 1)  |  char  |  char?  |  Character  |  1
+byte  |  int  |  signed char  |  sbyte?  |  Byte  |  1
+ubyte  |  int  |  unsigned char  |  byte?  |  Byte  |  1
+short  |  int  |  short  |  short?  |  Short  |  2
+ushort  |  int  |  unsigned short  |  ushort?  |  Short  |  2
+int  |  int  |  int  |  int?  |  Integer  |  4
+uint  |  int  |  unsigned int  |  uint?  |  Integer  |  4
+long  |  int  |  long long  |  long?  |  Long  |  8
+ulong  |  int  |  unsigned long long  |  ulong?  |  Long  |  8
+float  |  float  |  float  |  float?  |  Float  |  4
+double  |  float  |  double  |  double?  |  Double  |  8
+string  |  str  |  std::string  |  string  |  String  |
+
+* **Java** does not support unsigned types.
 
 ### Complex Data Types
 
-KS Type  |  Python Type  |  C++ Type  |  C# Type
----  |  ---  |  ---
-list <data_type>  |  list  |  std::vector<data_type>  |  List<data_type>
-map <data_type1, data_type2>  |  dict  |  std::map<data_type1, data_type2>  |  Dictionary<data_type1, data_type2>
-array[dim1_size][dim2_size]...[dimN_size] <data_type>  |  multi-dim list  |  std::array<std::array< ... std::array<data_type, dimN_size> ... , dim2_size>, dim1_size>  |  multi-dim array
+KS Type  |  Python Type  |  C++ Type  |  C# Type  |  Java Type
+---  |  ---  |  ---  |  ---  |  ---
+list <data_type>  |  list  |  std::vector<data_type>  |  List<data_type>  |  ArrayList<data_type>
+map <data_type1, data_type2>  |  dict  |  std::map<data_type1, data_type2>  |  Dictionary<data_type1, data_type2>  |  HashMap<data_type1, data_type2>
+array[dim1_size][dim2_size]...[dimN_size] <data_type>  |  multi-dim list  |  std::array<std::array< ... std::array<data_type, dimN_size> ... , dim2_size>, dim1_size>  |  multi-dim array  |  multi-dim array
 
 * The **data_type** can either be *simple data types*, *complex data types*, *enums* or other *classes*.
 
@@ -82,7 +84,7 @@ _def = enum <enum_type>
     {
         name1,
         name2,
-        name3(value3),
+        name3 (value3),
         name4
     }
 ```
@@ -102,9 +104,9 @@ Example:
 _def = enum <byte>
     {
         White,
-        Red(3),
+        Red (3),
         Green,
-        Blue(-2),
+        Blue (-2),
         Black
     }
 ```
@@ -146,6 +148,37 @@ public enum EColor
 }
 ```
 
+Java generated code:
+
+```java
+public enum EColor
+{
+    White((byte) 0),
+    Red((byte) 3),
+    Green((byte) 4),
+    Blue((byte) -2),
+    Black((byte) -1),
+    ;
+
+    private final byte value;
+    EColor(byte value) { this.value = value; }
+    public byte getValue() { return value; }
+
+    private static Map<Byte, EColor> reverseLookup;
+
+    public static EColor of(byte value)
+    {
+        if (reverseLookup == null)
+        {
+            reverseLookup = new HashMap<>();
+            for (EColor c : EColor.values())
+                reverseLookup.put(c.getValue(), c);
+        }
+        return reverseLookup.get(value);
+    }
+}
+```
+
 Note that the **enum_type** will be used in *serialize* and *deserialize* methods in classes.
 
 #### Class
@@ -170,7 +203,7 @@ attribute2 = attribute_type
 
 * The **attribute_type** can either be *simple data types*, *complex data types*, *enums* or other *classes*.
 * In case you want to add new methods to your classes or other similar operations, be noted that it is not possible to add them in the **ks** file. You must create your own class, inherit it from the generated class, and then add your desired methods to this class.
-* Each generated class has four methods:
+* Each generated class has three methods:
 
 > **name:** Returns the *class name* of an *instance* (or *class* in Python).
 >
@@ -237,6 +270,31 @@ attribute2 = attribute_type
 
 * This code can be found in a generated file named **KSObject.cs**.
 
+**Java** extras:
+
+* Methods:
+
+> **NameStatic:** A static field that returns the *class name* of a *class*. Do **not** use this field for *instances*. Use the **Name** method instead.
+
+* **Java** does not support multiple inheritance. So only first parent will be considered and a warning will be shown when generating the class codes.
+
+* **Java** does not support unsigned types. So they will be considered as signed types and a warning will be shown when generating the class codes.
+
+* Every generated class inherits **KSObject** class. The **KSObject** is an abstract class which its important part is implemented as below:
+
+    ```java
+    public abstract class KSObject
+    {
+        public static final String NameStatic = "";
+        public abstract String Name();
+        public abstract byte[] serialize();
+        public int deserialize(byte[] s) { return deserialize(s, 0); }
+        protected abstract int deserialize(byte[] s, int offset);
+    }
+    ```
+
+* This code can be found in a generated file named **KSObject.java**.
+
 ### Coding Style
 
 In order to use **Capitalization Rules** properly, it is supposed to implement **ks** files with these capitalization rules:
@@ -249,10 +307,11 @@ In order to use **Capitalization Rules** properly, it is supposed to implement *
 >
 > **Class Attributes**: snake_case
 >
-> **Module Names**: snake_case
+> **KS File Names**: snake_case
 
 Then your selected capitalization rule will just be applied to **Class Attributes**.
-**PascalCase** rule will be used for generating `C#` file names and namespaces.
+**PascalCase** rule will be used for generating `C#` file names and namespaces and `Java` file names.
+**snake_case** rule will be used for generating `Java` packages.
 
 Example:
 
@@ -283,6 +342,10 @@ See [inheritance.h](https://github.com/koala-team/serializer/tree/master/example
 C# generated code:
 
 See [Inheritance.cs](https://github.com/koala-team/serializer/tree/master/examples/Inheritance.cs)
+
+Java generated code:
+
+See [Inheritance.java](https://github.com/koala-team/serializer/tree/master/examples/Inheritance.java)
 
 ## Full Example
 
@@ -425,7 +488,58 @@ namespace CsTest
 }
 ```
 
+### Java
+
+In bash:
+
+    $ koalasc examples/full.ks java . camelCase
+
+Main.java:
+
+``` java
+package org.koala.serializer.test;
+
+import java.lang.*;
+import java.util.*;
+
+import ks.*;
+import ks.full.Full;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Full.Test t1 = new Full.Test();
+        t1.v12 = "hello";
+
+        t1.v15 = List.of(1, 2, 3);
+
+        t1.v17 = Map.of(
+            "one", 1,
+            "two", 2
+        );
+
+        t1.v22 = Map.of(
+            "one", new Full.Child() {{ c = "first"; }},
+            "two", new Full.Child() {{ c = "second"; firstName = "baby"; _lastName_ = "knight"; }}
+        );
+
+        byte[] s = t1.serialize();
+
+        Full.Test t2 = new Full.Test();
+        t2.deserialize(s);
+        assert (t1.v12.equals(t2.v12));
+        assert (t1.v15.equals(t2.v15));
+        assert (t1.v17.equals(t2.v17));
+        assert (t1.v22.get("one").c.equals(t2.v22.get("one").c));
+        assert (t1.v22.get("two").firstName.equals(t2.v22.get("two").firstName));
+        assert (t1.v22.get("two")._lastName_.equals(t2.v22.get("two")._lastName_));
+    }
+}
+```
+
 ## TODO
 
 * Advanced optimization and compression.
-* Add code generators for other programming languages like **Java**. Currently, **Python**, **C++ 11** and **C#** are the supported languages.
+* Add code generators for other programming languages. Currently, **Python**, **C++ 11**, **C#** and **Java** are the supported languages.
+* Add `is_equal` and `clone` methods to **KSObject**s.
+* Add unittests.
