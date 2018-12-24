@@ -3,9 +3,9 @@
 _def = enum <byte> 
 	{
 		White,
-		Red(3),
+		Red (3),
 		Green,
-		Blue(-2),
+		Blue (-2),
 		Black
 	}
 
