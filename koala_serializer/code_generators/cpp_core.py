@@ -270,8 +270,8 @@ class TypeGenerator:
         code_editor = self._code_editor
 
         _def = properties.pop('_def')
-        self._user_defined_types[Tokens.Enum][type_name] = _def[1][0]
-        value_type = _def[1][0][0]
+        value_type = _def[1][0]
+        self._user_defined_types[Tokens.Enum][type_name] = value_type
         code_editor.add_line("enum class %s" % type_name)
         code_editor.increase_indentation()
 

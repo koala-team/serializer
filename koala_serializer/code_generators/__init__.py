@@ -9,6 +9,7 @@ from ..parser_core import Tokens, capitalization_rules
 from .python import PythonCodeGenerator
 from .cpp import CppCodeGenerator
 from .cs import CsCodeGenerator
+from .java import JavaCodeGenerator
 
 
 class CodeGenerator:
@@ -17,7 +18,8 @@ class CodeGenerator:
         self._generators = {
             'python': PythonCodeGenerator(),
             'cpp': CppCodeGenerator(),
-            'cs': CsCodeGenerator()
+            'cs': CsCodeGenerator(),
+            'java': JavaCodeGenerator()
         }
 
         self._module_name = os.path.splitext(os.path.basename(source_path))[0]
