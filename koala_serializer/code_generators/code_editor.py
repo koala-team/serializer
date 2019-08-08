@@ -42,3 +42,9 @@ class CodeEditor(object):
         var = 'tmp%s' % self._temp_variable_number
         self._temp_variable_number += 1
         return var
+
+
+    def clear(self):
+        self._code = ""
+        self._global_indent = 0
+        self._temp_variable_number = 0

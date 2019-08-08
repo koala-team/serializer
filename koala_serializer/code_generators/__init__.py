@@ -32,7 +32,9 @@ class CodeGenerator:
         parse_tree = self._apply_capitalization_rule(parse_tree)
         result = self._generators[self._programming_language].generate(parse_tree, self._module_name)
         for code, filename in result:
-            with open(os.path.join(self._destination_dir, filename), 'w') as f:
+            path = os.path.join(self._destination_dir, filename)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, 'w') as f:
                 f.write(code)
 
 

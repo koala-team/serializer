@@ -79,8 +79,6 @@ class HeaderGenerator:
         code_editor.add_line()
         self._gen_imports()
         code_editor.add_line()
-        self._gen_outer_class(module_name)
-        self._code_editor.increase_indentation()
 
 
     def _gen_imports(self):
@@ -89,16 +87,11 @@ class HeaderGenerator:
         self._code_editor.add_line("import java.nio.*;")
         self._code_editor.add_line("import java.nio.charset.Charset;")
         self._code_editor.add_line()
-        self._code_editor.add_line("import ks.*;")
+        self._code_editor.add_line("import ks.KSObject;")
 
 
     def _gen_package(self, pkg_name):
         self._code_editor.add_line("package %s;" % pkg_name)
-
-
-    def _gen_outer_class(self, pkg_name):
-        pkg_name = capitalization_rules['PascalCase'](pkg_name)
-        self._code_editor.add_line("public class %s" % pkg_name)
 
 
 ###################################################################################
@@ -113,12 +106,6 @@ class FooterGenerator:
 
     def gen_footer(self, module_name):
         self._code_editor.decrease_indentation(put_accolade=False)
-        self._gen_outer_class(module_name)
-
-
-    def _gen_outer_class(self, pkg_name):
-        pkg_name = capitalization_rules['PascalCase'](pkg_name)
-        self._code_editor.add_line("} // %s" % pkg_name)
 
 
 ###################################################################################
@@ -158,7 +145,7 @@ class TypeGenerator:
         self._user_defined_types[Tokens.Class][type_name] = (parents, properties)
 
         # generate definitions
-        code_editor.add_line("public static class %s extends %s" % (type_name, ', '.join(parents)))
+        code_editor.add_line("public class %s extends %s" % (type_name, ', '.join(parents)))
         code_editor.increase_indentation()
         for attr_name, tree in properties:
             vartype = self._variable_type_generator.gen_vartype(tree)
