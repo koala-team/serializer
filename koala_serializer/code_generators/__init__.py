@@ -2,6 +2,7 @@
 
 # python imports
 import os
+import errno
 from copy import deepcopy
 
 # project imports
@@ -33,7 +34,12 @@ class CodeGenerator:
         result = self._generators[self._programming_language].generate(parse_tree, self._module_name)
         for code, filename in result:
             path = os.path.join(self._destination_dir, filename)
-            os.makedirs(os.path.dirname(path), exist_ok=True)
+            # os.makedirs(os.path.dirname(path), exist_ok=True)
+            try:
+                os.makedirs(os.path.dirname(path))
+            except OSError as e:
+                if e.errno != errno.EEXIST:
+                    raise
             with open(path, 'w') as f:
                 f.write(code)
 
