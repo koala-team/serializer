@@ -333,19 +333,19 @@ name = string
 
 Python generated code:
 
-See [inheritance.py](https://github.com/koala-team/serializer/tree/master/examples/inheritance.py)
+See [inheritance.py](https://github.com/koala-team/serializer/tree/master/examples/Python/inheritance.py)
 
 C++ generated code:
 
-See [inheritance.h](https://github.com/koala-team/serializer/tree/master/examples/inheritance.h)
+See [inheritance.h](https://github.com/koala-team/serializer/tree/master/examples/C++/inheritance.h)
 
 C# generated code:
 
-See [Inheritance.cs](https://github.com/koala-team/serializer/tree/master/examples/Inheritance.cs)
+See [Inheritance.cs](https://github.com/koala-team/serializer/blob/master/examples/C%23/Inheritance.cs)
 
 Java generated code:
 
-See [Inheritance.java](https://github.com/koala-team/serializer/tree/master/examples/Inheritance.java)
+See [inheritance package](https://github.com/koala-team/serializer/tree/master/examples/Java/ks/inheritance)
 
 ## Full Example
 
@@ -497,18 +497,16 @@ In bash:
 Main.java:
 
 ``` java
-package org.koala.serializer.test;
-
 import java.lang.*;
 import java.util.*;
 
 import ks.*;
-import ks.full.Full;
+import ks.full.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        Full.Test t1 = new Full.Test();
+        Test t1 = new Test();
         t1.v12 = "hello";
 
         t1.v15 = List.of(1, 2, 3);
@@ -519,13 +517,13 @@ public class Main {
         );
 
         t1.v22 = Map.of(
-            "one", new Full.Child() {{ c = "first"; }},
-            "two", new Full.Child() {{ c = "second"; firstName = "baby"; _lastName_ = "knight"; }}
+            "one", new Child() {{ c = "first"; }},
+            "two", new Child() {{ c = "second"; firstName = "baby"; _lastName_ = "knight"; }}
         );
 
         byte[] s = t1.serialize();
 
-        Full.Test t2 = new Full.Test();
+        Test t2 = new Test();
         t2.deserialize(s);
         assert (t1.v12.equals(t2.v12));
         assert (t1.v15.equals(t2.v15));
@@ -540,6 +538,6 @@ public class Main {
 ## TODO
 
 * Advanced optimization and compression.
-* Add code generators for other programming languages. Currently, **Python**, **C++ 11**, **C#** and **Java** are the supported languages.
+* Add code generators for other programming languages. Currently, **Python**, **C++ 11**, **C#** and **Java 11** are supported languages.
 * Add `is_equal` and `clone` methods to **KSObject**s.
 * Add unittests.
