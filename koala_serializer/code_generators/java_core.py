@@ -151,9 +151,32 @@ class TypeGenerator:
             vartype = self._variable_type_generator.gen_vartype(tree)
             if tree[0] in [Tokens.UnsignedByte, Tokens.UnsignedShort, Tokens.UnsignedInteger, Tokens.UnsignedLong]:
                 warnings.warn("Java does not support unsigned types. Instead, signed types will be considered.")
-            code_editor.add_line("public %s %s;" % (vartype, attr_name))
+            code_editor.add_line("protected %s %s;" % (vartype, attr_name))
+        code_editor.add_line()
 
-        code_editor.add_line('\n')
+        # generate getters
+        code_editor.add_line("// getters")
+        code_editor.add_line()
+        for attr_name, tree in properties:
+            vartype = self._variable_type_generator.gen_vartype(tree)
+            code_editor.add_line("public %s get%s()" % (vartype, capitalization_rules['PascalCase'](attr_name)))
+            code_editor.increase_indentation()
+            code_editor.add_line("return this.%s;" % attr_name)
+            code_editor.decrease_indentation()
+            code_editor.add_line()
+        code_editor.add_line()
+
+        # generate setters
+        code_editor.add_line("// setters")
+        code_editor.add_line()
+        for attr_name, tree in properties:
+            vartype = self._variable_type_generator.gen_vartype(tree)
+            code_editor.add_line("public void set%s(%s %s)" % (capitalization_rules['PascalCase'](attr_name), vartype, attr_name))
+            code_editor.increase_indentation()
+            code_editor.add_line("this.%s = %s;" % (attr_name, attr_name))
+            code_editor.decrease_indentation()
+            code_editor.add_line()
+        code_editor.add_line()
 
         # generate constructor
         code_editor.add_line("public %s()" % type_name)
