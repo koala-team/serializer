@@ -9,9 +9,24 @@ import ks.KSObject;
 
 public class Parent1 extends KSObject
 {
-	public Integer count;
+	protected Integer count;
 	
-
+	// getters
+	
+	public Integer getCount()
+	{
+		return this.count;
+	}
+	
+	
+	// setters
+	
+	public void setCount(Integer count)
+	{
+		this.count = count;
+	}
+	
+	
 	public Parent1()
 	{
 	}

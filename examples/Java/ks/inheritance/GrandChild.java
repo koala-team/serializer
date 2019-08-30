@@ -9,9 +9,24 @@ import ks.KSObject;
 
 public class GrandChild extends Child
 {
-	public Float height;
+	protected Float height;
 	
-
+	// getters
+	
+	public Float getHeight()
+	{
+		return this.height;
+	}
+	
+	
+	// setters
+	
+	public void setHeight(Float height)
+	{
+		this.height = height;
+	}
+	
+	
 	public GrandChild()
 	{
 	}

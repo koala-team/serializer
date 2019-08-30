@@ -10,7 +10,12 @@ import ks.KSObject;
 public class Parent3 extends KSObject
 {
 	
-
+	// getters
+	
+	
+	// setters
+	
+	
 	public Parent3()
 	{
 	}

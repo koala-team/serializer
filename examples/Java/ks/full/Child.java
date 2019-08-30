@@ -9,9 +9,24 @@ import ks.KSObject;
 
 public class Child extends Parent
 {
-	public String c;
+	protected String c;
 	
-
+	// getters
+	
+	public String getC()
+	{
+		return this.c;
+	}
+	
+	
+	// setters
+	
+	public void setC(String c)
+	{
+		this.c = c;
+	}
+	
+	
 	public Child()
 	{
 	}

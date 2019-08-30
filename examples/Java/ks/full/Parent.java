@@ -9,10 +9,35 @@ import ks.KSObject;
 
 public class Parent extends KSObject
 {
-	public String firstName;
-	public String _lastName_;
+	protected String firstName;
+	protected String _lastName_;
 	
-
+	// getters
+	
+	public String getFirstName()
+	{
+		return this.firstName;
+	}
+	
+	public String get_LastName_()
+	{
+		return this._lastName_;
+	}
+	
+	
+	// setters
+	
+	public void setFirstName(String firstName)
+	{
+		this.firstName = firstName;
+	}
+	
+	public void set_LastName_(String _lastName_)
+	{
+		this._lastName_ = _lastName_;
+	}
+	
+	
 	public Parent()
 	{
 	}

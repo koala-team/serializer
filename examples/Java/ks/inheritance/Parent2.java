@@ -9,9 +9,24 @@ import ks.KSObject;
 
 public class Parent2 extends KSObject
 {
-	public Long number;
+	protected Long number;
 	
-
+	// getters
+	
+	public Long getNumber()
+	{
+		return this.number;
+	}
+	
+	
+	// setters
+	
+	public void setNumber(Long number)
+	{
+		this.number = number;
+	}
+	
+	
 	public Parent2()
 	{
 	}

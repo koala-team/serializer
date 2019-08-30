@@ -9,32 +9,277 @@ import ks.KSObject;
 
 public class Test extends KSObject
 {
-	public Boolean v0;
-	public Character v1;
-	public Byte v2;
-	public Byte v3;
-	public Short v4;
-	public Short v5;
-	public Integer v6;
-	public Integer v7;
-	public Long v8;
-	public Long v9;
-	public Float v10;
-	public Double v11;
-	public String v12;
-	public EColor v13;
-	public Child v14;
-	public List<Integer> v15;
-	public List<List<Character>> v16;
-	public Map<String, Integer> v17;
-	public Map<Character, List<Map<Double, EColor>>> v18;
-	public Byte[] v19;
-	public List<String>[][] v20;
-	public List<Child[]> v21;
-	public Map<String, Child> v22;
-	public Child[][] v23;
+	protected Boolean v0;
+	protected Character v1;
+	protected Byte v2;
+	protected Byte v3;
+	protected Short v4;
+	protected Short v5;
+	protected Integer v6;
+	protected Integer v7;
+	protected Long v8;
+	protected Long v9;
+	protected Float v10;
+	protected Double v11;
+	protected String v12;
+	protected EColor v13;
+	protected Child v14;
+	protected List<Integer> v15;
+	protected List<List<Character>> v16;
+	protected Map<String, Integer> v17;
+	protected Map<Character, List<Map<Double, EColor>>> v18;
+	protected Byte[] v19;
+	protected List<String>[][] v20;
+	protected List<Child[]> v21;
+	protected Map<String, Child> v22;
+	protected Child[][] v23;
 	
-
+	// getters
+	
+	public Boolean getV0()
+	{
+		return this.v0;
+	}
+	
+	public Character getV1()
+	{
+		return this.v1;
+	}
+	
+	public Byte getV2()
+	{
+		return this.v2;
+	}
+	
+	public Byte getV3()
+	{
+		return this.v3;
+	}
+	
+	public Short getV4()
+	{
+		return this.v4;
+	}
+	
+	public Short getV5()
+	{
+		return this.v5;
+	}
+	
+	public Integer getV6()
+	{
+		return this.v6;
+	}
+	
+	public Integer getV7()
+	{
+		return this.v7;
+	}
+	
+	public Long getV8()
+	{
+		return this.v8;
+	}
+	
+	public Long getV9()
+	{
+		return this.v9;
+	}
+	
+	public Float getV10()
+	{
+		return this.v10;
+	}
+	
+	public Double getV11()
+	{
+		return this.v11;
+	}
+	
+	public String getV12()
+	{
+		return this.v12;
+	}
+	
+	public EColor getV13()
+	{
+		return this.v13;
+	}
+	
+	public Child getV14()
+	{
+		return this.v14;
+	}
+	
+	public List<Integer> getV15()
+	{
+		return this.v15;
+	}
+	
+	public List<List<Character>> getV16()
+	{
+		return this.v16;
+	}
+	
+	public Map<String, Integer> getV17()
+	{
+		return this.v17;
+	}
+	
+	public Map<Character, List<Map<Double, EColor>>> getV18()
+	{
+		return this.v18;
+	}
+	
+	public Byte[] getV19()
+	{
+		return this.v19;
+	}
+	
+	public List<String>[][] getV20()
+	{
+		return this.v20;
+	}
+	
+	public List<Child[]> getV21()
+	{
+		return this.v21;
+	}
+	
+	public Map<String, Child> getV22()
+	{
+		return this.v22;
+	}
+	
+	public Child[][] getV23()
+	{
+		return this.v23;
+	}
+	
+	
+	// setters
+	
+	public void setV0(Boolean v0)
+	{
+		this.v0 = v0;
+	}
+	
+	public void setV1(Character v1)
+	{
+		this.v1 = v1;
+	}
+	
+	public void setV2(Byte v2)
+	{
+		this.v2 = v2;
+	}
+	
+	public void setV3(Byte v3)
+	{
+		this.v3 = v3;
+	}
+	
+	public void setV4(Short v4)
+	{
+		this.v4 = v4;
+	}
+	
+	public void setV5(Short v5)
+	{
+		this.v5 = v5;
+	}
+	
+	public void setV6(Integer v6)
+	{
+		this.v6 = v6;
+	}
+	
+	public void setV7(Integer v7)
+	{
+		this.v7 = v7;
+	}
+	
+	public void setV8(Long v8)
+	{
+		this.v8 = v8;
+	}
+	
+	public void setV9(Long v9)
+	{
+		this.v9 = v9;
+	}
+	
+	public void setV10(Float v10)
+	{
+		this.v10 = v10;
+	}
+	
+	public void setV11(Double v11)
+	{
+		this.v11 = v11;
+	}
+	
+	public void setV12(String v12)
+	{
+		this.v12 = v12;
+	}
+	
+	public void setV13(EColor v13)
+	{
+		this.v13 = v13;
+	}
+	
+	public void setV14(Child v14)
+	{
+		this.v14 = v14;
+	}
+	
+	public void setV15(List<Integer> v15)
+	{
+		this.v15 = v15;
+	}
+	
+	public void setV16(List<List<Character>> v16)
+	{
+		this.v16 = v16;
+	}
+	
+	public void setV17(Map<String, Integer> v17)
+	{
+		this.v17 = v17;
+	}
+	
+	public void setV18(Map<Character, List<Map<Double, EColor>>> v18)
+	{
+		this.v18 = v18;
+	}
+	
+	public void setV19(Byte[] v19)
+	{
+		this.v19 = v19;
+	}
+	
+	public void setV20(List<String>[][] v20)
+	{
+		this.v20 = v20;
+	}
+	
+	public void setV21(List<Child[]> v21)
+	{
+		this.v21 = v21;
+	}
+	
+	public void setV22(Map<String, Child> v22)
+	{
+		this.v22 = v22;
+	}
+	
+	public void setV23(Child[][] v23)
+	{
+		this.v23 = v23;
+	}
+	
+	
 	public Test()
 	{
 	}

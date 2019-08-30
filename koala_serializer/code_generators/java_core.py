@@ -32,8 +32,8 @@ class RootGenerator:
         self._code_editor.add_lines([
             "public abstract class KSObject",
             "{",
-            "\tpublic static final String NameStatic = \"\";",
-            "\tpublic abstract String Name();",
+            "\tpublic static final String nameStatic = \"\";",
+            "\tpublic abstract String name();",
             "\tpublic abstract byte[] serialize();",
             "\tpublic int deserialize(byte[] s) { return deserialize(s, 0); }",
             "\tprotected abstract int deserialize(byte[] s, int offset);",
@@ -185,11 +185,11 @@ class TypeGenerator:
         code_editor.add_line()
 
         # generate name
-        code_editor.add_line("public static final String NameStatic = \"%s\";" % type_name)
+        code_editor.add_line("public static final String nameStatic = \"%s\";" % type_name)
         code_editor.add_line()
 
         code_editor.add_line("@Override")
-        code_editor.add_line("public String Name() { return \"%s\"; }" % type_name)
+        code_editor.add_line("public String name() { return \"%s\"; }" % type_name)
         code_editor.add_line()
 
         # generate serializer
