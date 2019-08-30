@@ -31,10 +31,10 @@ public class Parent1 extends KSObject
 	{
 	}
 	
-	public static final String NameStatic = "Parent1";
+	public static final String nameStatic = "Parent1";
 	
 	@Override
-	public String Name() { return "Parent1"; }
+	public String name() { return "Parent1"; }
 	
 	@Override
 	public byte[] serialize()

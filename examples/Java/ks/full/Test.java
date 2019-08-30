@@ -284,10 +284,10 @@ public class Test extends KSObject
 	{
 	}
 	
-	public static final String NameStatic = "Test";
+	public static final String nameStatic = "Test";
 	
 	@Override
-	public String Name() { return "Test"; }
+	public String name() { return "Test"; }
 	
 	@Override
 	public byte[] serialize()

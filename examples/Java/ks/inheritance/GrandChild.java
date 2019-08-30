@@ -31,10 +31,10 @@ public class GrandChild extends Child
 	{
 	}
 	
-	public static final String NameStatic = "GrandChild";
+	public static final String nameStatic = "GrandChild";
 	
 	@Override
-	public String Name() { return "GrandChild"; }
+	public String name() { return "GrandChild"; }
 	
 	@Override
 	public byte[] serialize()

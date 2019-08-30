@@ -5,8 +5,8 @@ import java.util.*;
 
 public abstract class KSObject
 {
-	public static final String NameStatic = "";
-	public abstract String Name();
+	public static final String nameStatic = "";
+	public abstract String name();
 	public abstract byte[] serialize();
 	public int deserialize(byte[] s) { return deserialize(s, 0); }
 	protected abstract int deserialize(byte[] s, int offset);
