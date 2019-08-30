@@ -225,13 +225,13 @@ attribute2 = attribute_type
 
 > **nameStatic:** A static method that returns the *class name* of a *class*. Do **not** use this method for *instances*. Use the **name** method instead.
 >
-> **getters:** Return a copy of attributes. Their names are same as attributes.
+> **getters:** Return a copy of attributes. Their name is the same as the attribute's name.
 >
-> **reference getters:** Return reference of attributes. Their names start with **ref_** and end with an attribute name.
+> **reference getters:** Return reference of attributes. Their name starts with `ref_` and ends with the attribute's name.
 >
-> **setters:** Given a reference value, these methods set the attributes. Their names are same as attributes.
+> **setters:** Given a reference value, these methods set the attributes. Their name is the same as the attribute's name.
 >
-> **has_attribute getters and setters:** They are used to handle *Null* values. Their names start with **has_** and end with an attribute name.
+> **has_attribute getters and setters:** They are used to handle *Null* values. Their name starts with `has_` and ends with the attribute's name.
 
 * Inner *Null* values are not supported in **C++**.
 
@@ -274,7 +274,11 @@ attribute2 = attribute_type
 
 * Methods:
 
-> **NameStatic:** A static field that returns the *class name* of a *class*. Do **not** use this field for *instances*. Use the **Name** method instead.
+> **nameStatic:** A static field that returns the *class name* of a *class*. Do **not** use this field for *instances*. Use the **name** method instead.
+>
+> **getters:** Return reference of attributes. Their name starts with `get` and ends with the attribute's name in **PascalCase** format.
+>
+> **setters:** Given a reference value, these methods set the attributes. Their name starts with `set` and ends with the attribute's name in **PascalCase** format.
 
 * **Java** does not support multiple inheritance. So only first parent will be considered and a warning will be shown when generating the class codes.
 
@@ -285,8 +289,8 @@ attribute2 = attribute_type
     ```java
     public abstract class KSObject
     {
-        public static final String NameStatic = "";
-        public abstract String Name();
+        public static final String nameStatic = "";
+        public abstract String name();
         public abstract byte[] serialize();
         public int deserialize(byte[] s) { return deserialize(s, 0); }
         protected abstract int deserialize(byte[] s, int offset);
@@ -507,30 +511,30 @@ public class Main {
 
     public static void main(String[] args) {
         Test t1 = new Test();
-        t1.v12 = "hello";
+        t1.setV12("hello");
 
-        t1.v15 = List.of(1, 2, 3);
+        t1.setV15(List.of(1, 2, 3));
 
-        t1.v17 = Map.of(
+        t1.setV17(Map.of(
             "one", 1,
             "two", 2
-        );
+        ));
 
-        t1.v22 = Map.of(
+        t1.setV22(Map.of(
             "one", new Child() {{ c = "first"; }},
             "two", new Child() {{ c = "second"; firstName = "baby"; _lastName_ = "knight"; }}
-        );
+        ));
 
         byte[] s = t1.serialize();
 
         Test t2 = new Test();
         t2.deserialize(s);
-        assert (t1.v12.equals(t2.v12));
-        assert (t1.v15.equals(t2.v15));
-        assert (t1.v17.equals(t2.v17));
-        assert (t1.v22.get("one").c.equals(t2.v22.get("one").c));
-        assert (t1.v22.get("two").firstName.equals(t2.v22.get("two").firstName));
-        assert (t1.v22.get("two")._lastName_.equals(t2.v22.get("two")._lastName_));
+        assert (t1.getV12().equals(t2.getV12()));
+        assert (t1.getV15().equals(t2.getV15()));
+        assert (t1.getV17().equals(t2.getV17()));
+        assert (t1.getV22().get("one").getC().equals(t2.getV22().get("one").getC()));
+        assert (t1.getV22().get("two").getFirstName().equals(t2.getV22().get("two").getFirstName()));
+        assert (t1.getV22().get("two").get_LastName_().equals(t2.getV22().get("two").get_LastName_()));
     }
 }
 ```
@@ -538,6 +542,6 @@ public class Main {
 ## TODO
 
 * Advanced optimization and compression.
-* Add code generators for other programming languages. Currently, **Python**, **C++ 11**, **C#** and **Java 11** are supported languages.
+* Add code generators for other programming languages. Currently, **Python**, **C++ 11**, **C#** and **Java** are supported languages.
 * Add `is_equal` and `clone` methods to **KSObject**s.
 * Add unittests.
